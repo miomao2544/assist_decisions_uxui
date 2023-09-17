@@ -492,22 +492,67 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         fileToSend = uploadedFile;
                                       }
                                     }
+                                    var result =
+                                        await memberController.addMember(
+                                            username ?? "",
+                                            password ?? "",
+                                            nickname ?? "",
+                                            gender ?? "",
+                                            firstname ?? "",
+                                            lastname ?? "",
+                                            email ?? "",
+                                            tel ?? "",
+                                            fileToSend ?? "",
+                                            formattedInterestSelect ?? "");
+                                    if (result == false) {
+                                      // แสดงอนิเมชันแจ้งเตือนเมื่อสมัครสมาชิกสำเร็จ
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: Text('สำเร็จ'),
+                                            content: Text('บันทึกสมาชิกสำเร็จ'),
+                                            actions: [
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text('ปิด'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
 
-                                    await memberController.addMember(
-                                        username ?? "",
-                                        password ?? "",
-                                        nickname ?? "",
-                                        gender ?? "",
-                                        firstname ?? "",
-                                        lastname ?? "",
-                                        email ?? "",
-                                        tel ?? "",
-                                        fileToSend ?? "",
-                                        formattedInterestSelect ?? "");
-                                    Navigator.push(context,
-                                        MaterialPageRoute(builder: (context) {
-                                      return LoginMemberScreen();
-                                    }));
+                                      // เปลี่ยนหน้าไปยัง LoginMemberScreen หลังจากปิดกล่องข้อความแจ้งเตือน
+                                      Future.delayed(
+                                          Duration(milliseconds: 1000), () {
+                                        Navigator.push(context,
+                                            MaterialPageRoute(
+                                                builder: (context) {
+                                          return LoginMemberScreen();
+                                        }));
+                                      });
+                                    } else {
+                                      // แสดงอนิเมชันแจ้งเตือนถ้า Username ซ้ำ
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: Text('ข้อผิดพลาด'),
+                                            content: Text('Username ซ้ำ'),
+                                            actions: [
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text('ปิด'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    }
                                   }
                                 }
                               }),
