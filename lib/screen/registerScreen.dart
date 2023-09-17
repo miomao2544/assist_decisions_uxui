@@ -432,7 +432,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           if (value == null || value.isEmpty) {
                             return 'กรุณารหัสผ่านอีกครั้งเพื่อยืนยัน';
                           } else if (value.toString() != password) {
-                            return 'คุณกรอกรหัสผ่านไม่เหมือนเดิม กรุณากรอกใหม่อีกครั้ง';
+                            return 'รหัสผ่านของคุณไม่เหมือนเดิม กรุณากรอกใหม่อีกครั้ง';
                           }
                           return null;
                         },
