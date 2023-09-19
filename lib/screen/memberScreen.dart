@@ -38,8 +38,8 @@ void fetchPost() async {
   
   try {
     // final dateStop = dateFormatter.parse(posts[0].dateStop!);
-    openPosts = posts?.where((post) => dateFormatter.parse(post.dateStop!).isAfter(now)).toList();
-    closedPosts = posts?.where((post) => dateFormatter.parse(post.dateStop!).isBefore(now)).toList();
+    openPosts = posts.where((post) => dateFormatter.parse(post.dateStop!).isAfter(now)).toList();
+    closedPosts = posts.where((post) => dateFormatter.parse(post.dateStop!).isBefore(now)).toList();
   } catch (e) {
     print("Error parsing date: $e");
   }
