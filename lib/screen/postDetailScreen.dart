@@ -60,7 +60,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
         actions: [
           IconButton(
             onPressed: () {
-              HomeScreen();
+              HomeScreen(username: "maihom2001");
             },
             icon: Icon(Icons.report),
           ),

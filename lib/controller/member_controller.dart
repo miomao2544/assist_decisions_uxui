@@ -99,7 +99,7 @@ class MemberController {
   }
 
   Future getMemberById(String username) async {
-    var url = Uri.parse(baseURL + '/members/getMemberById/$username');
+    var url = Uri.parse(baseURL + '/members/getProfile/$username');
 
     http.Response response = await http.post(url, headers: headers, body: null);
     print("ข้อมูลที่ได้คือ : " + response.body);

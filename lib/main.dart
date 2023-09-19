@@ -1,6 +1,4 @@
-import 'package:assist_decisions_app/screen/homeScreen.dart';
 import 'package:assist_decisions_app/screen/previewPostScreen.dart';
-import 'package:assist_decisions_app/screen/registerScreen.dart';
 import 'package:flutter/material.dart';
 
 void main() {

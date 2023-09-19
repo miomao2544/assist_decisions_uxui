@@ -10,6 +10,7 @@ class LoginMemberScreen extends StatefulWidget {
 }
 
 class _LoginMemberScreenState extends State<LoginMemberScreen> {
+  String username = "";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,6 +52,11 @@ class _LoginMemberScreenState extends State<LoginMemberScreen> {
                   labelStyle: TextStyle(color: Color(0xFF1c174d)),
                   prefixIcon: Icon(Icons.person, color: Color(0xFF1c174d)),
                 ),
+                onChanged: (value) {
+                  setState(() {
+                    username = value; // อัปเดตค่า username ทุกครั้งที่ผู้ใช้ป้อนข้อมูล
+                  });
+                },
               ),
               SizedBox(height: 16.0),
               TextField(
@@ -78,7 +84,7 @@ class _LoginMemberScreenState extends State<LoginMemberScreen> {
                     onPressed: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                        return HomeScreen();
+                        return HomeScreen(username: username);
                       }));
                     },
                   ),

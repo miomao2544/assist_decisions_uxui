@@ -151,7 +151,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
                     builder: (BuildContext context) {
-                      return const HomeScreen();
+                      return const HomeScreen(username: "maihom2001",);
                     },
                   ),
                 );
@@ -507,7 +507,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
                             builder: (BuildContext context) {
-                              return const HomeScreen();
+                              return const HomeScreen(username: "maihom2001",);
                             },
                           ),
                         );

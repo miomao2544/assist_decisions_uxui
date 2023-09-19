@@ -1,3 +1,5 @@
+import 'package:assist_decisions_app/controller/member_controller.dart';
+import 'package:assist_decisions_app/model/member.dart';
 import 'package:assist_decisions_app/screen/addPostScreen.dart';
 import 'package:assist_decisions_app/screen/listPostScreen.dart';
 import 'package:assist_decisions_app/screen/loginMemberScreen.dart';
@@ -10,7 +12,8 @@ import 'package:flutter/material.dart';
 import '../constant/constant_value.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final String username;
+  const HomeScreen({required this.username});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -19,20 +22,31 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int selectedChoice = 0;
   int currentState = 0;
-
-  List<Widget> widgets = [
-    MemberScreen(),
-    Text("null"),
-    ListPostScreen(),
-    NotifyPostScreen(),
-    AddPostScreen(),
-    ViewProfileScreen()
-  ];
-
+  String username = '';
+  String imageUser = '';
+  List<Widget> widgets = [];
+  final MemberController memberController = MemberController();
+  late Member member;
+  
+void fetchMember() async {
+  member = await memberController.getMemberById(widget.username);
+  print("--------------------------------${member.image.toString()}---------------------");
+  imageUser = member.image.toString();
+   print("--------------------------------${imageUser}---------------------");
+}
   @override
   void initState() {
     super.initState();
     selectedChoice = 0;
+    fetchMember();
+    widgets = [
+      MemberScreen(username: widget.username), // ใช้ username ที่เรากำหนดใน initState
+      Text("null"),
+      ListPostScreen(),
+      NotifyPostScreen(),
+      AddPostScreen(),
+      ViewProfileScreen()
+    ];
   }
 
   @override
@@ -102,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: 55, // Set the width and height to be equal
                 // Set the width and height to be equal
                 child: Image.network(
-                  baseURL + '/members/downloadimg/1691916492868.png',
+                  baseURL + '/members/downloadimg/${imageUser}',
                   fit: BoxFit.cover,
                 ),
               ),
@@ -172,9 +186,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         selectedChoice = 3;
                       });
                     },
-                    icon: MyNotificationWidget(selectedChoice:selectedChoice,notificationCount: 5,),
+                    icon: MyNotificationWidget(
+                      selectedChoice: selectedChoice,
+                      notificationCount: 5,
+                    ),
                   ),
-                  
                 ]),
           ),
         ),

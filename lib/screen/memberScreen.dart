@@ -2,13 +2,14 @@ import 'package:assist_decisions_app/controller/post_controller.dart';
 import 'package:assist_decisions_app/model/post.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
 import '../constant/constant_value.dart';
 
 // import '../constant/constant_value.dart';
 
 class MemberScreen extends StatefulWidget {
-  const MemberScreen({super.key});
+  final String username;
+  const MemberScreen({required this.username});
 
   @override
   State<MemberScreen> createState() => _MemberScreenState();
@@ -21,17 +22,33 @@ class _MemberScreenState extends State<MemberScreen> {
     "assets/images/page3.png",
   ];
 
-  List<Post>? posts;
+  List<Post> posts = [];
   bool? isDataLoaded = false;
-  final PostController postController = PostController();
-  void fetchPost() async {
-    posts = await postController.listAllPosts();
-    print(posts?[0].member?.username);
 
-    setState(() {
-      isDataLoaded = true;
-    });
+  List<Post>? openPosts;
+  List<Post>? closedPosts;
+
+  final PostController postController = PostController();
+
+
+void fetchPost() async {
+  posts = await postController.listPostsInterest(widget.username);
+  final now = DateTime.now();
+  final dateFormatter = DateFormat('yyyy-MM-ddTHH:mm:ss.SSSZZZZZ');
+  
+  try {
+    // final dateStop = dateFormatter.parse(posts[0].dateStop!);
+    openPosts = posts?.where((post) => dateFormatter.parse(post.dateStop!).isAfter(now)).toList();
+    closedPosts = posts?.where((post) => dateFormatter.parse(post.dateStop!).isBefore(now)).toList();
+  } catch (e) {
+    print("Error parsing date: $e");
   }
+  
+  setState(() {
+    isDataLoaded = true;
+  });
+}
+
 
   @override
   void initState() {
@@ -49,6 +66,7 @@ class _MemberScreenState extends State<MemberScreen> {
             SizedBox(
               height: 20.0,
             ),
+            Text("Username is : ${widget.username}"),
             CarouselSlider(
               items: movies.map((movie) {
                 return Container(
@@ -73,15 +91,15 @@ class _MemberScreenState extends State<MemberScreen> {
               padding: EdgeInsets.all(10.0),
               height: MediaQuery.of(context).size.height / 4,
               child: ListView.builder(
-                itemCount: posts?.length,
+                itemCount: openPosts?.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
                   return Container(
-                    decoration: BoxDecoration(),
-                    width: 200,
-                    height: 100,
-                    margin: EdgeInsets.symmetric(horizontal: 8),
-                    child: Card(
+                      decoration: BoxDecoration(),
+                      width: 200,
+                      height: 100,
+                      margin: EdgeInsets.symmetric(horizontal: 8),
+                      child: Card(
                         elevation: 5,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -90,7 +108,8 @@ class _MemberScreenState extends State<MemberScreen> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             image: DecorationImage(
-                            image: NetworkImage(baseURL + '/posts/downloadimg/${posts?[index].postImage}'),
+                              image: NetworkImage(baseURL +
+                                  '/posts/downloadimg/${openPosts?[index].postImage}'),
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -117,16 +136,17 @@ class _MemberScreenState extends State<MemberScreen> {
                                     children: [
                                       Container(
                                         decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: Colors.green),
+                                          border:
+                                              Border.all(color: Colors.green),
                                           borderRadius:
                                               BorderRadius.circular(8.0),
                                         ),
                                         child: Padding(
                                           padding: const EdgeInsets.all(5.0),
                                           child: Text(
-                                            "${posts?[index].interest?.interestName}",
-                                            style: const TextStyle( color: Colors.green,
+                                            "${openPosts?[index].interest?.interestName}",
+                                            style: const TextStyle(
+                                                color: Colors.green,
                                                 fontFamily: 'Itim',
                                                 fontSize: 12),
                                           ),
@@ -136,7 +156,7 @@ class _MemberScreenState extends State<MemberScreen> {
                                   ),
                                   SizedBox(height: 8),
                                   Text(
-                                    "${posts?[index].title}",
+                                    "${openPosts?[index].title}",
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
@@ -144,7 +164,7 @@ class _MemberScreenState extends State<MemberScreen> {
                                   ),
                                   SizedBox(height: 8),
                                   Text(
-                                    "${posts?[index].description}",
+                                    "${openPosts?[index].description}",
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
@@ -171,8 +191,7 @@ class _MemberScreenState extends State<MemberScreen> {
                             ),
                           ),
                         ),
-                      )
-                  );
+                      ));
                 },
               ),
             ),
@@ -185,7 +204,7 @@ class _MemberScreenState extends State<MemberScreen> {
               padding: EdgeInsets.all(10.0),
               height: MediaQuery.of(context).size.height / 4,
               child: ListView.builder(
-                itemCount: posts?.length,
+                itemCount: closedPosts?.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
                   return Container(
@@ -202,7 +221,8 @@ class _MemberScreenState extends State<MemberScreen> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             image: DecorationImage(
-                            image: NetworkImage(baseURL + '/posts/downloadimg/${posts?[index].postImage}'),
+                              image: NetworkImage(baseURL +
+                                  '/posts/downloadimg/${closedPosts?[index].postImage}'),
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -229,17 +249,17 @@ class _MemberScreenState extends State<MemberScreen> {
                                     children: [
                                       Container(
                                         decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: Colors.amber),
+                                          border:
+                                              Border.all(color: Colors.amber),
                                           borderRadius:
                                               BorderRadius.circular(8.0),
                                         ),
                                         child: Padding(
                                           padding: const EdgeInsets.all(5.0),
                                           child: Text(
-                                            "${posts?[index].interest?.interestName}",
+                                            "${closedPosts?[index].interest?.interestName}",
                                             style: const TextStyle(
-                                              color: Colors.amber,
+                                                color: Colors.amber,
                                                 fontFamily: 'Itim',
                                                 fontSize: 12),
                                           ),
@@ -249,7 +269,7 @@ class _MemberScreenState extends State<MemberScreen> {
                                   ),
                                   SizedBox(height: 8),
                                   Text(
-                                    "${posts?[index].title}",
+                                    "${closedPosts?[index].title}",
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
@@ -257,7 +277,7 @@ class _MemberScreenState extends State<MemberScreen> {
                                   ),
                                   SizedBox(height: 8),
                                   Text(
-                                    "${posts?[index].description}",
+                                    "${closedPosts?[index].description}",
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
