@@ -45,7 +45,7 @@ class MemberController {
   }
 
   Future updateMember(
-      String username,
+           String username,
       String password,
       String nickname,
       String gender,
@@ -53,33 +53,32 @@ class MemberController {
       String lastname,
       String email,
       String tel,
-      String image,
-      String adminstatus) async {
-    // var imageName = await upload(image);
-
+      String imageName,
+      String interestId) async {
     Map data = {
       "username": username,
-      "adminstatus": adminstatus,
+      "adminstatus": "0",
       "email": email,
       "firstname": firstname,
       "gender": gender,
-      "image": image,
+      "image": imageName,
       "lastname": lastname,
       "nickname": nickname,
       "password": password,
-      "point": "2000",
-      "status": "active",
       "tel": tel,
-      "interestId": "I00001"
+      "interestId": interestId
     };
     var body = json.encode(data);
     var url = Uri.parse(baseURL + '/members/update');
 
+    print("----------------body------------" + body);
     http.Response response = await http.post(url, headers: headers, body: body);
-    print(response.body);
     var jsonResponse = jsonDecode(response.body);
-
-    return jsonResponse;
+    if (jsonResponse != null && jsonResponse['success'] == true) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   Future upload(File file) async {
@@ -107,4 +106,5 @@ class MemberController {
     Member? member = Member.fromJsonToMember(jsonMap);
     return member;
   }
+
 }

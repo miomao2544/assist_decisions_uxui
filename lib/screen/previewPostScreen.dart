@@ -4,7 +4,6 @@ import 'package:assist_decisions_app/screen/loginMemberScreen.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../constant/constant_value.dart';
 import '../widgets/customPostCard.dart';
 
 class PreviewPostScreen extends StatefulWidget {

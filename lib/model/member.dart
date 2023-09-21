@@ -47,7 +47,6 @@ class Member{
     point: json["point"],
     interest: json["interest"] == null?null: Interest.fromJsonToInterest(json["interest"])
   );
-  
   Map<String,dynamic> fromMemberToJson(){
     return<String,dynamic>{
       'username' : username,
@@ -62,7 +61,7 @@ class Member{
       'status' : status,
       'adminstatus' : adminstatus,
       'point' : point,
-      'interest': interest?.interestId
+      'interests': interest?.interestId
     };
   }
 }

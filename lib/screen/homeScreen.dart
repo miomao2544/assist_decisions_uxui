@@ -1,6 +1,7 @@
 import 'package:assist_decisions_app/controller/member_controller.dart';
 import 'package:assist_decisions_app/model/member.dart';
 import 'package:assist_decisions_app/screen/addPostScreen.dart';
+import 'package:assist_decisions_app/screen/chackPointScreen.dart';
 import 'package:assist_decisions_app/screen/listPostScreen.dart';
 import 'package:assist_decisions_app/screen/loginMemberScreen.dart';
 import 'package:assist_decisions_app/screen/memberScreen.dart';
@@ -28,7 +29,6 @@ class _HomeScreenState extends State<HomeScreen> {
   final MemberController memberController = MemberController();
   late Member member;
 
-
   void fetchMember() async {
     member = await memberController.getMemberById(widget.username);
     print(
@@ -36,19 +36,24 @@ class _HomeScreenState extends State<HomeScreen> {
     imageUser = member.image.toString();
     print("--------------------------------${imageUser}---------------------");
   }
+
   @override
-  void initState(){
+  void initState() {
     super.initState();
     fetchMember();
     selectedChoice = 0;
-    widgets =  [
+
+    widgets = [
       MemberScreen(
           username: widget.username), // ใช้ username ที่เรากำหนดใน initState
       Text("null"),
       ListPostScreen(),
       NotifyPostScreen(),
       AddPostScreen(),
-      ViewProfileScreen(username: widget.username,)
+      ViewProfileScreen(
+        username: widget.username,
+      ),
+      ChackPointScreen(username: widget.username),
     ];
   }
 
@@ -116,7 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
               child: Container(
-                width: 50, 
+                width: 50,
                 child: Image.network(
                   baseURL + '/members/downloadimg/${imageUser}',
                   fit: BoxFit.cover,
@@ -130,10 +135,16 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.teal,
         onPressed: () {
-          Navigator.of(context).pushReplacement(
+          Widget destinationWidget;
+          if ((member.point??0) >= 100) {
+            destinationWidget = widgets[4];
+          } else {
+            destinationWidget = widgets[6];
+          }
+          Navigator.of(context).push(
             MaterialPageRoute(
               builder: (BuildContext context) {
-                return const AddPostScreen();
+                return destinationWidget;
               },
             ),
           );
@@ -190,7 +201,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                     icon: MyNotificationWidget(
                       selectedChoice: selectedChoice,
-                      notificationCount: 5,
+                      notificationCount: 1,
                     ),
                   ),
                 ]),

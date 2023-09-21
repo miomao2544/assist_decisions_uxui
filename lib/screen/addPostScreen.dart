@@ -514,7 +514,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       }
                     },
                   ),
-                  ChackPointScreen(),
+                  ChackPointScreen(username: "vote",),
                   SizedBox(height: 30),
                 ],
               ),

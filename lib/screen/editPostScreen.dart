@@ -535,7 +535,7 @@ DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(widget.post?.dateStop??"
                       }
                     },
                   ),
-                  ChackPointScreen(),
+                  ChackPointScreen(username: "vote",),
                   SizedBox(height: 30),
                 ],
               ),

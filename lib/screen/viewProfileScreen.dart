@@ -24,27 +24,25 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
   List<Interest> interests = [];
   List<String?> interestSelect = [];
   final MemberController memberController = MemberController();
-  InterestController interestController = InterestController();
+  final InterestController interestController = InterestController();
 
   void fetchMember() async {
-    member = await memberController.getMemberById("maihom2001");
-    print(member?.firstname);
+    member = await memberController.getMemberById(widget.username);
+    interests = await interestController.listInterestsByUser(widget.username);
+    print("-------------------interest------------------${interests}");
 
     setState(() {
       isDataLoaded = true;
     });
   }
 
-  String genderToText(String gender) {
-    return gender == "M" ? "ชาย" : "หญิง";
-  }
 
   String maskPassword(String password) {
     return '*' * password.length;
   }
 
   Future<void> loadInterests() async {
-    List<Interest> interestList = await interestController.listAllInterests();
+    List<Interest> interestList =  await interestController.listAllInterests();
     setState(() {
       interests = interestList;
     });
@@ -127,7 +125,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
               DividerBoxBlack(),
               InfoRow(
                   label: "สิ่งที่สนใจ",
-                  value: "${member?.interest?.interestName}"),
+                  value: ""),
               DividerBoxBlack(),
               Container(
                 height: 30.0,
@@ -143,13 +141,6 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                       padding: EdgeInsets.symmetric(horizontal: 8.0),
                       child: ElevatedButton(
                         onPressed: () {
-                          setState(() {
-                            if (isSelected) {
-                              interestSelect.remove(interest.interestId);
-                            } else {
-                              interestSelect.add(interest.interestId);
-                            }
-                          });
                         },
                         style: ElevatedButton.styleFrom(
                           primary:
@@ -161,8 +152,6 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                   },
                 ),
               ),
-              Text("คุณสามารถเลือกความสนใจได้มากกว่า 1 อัน",
-                  style: TextStyle(fontSize: 15)),
               InfoRow(label: "ชื่อผู้ใช้งาน", value: "${member?.username}"),
               DividerBoxBlack(),
               InfoRow(
@@ -171,7 +160,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) =>EditProfileScreen(member: member)),);
+                    Navigator.push(context, MaterialPageRoute(builder: (context) =>EditProfileScreen(username: widget.username)),);
                 },
                 child: Text("แก้ไขข้อมูล"),
               ),

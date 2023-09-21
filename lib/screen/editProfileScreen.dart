@@ -8,8 +8,8 @@ import '../controller/interest_controller.dart';
 import '../model/interest.dart';
 
 class EditProfileScreen extends StatefulWidget {
-  final Member? member;
-  const EditProfileScreen({required this.member});
+  final String? username;
+  const EditProfileScreen({required this.username});
 
   @override
   State<EditProfileScreen> createState() => _EditProfileScreenState();
@@ -20,19 +20,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   InterestController interestController = InterestController();
 
   List<Interest> interests = [];
-  String? selectedInterest;
+
   List<String?> interestSelect = [];
   List<bool> isSelected = [false, false, false];
 
-  String? username = "";
-  String? password = "";
-  String? confirmPassword = "";
-  String? nickname = "";
-  String? gender = "";
-  String? firstname = "";
-  String? lastname = "";
-  String? email = "";
-  String? tel = "";
+  String? username;
+  String? password;
+  String? confirmPassword;
+  String? nickname;
+  String? gender = "M";
+  String? firstname;
+  String? lastname;
+  String? email;
+  String? tel;
+  String? formattedInterestSelect;
+  Member? member;
   TextEditingController memberImageTextController = TextEditingController();
 
   final GlobalKey<FormState> fromKey = GlobalKey<FormState>();
@@ -65,28 +67,51 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     }
   }
 
-  Future<void> loadInterests() async {
+  Future loadInterests() async {
     List<Interest> interestList = await interestController.listAllInterests();
     setState(() {
+      print(interests);
       interests = interestList;
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    loadInterests();
-    isSelected = List<bool>.filled(interests.length, false);
-    username = widget.member?.username;
-    password = widget.member?.password;
-    nickname = widget.member?.nickname;
-    gender = widget.member?.gender;
-    firstname = widget.member?.firstname;
-    lastname = widget.member?.lastname;
-    email = widget.member?.email;
-    tel = widget.member?.tel;
-    memberImageTextController = TextEditingController(text: widget.member?.image);
+  bool isThaiOrEnglish(String input) {
+    final thaiPattern = RegExp(r'^[ก-๏\s]+$');
+    final englishPattern = RegExp(r'^[a-zA-Z\s]+$');
+
+    return thaiPattern.hasMatch(input) || englishPattern.hasMatch(input);
   }
+
+  bool isValidEmail(String email) {
+    final emailRegex = RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$');
+    return emailRegex.hasMatch(email);
+  }
+
+
+
+@override
+void initState() {
+  super.initState();
+  loadInterests();
+  isSelected = List<bool>.filled(interests.length, false);
+}
+Future<void> initializeData() async {
+
+     member =  await memberController.getMemberById(widget.username.toString());
+
+  setState(() {
+    if (member != null) {
+      firstname = member?.firstname.toString();
+
+    }
+
+  });
+}
+@override
+void didChangeDependencies() {
+  super.didChangeDependencies();
+  initializeData();
+}
 
   @override
   Widget build(BuildContext context) {
@@ -155,7 +180,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         ],
                       ),
                       TextFormField(
-                        initialValue: firstname,
+                        initialValue: firstname = member?.firstname.toString(),
                         decoration: InputDecoration(
                           labelText: 'ชื่อ',
                           prefixIcon:
@@ -167,10 +192,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             firstname = value;
                           });
                         },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'กรุณากรอกชื่อ';
+                          } else if (!isThaiOrEnglish(value)) {
+                            return 'กรุณาเขียนเป็นภาษาไทย หรือ อังกฤษเท่านั้น';
+                          } else if (value.length < 2 || value.length > 100) {
+                            return 'อักษรของคุณควรอยู่ระหว่าง 2 และ 100 ตัวอักษร';
+                          }
+                          return null;
+                        },
                       ),
-                      SizedBox(height: 16.0),
                       TextFormField(
-                        initialValue: lastname,
                         decoration: InputDecoration(
                           labelText: 'นามสกุล',
                           prefixIcon:
@@ -182,10 +215,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             lastname = value;
                           });
                         },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'กรุณากรอกนามสกุล';
+                          } else if (!isThaiOrEnglish(value)) {
+                            return 'กรุณาเขียนเป็นภาษาไทย หรือ อังกฤษเท่านั้น';
+                          } else if (value.length < 2 || value.length > 100) {
+                            return 'อักษรของคุณควรอยู่ระหว่าง 2 และ 100 ตัวอักษร';
+                          }
+                          return null;
+                        },
                       ),
                       SizedBox(height: 16.0),
                       TextFormField(
-                        initialValue: email,
                         decoration: InputDecoration(
                           labelText: 'อีเมล์',
                           prefixIcon:
@@ -197,12 +239,23 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             email = value;
                           });
                         },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'กรุณากรอกอีเมล์';
+                          } else if (!isValidEmail(value)) {
+                            return 'รูปแบบของคุณอีเมล์ไม่ถูกต้อง';
+                          } else if (value.length < 5 || value.length > 60) {
+                            return 'อักษรของคุณควรอยู่ระหว่าง 5 และ 60 ตัวอักษร';
+                          } else if (value.contains(' ')) {
+                            return 'ไม่อนุญาตให้มีช่องว่างในข้อมูล';
+                          }
+                          return null;
+                        },
                       ),
                       SizedBox(height: 16.0),
                       TextFormField(
-                        initialValue: tel,
                         decoration: InputDecoration(
-                          labelText: 'เบอร์โทร',
+                          labelText: 'หมายเลขโทรศัพท์',
                           prefixIcon:
                               Icon(Icons.phone, color: Color(0xFF1c174d)),
                           labelStyle: TextStyle(color: Color(0xFF1c174d)),
@@ -211,6 +264,23 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           setState(() {
                             tel = value;
                           });
+                        },
+                        validator: (value) {
+                          final validDigits = RegExp(r'^[0-9]{10}$');
+
+                          if (value == null || value.isEmpty) {
+                            return 'กรุณากรอกหมายเลขโทรศัพท์';
+                          } else if (!value.startsWith('06') &&
+                              !value.startsWith('08') &&
+                              !value.startsWith('09')) {
+                            return 'หมายเลขโทรศัพท์ต้องขึ้นต้นด้วย 06, 08, หรือ 09';
+                          }
+                          if (!validDigits.hasMatch(value.toString())) {
+                            return 'หมายเลขโทรศัพท์ต้องประกอบด้วยตัวเลข 0-9';
+                          } else if (value.length != 10) {
+                            return 'หมายเลขโทรศัพท์ต้องมี 10 ตัวเท่านั้น';
+                          }
+                          return null;
                         },
                       ),
                       SizedBox(height: 16.0),
@@ -236,6 +306,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                     } else {
                                       interestSelect.add(interest.interestId);
                                     }
+                                    formattedInterestSelect = interestSelect
+                                        .where((item) => item != null)
+                                        .join(',');
+                                    print(
+                                        "interestSelect is ----------------- > = " +
+                                            formattedInterestSelect.toString());
                                   });
                                 },
                                 style: ElevatedButton.styleFrom(
@@ -298,41 +374,51 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ),
                       SizedBox(height: 12.0),
                       TextFormField(
-                        initialValue: nickname,
                         decoration: InputDecoration(
-                          labelText: 'ชื่อบัญชี',
-                          prefixIcon: Icon(Icons.account_circle,
-                              color: Color(0xFF1c174d)),
-                          labelStyle: TextStyle(color: Color(0xFF1c174d)),
-                        ),
+                            labelText: 'ชื่อบัญชี',
+                            prefixIcon: Icon(Icons.account_circle)),
                         onChanged: (value) {
                           setState(() {
                             nickname = value;
                           });
                         },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'กรุณากรอกชื่อ';
+                          } else if (!isThaiOrEnglish(value)) {
+                            return 'กรุณาเขียนเป็นภาษาไทย หรือ อังกฤษเท่านั้น';
+                          } else if (value.length < 2 || value.length > 100) {
+                            return 'อักษรของคุณควรอยู่ระหว่าง 2 และ 100 ตัวอักษร';
+                          }
+                          return null;
+                        },
                       ),
                       SizedBox(height: 16.0),
                       TextFormField(
-                        initialValue: username,
                         decoration: InputDecoration(
                           labelText: 'ชื่อผู้ใช้งาน (ห้ามซ้ำ)',
-                          prefixIcon:
-                              Icon(Icons.person, color: Color(0xFF1c174d)),
-                          labelStyle: TextStyle(color: Color(0xFF1c174d)),
                         ),
                         onChanged: (value) {
                           setState(() {
                             username = value;
                           });
                         },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'กรุณากรอกชื่อผู้ใช้งาน';
+                          } else if (!RegExp(r'^[a-zA-Z0-9]+$')
+                              .hasMatch(value)) {
+                            return 'กรุณากรอกตัวอักษรภาษาอังกฤษหรือตัวเลขเท่านั้น';
+                          } else if (value.length < 6 || value.length > 12) {
+                            return 'อักษรของคุณควรอยู่ระหว่าง 6 และ 12 ตัวอักษร';
+                          }
+                          return null;
+                        },
                       ),
                       SizedBox(height: 16.0),
                       TextFormField(
-                        initialValue: password,
                         decoration: InputDecoration(
                           labelText: 'รหัสผ่าน',
-                          prefixIcon: Icon(Icons.key, color: Color(0xFF1c174d)),
-                          labelStyle: TextStyle(color: Color(0xFF1c174d)),
                         ),
                         obscureText: true,
                         onChanged: (value) {
@@ -340,19 +426,36 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             password = value;
                           });
                         },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'กรุณากรอกรหัสผ่าน';
+                          } else if (value.length < 8 || value.length > 16) {
+                            return 'รหัสผ่านควรมีความยาวระหว่าง 8 และ 16 ตัวอักษร';
+                          } else if (!RegExp(r'^[a-zA-Z0-9@_\-\.]+$')
+                              .hasMatch(value)) {
+                            return 'รหัสผ่านควรประกอบด้วยตัวอักษรภาษาอังกฤษ, ตัวเลข, @, _, -, หรือ . เท่านั้น';
+                          }
+                          return null;
+                        },
                       ),
                       SizedBox(height: 16.0),
                       TextFormField(
                         decoration: InputDecoration(
                           labelText: 'ยืนยันรหัสผ่าน',
-                          prefixIcon: Icon(Icons.key, color: Color(0xFF1c174d)),
-                          labelStyle: TextStyle(color: Color(0xFF1c174d)),
                         ),
                         obscureText: true,
                         onChanged: (value) {
                           setState(() {
                             confirmPassword = value;
                           });
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'กรุณารหัสผ่านอีกครั้งเพื่อยืนยัน';
+                          } else if (value.toString() != password) {
+                            return 'รหัสผ่านของคุณไม่เหมือนเดิม กรุณากรอกใหม่อีกครั้ง';
+                          }
+                          return null;
                         },
                       ),
                       SizedBox(height: 16.0),
@@ -364,33 +467,115 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           child: ElevatedButton.icon(
                               icon: Icon(Icons.add),
                               label:
-                                  Text("บันทึก", style: TextStyle(fontSize: 20)),
+                                  Text("สมัคร", style: TextStyle(fontSize: 20)),
                               style: ButtonStyle(
                                 backgroundColor:
                                     MaterialStateProperty.all<Color>(Color(
                                         0xFF479f76)), // กำหนดสีพื้นหลังของปุ่ม
                               ),
                               onPressed: () async {
-                                print("เพศ คือ : ${gender}");
                                 if (fromKey.currentState!.validate()) {
-                                  await memberController.updateMember(
-                                    username ?? "",
-                                    password ?? "",
-                                    nickname ?? "",
-                                    gender ?? "",
-                                    firstname ?? "",
-                                    lastname ?? "",
-                                    email ?? "",
-                                    tel ?? "",
-                                    memberImageTextController.text,
-                                    widget.member?.adminstatus.toString()??"",
-                
-                                  );
+                                  if (interestSelect.isEmpty) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        Future.delayed(Duration(seconds: 3),
+                                            () {
+                                          Navigator.of(context).pop();
+                                        });
+
+                                        return AlertDialog(
+                                          title: Text('แจ้งเตือน'),
+                                          content: Text(
+                                              'กรุณาเลือกความสนใจอย่างน้อย 1 ตัวเลือก'),
+                                          actions: [
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text('ปิด'),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  } else {
+                                    String? fileToSend =
+                                        "I00001.png"; // เริ่มต้นให้ใช้ fileToDisplay
+
+                                    if (fileToDisplay != null) {
+                                      // รอผลลัพธ์จากการอัปโหลด
+                                      var uploadedFile = await memberController
+                                          .upload(fileToDisplay!);
+
+                                      // ตรวจสอบว่า uploadedFile ไม่เป็น null
+                                      if (uploadedFile != null) {
+                                        fileToSend = uploadedFile;
+                                      }
+                                    }
+                                    var result =
+                                        await memberController.updateMember(
+                                            username ?? "",
+                                            password ?? "",
+                                            nickname ?? "",
+                                            gender ?? "",
+                                            firstname ?? "",
+                                            lastname ?? "",
+                                            email ?? "",
+                                            tel ?? "",
+                                            fileToSend ?? "",
+                                            formattedInterestSelect ?? "");
+                                    if (result == false) {
+                                      // แสดงอนิเมชันแจ้งเตือนเมื่อสมัครสมาชิกสำเร็จ
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: Text('สำเร็จ'),
+                                            content: Text('บันทึกสมาชิกสำเร็จ'),
+                                            actions: [
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text('ปิด'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+
+                                      // เปลี่ยนหน้าไปยัง LoginMemberScreen หลังจากปิดกล่องข้อความแจ้งเตือน
+                                      Future.delayed(
+                                          Duration(milliseconds: 1000), () {
+                                        Navigator.push(context,
+                                            MaterialPageRoute(
+                                                builder: (context) {
+                                          return LoginMemberScreen();
+                                        }));
+                                      });
+                                    } else {
+                                      // แสดงอนิเมชันแจ้งเตือนถ้า Username ซ้ำ
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: Text('ข้อผิดพลาด'),
+                                            content: Text('Username ซ้ำ'),
+                                            actions: [
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text('ปิด'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    }
+                                  }
                                 }
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) {
-                                  return LoginMemberScreen();
-                                }));
                               }),
                         ),
                       ),
