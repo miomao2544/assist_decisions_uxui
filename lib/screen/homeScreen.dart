@@ -28,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final MemberController memberController = MemberController();
   late Member member;
 
+
   void fetchMember() async {
     member = await memberController.getMemberById(widget.username);
     print(
@@ -35,13 +36,12 @@ class _HomeScreenState extends State<HomeScreen> {
     imageUser = member.image.toString();
     print("--------------------------------${imageUser}---------------------");
   }
-
   @override
-  void initState() {
+  void initState(){
     super.initState();
-    selectedChoice = 0;
     fetchMember();
-    widgets = [
+    selectedChoice = 0;
+    widgets =  [
       MemberScreen(
           username: widget.username), // ใช้ username ที่เรากำหนดใน initState
       Text("null"),
