@@ -4,6 +4,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../constant/constant_value.dart';
+import '../widgets/customPostCard.dart';
+import 'loginMemberScreen.dart';
 
 // import '../constant/constant_value.dart';
 
@@ -30,25 +32,26 @@ class _MemberScreenState extends State<MemberScreen> {
 
   final PostController postController = PostController();
 
+  void fetchPost() async {
+    posts = await postController.listPostsInterest(widget.username);
+    final now = DateTime.now();
+    final dateFormatter = DateFormat('yyyy-MM-ddTHH:mm:ss.SSSZZZZZ');
 
-void fetchPost() async {
-  posts = await postController.listPostsInterest(widget.username);
-  final now = DateTime.now();
-  final dateFormatter = DateFormat('yyyy-MM-ddTHH:mm:ss.SSSZZZZZ');
-  
-  try {
-    // final dateStop = dateFormatter.parse(posts[0].dateStop!);
-    openPosts = posts.where((post) => dateFormatter.parse(post.dateStop!).isAfter(now)).toList();
-    closedPosts = posts.where((post) => dateFormatter.parse(post.dateStop!).isBefore(now)).toList();
-  } catch (e) {
-    print("Error parsing date: $e");
+    try {
+      openPosts = posts
+          .where((post) => dateFormatter.parse(post.dateStop!).isAfter(now))
+          .toList();
+      closedPosts = posts
+          .where((post) => dateFormatter.parse(post.dateStop!).isBefore(now))
+          .toList();
+    } catch (e) {
+      print("Error parsing date: $e");
+    }
+
+    setState(() {
+      isDataLoaded = true;
+    });
   }
-  
-  setState(() {
-    isDataLoaded = true;
-  });
-}
-
 
   @override
   void initState() {
@@ -94,104 +97,14 @@ void fetchPost() async {
                 itemCount: openPosts?.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
-                  return Container(
-                      decoration: BoxDecoration(),
-                      width: 200,
-                      height: 100,
-                      margin: EdgeInsets.symmetric(horizontal: 8),
-                      child: Card(
-                        elevation: 5,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            image: DecorationImage(
-                              image: NetworkImage(baseURL +
-                                  '/posts/downloadimg/${openPosts?[index].postImage}'),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              gradient: LinearGradient(
-                                begin: Alignment.bottomCenter,
-                                end: Alignment.topCenter,
-                                colors: [
-                                  Colors.white.withOpacity(1),
-                                  Colors.transparent
-                                ],
-                              ),
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.green),
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: Text(
-                                            "${openPosts?[index].interest?.interestName}",
-                                            style: const TextStyle(
-                                                color: Colors.green,
-                                                fontFamily: 'Itim',
-                                                fontSize: 12),
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  SizedBox(height: 8),
-                                  Text(
-                                    "${openPosts?[index].title}",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                        fontFamily: 'Itim', fontSize: 20),
-                                  ),
-                                  SizedBox(height: 8),
-                                  Text(
-                                    "${openPosts?[index].description}",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                        fontFamily: 'Itim', fontSize: 16),
-                                  ),
-                                  SizedBox(height: 8),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      ElevatedButton(
-                                        onPressed: () {},
-                                        child: Text(
-                                          "เพิ่มเติม",
-                                          style: TextStyle(color: Colors.black),
-                                        ),
-                                        style: ElevatedButton.styleFrom(
-                                          primary: Colors.green,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ));
+                  return CustomPostCard(
+                    postImage: openPosts?[index].postImage ?? '',
+                    interestName:
+                        openPosts?[index].interest?.interestName ?? '',
+                    title: openPosts?[index].title ?? '',
+                    description: openPosts?[index].description ?? '',
+                    screen: LoginMemberScreen()
+                  );
                 },
               ),
             ),
@@ -207,104 +120,14 @@ void fetchPost() async {
                 itemCount: closedPosts?.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
-                  return Container(
-                      decoration: BoxDecoration(),
-                      width: 200,
-                      height: 100,
-                      margin: EdgeInsets.symmetric(horizontal: 8),
-                      child: Card(
-                        elevation: 5,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            image: DecorationImage(
-                              image: NetworkImage(baseURL +
-                                  '/posts/downloadimg/${closedPosts?[index].postImage}'),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              gradient: LinearGradient(
-                                begin: Alignment.bottomCenter,
-                                end: Alignment.topCenter,
-                                colors: [
-                                  Colors.white.withOpacity(1),
-                                  Colors.transparent
-                                ],
-                              ),
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.amber),
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: Text(
-                                            "${closedPosts?[index].interest?.interestName}",
-                                            style: const TextStyle(
-                                                color: Colors.amber,
-                                                fontFamily: 'Itim',
-                                                fontSize: 12),
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  SizedBox(height: 8),
-                                  Text(
-                                    "${closedPosts?[index].title}",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                        fontFamily: 'Itim', fontSize: 20),
-                                  ),
-                                  SizedBox(height: 8),
-                                  Text(
-                                    "${closedPosts?[index].description}",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                        fontFamily: 'Itim', fontSize: 16),
-                                  ),
-                                  SizedBox(height: 8),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      ElevatedButton(
-                                        onPressed: () {},
-                                        child: Text(
-                                          "เพิ่มเติม",
-                                          style: TextStyle(color: Colors.black),
-                                        ),
-                                        style: ElevatedButton.styleFrom(
-                                          primary: Colors.amber,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ));
+                  return CustomPostCard(
+                    postImage: closedPosts?[index].postImage ?? '',
+                    interestName:
+                        closedPosts?[index].interest?.interestName ?? '',
+                    title: closedPosts?[index].title ?? '',
+                    description: closedPosts?[index].description ?? '',
+                    screen: LoginMemberScreen()
+                  );
                 },
               ),
             ),

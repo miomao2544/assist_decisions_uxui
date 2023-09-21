@@ -27,25 +27,28 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget> widgets = [];
   final MemberController memberController = MemberController();
   late Member member;
-  
-void fetchMember() async {
-  member = await memberController.getMemberById(widget.username);
-  print("--------------------------------${member.image.toString()}---------------------");
-  imageUser = member.image.toString();
-   print("--------------------------------${imageUser}---------------------");
-}
+
+  void fetchMember() async {
+    member = await memberController.getMemberById(widget.username);
+    print(
+        "--------------------------------${member.image.toString()}---------------------");
+    imageUser = member.image.toString();
+    print("--------------------------------${imageUser}---------------------");
+  }
+
   @override
   void initState() {
     super.initState();
     selectedChoice = 0;
     fetchMember();
     widgets = [
-      MemberScreen(username: widget.username), // ใช้ username ที่เรากำหนดใน initState
+      MemberScreen(
+          username: widget.username), // ใช้ username ที่เรากำหนดใน initState
       Text("null"),
       ListPostScreen(),
       NotifyPostScreen(),
       AddPostScreen(),
-      ViewProfileScreen()
+      ViewProfileScreen(username: widget.username,)
     ];
   }
 
@@ -104,17 +107,16 @@ void fetchMember() async {
           ClipOval(
             child: GestureDetector(
               onTap: () {
-                Navigator.of(context).pushReplacement(
+                Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (BuildContext context) {
-                      return const ViewProfileScreen();
+                      return widgets[5];
                     },
                   ),
                 );
               },
               child: Container(
-                width: 55, // Set the width and height to be equal
-                // Set the width and height to be equal
+                width: 50, 
                 child: Image.network(
                   baseURL + '/members/downloadimg/${imageUser}',
                   fit: BoxFit.cover,

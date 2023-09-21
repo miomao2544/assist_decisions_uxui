@@ -10,7 +10,8 @@ import '../model/member.dart';
 import '../widgets/InfoRow.dart';
 
 class ViewProfileScreen extends StatefulWidget {
-  const ViewProfileScreen({super.key});
+  final String username;
+  const ViewProfileScreen({required this.username});
 
   @override
   State<ViewProfileScreen> createState() => _ViewProfileScreenState();

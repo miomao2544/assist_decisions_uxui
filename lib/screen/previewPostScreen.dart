@@ -3,8 +3,9 @@ import 'package:assist_decisions_app/model/post.dart';
 import 'package:assist_decisions_app/screen/loginMemberScreen.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
 import '../constant/constant_value.dart';
+import '../widgets/customPostCard.dart';
 
 class PreviewPostScreen extends StatefulWidget {
   const PreviewPostScreen({super.key});
@@ -20,17 +21,33 @@ class _PreviewPostScreenState extends State<PreviewPostScreen> {
     "assets/images/page3.png",
   ];
 
-  List<Post>? posts;
+  List<Post> posts = [];
   bool? isDataLoaded = false;
+  
+  List<Post>? openPosts;
+  List<Post>? closedPosts;
   final PostController postController = PostController();
   void fetchPost() async {
-    posts = await postController.listPostsAfter();
-    print(posts?[0].member?.username);
+    posts = await postController.listAllPosts();
+    final now = DateTime.now();
+    final dateFormatter = DateFormat('yyyy-MM-ddTHH:mm:ss.SSSZZZZZ');
+
+    try {
+      openPosts = posts
+          .where((post) => dateFormatter.parse(post.dateStop!).isAfter(now))
+          .toList();
+      closedPosts = posts
+          .where((post) => dateFormatter.parse(post.dateStop!).isBefore(now))
+          .toList();
+    } catch (e) {
+      print("Error parsing date: $e");
+    }
 
     setState(() {
       isDataLoaded = true;
     });
   }
+
 
   @override
   void initState() {
@@ -81,113 +98,17 @@ class _PreviewPostScreenState extends State<PreviewPostScreen> {
               padding: EdgeInsets.all(10.0),
               height: MediaQuery.of(context).size.height / 4,
               child: ListView.builder(
-                itemCount: posts?.length,
+                itemCount: openPosts?.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
-                  return Container(
-                      decoration: BoxDecoration(),
-                      width: 200,
-                      height: 100,
-                      margin: EdgeInsets.symmetric(horizontal: 8),
-                      child: Card(
-                        elevation: 5,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            image: DecorationImage(
-                              image: NetworkImage(baseURL +
-                                  '/posts/downloadimg/${posts?[index].postImage}'),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              gradient: LinearGradient(
-                                begin: Alignment.bottomCenter,
-                                end: Alignment.topCenter,
-                                colors: [
-                                  Colors.white.withOpacity(1),
-                                  Colors.transparent
-                                ],
-                              ),
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.green),
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: Text(
-                                            "${posts?[index].interest?.interestName}",
-                                            style: const TextStyle(
-                                                color: Colors.green,
-                                                fontFamily: 'Itim',
-                                                fontSize: 12),
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  SizedBox(height: 8),
-                                  Text(
-                                    "${posts?[index].title}",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                        fontFamily: 'Itim', fontSize: 20),
-                                  ),
-                                  SizedBox(height: 8),
-                                  Text(
-                                    "${posts?[index].description}",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                        fontFamily: 'Itim', fontSize: 16),
-                                  ),
-                                  SizedBox(height: 8),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.push(context,
-                                              MaterialPageRoute(
-                                                  builder: (context) {
-                                            return LoginMemberScreen();
-                                          }));
-                                        },
-                                        child: Text(
-                                          "เพิ่มเติม",
-                                          style: TextStyle(color: Colors.black),
-                                        ),
-                                        style: ElevatedButton.styleFrom(
-                                          primary: Colors.green,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ));
+                  return CustomPostCard(
+                    postImage: openPosts?[index].postImage ?? '',
+                    interestName:
+                        openPosts?[index].interest?.interestName ?? '',
+                    title: openPosts?[index].title ?? '',
+                    description: openPosts?[index].description ?? '',
+                    screen: LoginMemberScreen()
+                  );
                 },
               ),
             ),
@@ -200,113 +121,17 @@ class _PreviewPostScreenState extends State<PreviewPostScreen> {
               padding: EdgeInsets.all(10.0),
               height: MediaQuery.of(context).size.height / 4,
               child: ListView.builder(
-                itemCount: posts?.length,
+                itemCount: closedPosts?.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
-                  return Container(
-                      decoration: BoxDecoration(),
-                      width: 200,
-                      height: 100,
-                      margin: EdgeInsets.symmetric(horizontal: 8),
-                      child: Card(
-                        elevation: 5,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            image: DecorationImage(
-                              image: NetworkImage(baseURL +
-                                  '/posts/downloadimg/${posts?[index].postImage}'),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              gradient: LinearGradient(
-                                begin: Alignment.bottomCenter,
-                                end: Alignment.topCenter,
-                                colors: [
-                                  Colors.white.withOpacity(1),
-                                  Colors.transparent
-                                ],
-                              ),
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.amber),
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: Text(
-                                            "${posts?[index].interest?.interestName}",
-                                            style: const TextStyle(
-                                                color: Colors.amber,
-                                                fontFamily: 'Itim',
-                                                fontSize: 12),
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  SizedBox(height: 8),
-                                  Text(
-                                    "${posts?[index].title}",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                        fontFamily: 'Itim', fontSize: 20),
-                                  ),
-                                  SizedBox(height: 8),
-                                  Text(
-                                    "${posts?[index].description}",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                        fontFamily: 'Itim', fontSize: 16),
-                                  ),
-                                  SizedBox(height: 8),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.push(context,
-                                              MaterialPageRoute(
-                                                  builder: (context) {
-                                            return LoginMemberScreen();
-                                          }));
-                                        },
-                                        child: Text(
-                                          "เพิ่มเติม",
-                                          style: TextStyle(color: Colors.black),
-                                        ),
-                                        style: ElevatedButton.styleFrom(
-                                          primary: Colors.amber,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ));
+                  return CustomPostCard(
+                    postImage: closedPosts?[index].postImage ?? '',
+                    interestName:
+                        closedPosts?[index].interest?.interestName ?? '',
+                    title: closedPosts?[index].title ?? '',
+                    description: closedPosts?[index].description ?? '',
+                    screen: LoginMemberScreen()
+                  );
                 },
               ),
             ),

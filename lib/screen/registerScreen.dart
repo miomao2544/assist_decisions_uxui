@@ -480,7 +480,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     );
                                   } else {
                                     String? fileToSend =
-                                        "I00001.jpg"; // เริ่มต้นให้ใช้ fileToDisplay
+                                        "I00001.png"; // เริ่มต้นให้ใช้ fileToDisplay
 
                                     if (fileToDisplay != null) {
                                       // รอผลลัพธ์จากการอัปโหลด
