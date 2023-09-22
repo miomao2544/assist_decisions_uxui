@@ -20,7 +20,6 @@ class ViewProfileScreen extends StatefulWidget {
 class _ViewProfileScreenState extends State<ViewProfileScreen> {
   Member? member;
   bool? isDataLoaded = false;
-  List<bool> isSelected = [false, false, false];
   List<Interest> interests = [];
   List<String?> interestSelect = [];
   final MemberController memberController = MemberController();
@@ -28,32 +27,30 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
 
   void fetchMember() async {
     member = await memberController.getMemberById(widget.username);
-    interests = await interestController.listInterestsByUser(widget.username);
-    print("-------------------interest------------------${interests}");
-
-    setState(() {
-      isDataLoaded = true;
-    });
+    if (member != null) {
+      if (member!.interests != null) {
+        // Map interests to a list of strings
+        interestSelect = member!.interests!
+            .map((interest) => interest.interestName ?? "")
+            .toList();
+      }
+      // Fetch interests for the user (you should implement this)
+      interests = member!.interests!;
+      ;
+      setState(() {
+        isDataLoaded = true;
+      });
+    }
   }
-
 
   String maskPassword(String password) {
     return '*' * password.length;
-  }
-
-  Future<void> loadInterests() async {
-    List<Interest> interestList =  await interestController.listAllInterests();
-    setState(() {
-      interests = interestList;
-    });
   }
 
   @override
   void initState() {
     super.initState();
     fetchMember();
-    loadInterests();
-    isSelected = List<bool>.filled(interests.length, false);
   }
 
   @override
@@ -63,111 +60,124 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
       appBar: AppBar(
         title: Text('Profile'),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(30.0),
-          child: Container(
-            child: Column(children: [
-              ClipOval(
-                child: Image.network(
-                  baseURL + '/members/downloadimg/${member?.image}',
-                  fit: BoxFit.cover,
-                  width: 150,
-                  height: 150,
-                ),
-              ),
-              const SizedBox(height: 15),
-              Text(
-                "${member?.nickname}",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "คะแนน",
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        Text("${member?.point}",
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold)),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text("สถานะ",
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold)),
-                        Text("${member?.status}",
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold)),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              InfoRow(label: "คะแนน", value: "${member?.point}"),
-              DividerBoxBlack(),
-              InfoRow(label: "ชื่อ", value: "${member?.firstname}"),
-              DividerBoxBlack(),
-              InfoRow(label: "นามสกุล", value: "${member?.lastname}"),
-              DividerBoxBlack(),
-              InfoRow(label: "อีเมล", value: "${member?.email}"),
-              DividerBoxBlack(),
-              InfoRow(label: "เบอร์โทรศัพท์", value: "${member?.tel}"),
-              DividerBoxBlack(),
-              InfoRow(
-                  label: "สิ่งที่สนใจ",
-                  value: ""),
-              DividerBoxBlack(),
-              Container(
-                height: 30.0,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: interests.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final interest = interests[index];
-                    final isSelected =
-                        interestSelect.contains(interest.interestId);
-      
-                    return Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8.0),
-                      child: ElevatedButton(
-                        onPressed: () {
-                        },
-                        style: ElevatedButton.styleFrom(
-                          primary:
-                              isSelected ? Color(0xFF479f76) : Color(0xFF1c174d),
-                        ),
-                        child: Text(interest.interestName ?? ""),
+      body: isDataLoaded == true
+          ? SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(30.0),
+                child: Container(
+                  child: Column(children: [
+                    ClipOval(
+                      child: Image.network(
+                        baseURL + '/members/downloadimg/${member?.image}',
+                        fit: BoxFit.cover,
+                        width: 150,
+                        height: 150,
                       ),
-                    );
-                  },
+                    ),
+                    const SizedBox(height: 15),
+                    Text(
+                      "${member?.nickname}",
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                "คะแนน",
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              Text("${member?.point}",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text("สถานะ",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold)),
+                              Text("${member?.status}",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    InfoRow(label: "คะแนน", value: "${member?.point}"),
+                    DividerBoxBlack(),
+                    InfoRow(label: "ชื่อ", value: "${member?.firstname}"),
+                    DividerBoxBlack(),
+                    InfoRow(label: "นามสกุล", value: "${member?.lastname}"),
+                    DividerBoxBlack(),
+                    InfoRow(label: "อีเมล", value: "${member?.email}"),
+                    DividerBoxBlack(),
+                    InfoRow(label: "เบอร์โทรศัพท์", value: "${member?.tel}"),
+                    DividerBoxBlack(),
+                    InfoRow(label: "สิ่งที่สนใจ", value: ""),
+                    DividerBoxBlack(),
+                    Container(
+                      height: 35.0,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: interests.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final interest = interests[index];
+                          return Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 8.0),
+                            child: GestureDetector(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Color.fromARGB(255, 255, 179, 0),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 16.0, vertical: 8.0),
+                                child: Text(
+                                  interest.interestName ?? "",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    InfoRow(
+                        label: "ชื่อผู้ใช้งาน", value: "${member?.username}"),
+                    DividerBoxBlack(),
+                    SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  EditProfileScreen(username: widget.username)),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.amber, // เปลี่ยนสีปุ่มเป็นสีฟ้า
+                      ),
+                      child: Text("แก้ไขข้อมูล",
+                          style: TextStyle(color: Colors.white)),
+                    ),
+                  ]),
                 ),
               ),
-              InfoRow(label: "ชื่อผู้ใช้งาน", value: "${member?.username}"),
-              DividerBoxBlack(),
-              InfoRow(
-                  label: "รหัสผ่าน", value: maskPassword(member?.password ?? "")),
-              DividerBoxBlack(),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) =>EditProfileScreen(username: widget.username)),);
-                },
-                child: Text("แก้ไขข้อมูล"),
-              ),
-            ]),
-          ),
-        ),
-      ),
+            )
+          : CircularProgressIndicator(),
     ));
   }
 }

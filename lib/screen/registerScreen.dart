@@ -492,8 +492,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         fileToSend = uploadedFile;
                                       }
                                     }
-                                    var result =
-                                        await memberController.addMember(
+                                    var result = await memberController.addMember(
                                             username ?? "",
                                             password ?? "",
                                             nickname ?? "",

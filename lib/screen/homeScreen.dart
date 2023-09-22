@@ -24,16 +24,16 @@ class _HomeScreenState extends State<HomeScreen> {
   int selectedChoice = 0;
   int currentState = 0;
   String username = '';
-  String imageUser = '';
+  String? imageUser = '';
   List<Widget> widgets = [];
   final MemberController memberController = MemberController();
-  late Member member;
+  Member? member;
 
   void fetchMember() async {
     member = await memberController.getMemberById(widget.username);
     print(
-        "--------------------------------${member.image.toString()}---------------------");
-    imageUser = member.image.toString();
+        "--------------------------------${member?.image.toString()}---------------------");
+    imageUser = member?.image.toString();
     print("--------------------------------${imageUser}---------------------");
   }
 
@@ -136,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.teal,
         onPressed: () {
           Widget destinationWidget;
-          if ((member.point??0) >= 100) {
+          if ((member?.point??0) >= 100) {
             destinationWidget = widgets[4];
           } else {
             destinationWidget = widgets[6];

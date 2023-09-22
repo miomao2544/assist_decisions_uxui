@@ -500,7 +500,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                           await choiceController.addChoice(
                             choice.choiceName ?? '',
                             "choice.choiceImage",
-                            response["postID"],
+                            response["postId"],
                           );
                         }
                         // print(response);

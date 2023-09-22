@@ -44,7 +44,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   PlatformFile? pickedFile;
   File? fileToDisplay;
   bool isLoadingPicture = true;
-
+ bool? isDataLoaded = false;
   void _pickFile() async {
     try {
       setState(() {
@@ -98,25 +98,26 @@ void initState() {
 Future<void> initializeData() async {
 
      member =  await memberController.getMemberById(widget.username.toString());
-
-  setState(() {
-    if (member != null) {
+ if (member != null) {
       firstname = member?.firstname.toString();
-
+ 
     }
-
+  setState(() {
+     isDataLoaded = true;
   });
 }
 @override
 void didChangeDependencies() {
   super.didChangeDependencies();
   initializeData();
+
+  
 }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
+      body:isDataLoaded==true?Padding(
           padding: EdgeInsets.all(16.0),
           child: SingleChildScrollView(
             child: Column(
@@ -180,7 +181,7 @@ void didChangeDependencies() {
                         ],
                       ),
                       TextFormField(
-                        initialValue: firstname = member?.firstname.toString(),
+                        initialValue: firstname ,
                         decoration: InputDecoration(
                           labelText: 'ชื่อ',
                           prefixIcon:
@@ -584,7 +585,8 @@ void didChangeDependencies() {
                 ),
               ],
             ),
-          )),
+          ),
+          ):CircularProgressIndicator(),
     );
   }
 }
