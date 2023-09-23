@@ -29,12 +29,16 @@ class _AddPostScreenState extends State<AddPostScreen> {
   String? selectedInterest;
   FilePickerResult? filePickerResult;
   String? fileName;
+  List<String>? fileImageName = [];
   String? dateStarts;
   String? dateStops;
   PlatformFile? pickedFile;
   File? fileToDisplay;
+  List<File>? fileImagesToDisplay = [];
   bool isLoadingPicture = true;
+  List<bool>? isLoadingImagePicture;
   List<Choice> choices = [];
+  List<String>? Images = [];
   TextEditingController postImageTextController = TextEditingController();
   TextEditingController titleTextController = TextEditingController();
   TextEditingController descriptionTextController = TextEditingController();
@@ -70,9 +74,33 @@ class _AddPostScreenState extends State<AddPostScreen> {
     }
   }
 
+  void _pickFileChoices(int index) async {
+    try {
+      setState(() {
+        isLoadingPicture = true;
+      });
+
+      filePickerResult = await FilePicker.platform
+          .pickFiles(allowMultiple: false, type: FileType.image);
+      if (filePickerResult != null) {
+        fileImageName?.add(filePickerResult!.files.first.name);
+        pickedFile = filePickerResult!.files.first;
+        fileImagesToDisplay?.add(File(pickedFile!.path.toString()));
+        
+      }
+      setState(() {
+        isLoadingPicture = false;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
   void _removeChoice(int index) {
     setState(() {
       choices.removeAt(index);
+      fileImagesToDisplay?.removeAt(index);
+      fileImageName?.removeAt(index);
     });
   }
 
@@ -89,7 +117,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
           "${selectedDate.day.toString().padLeft(2, '0')}/${selectedDate.month.toString().padLeft(2, '0')}/${selectedDate.year.toString().padLeft(4, '0')}";
 
       postDateStartController.text = formattedDate;
-      String formattedDate2 = "${selectedDate.year.toString().padLeft(4, '0')}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')} ${selectedDate.hour.toString().padLeft(2, '0')}:${selectedDate.minute.toString().padLeft(2, '0')}:${selectedDate.second.toString().padLeft(2, '0')}";
+      String formattedDate2 =
+          "${selectedDate.year.toString().padLeft(4, '0')}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')} ${selectedDate.hour.toString().padLeft(2, '0')}:${selectedDate.minute.toString().padLeft(2, '0')}:${selectedDate.second.toString().padLeft(2, '0')}";
       dateStarts = formattedDate2;
     }
   }
@@ -108,7 +137,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
           "${selectedDate.day.toString().padLeft(2, '0')}/${selectedDate.month.toString().padLeft(2, '0')}/${selectedDate.year.toString().padLeft(4, '0')}";
       postDateStopController.text = formattedDate;
       print(postDateStopController.text);
-      String formattedDate2 = "${selectedDate.year.toString().padLeft(4, '0')}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')} ${selectedDate.hour.toString().padLeft(2, '0')}:${selectedDate.minute.toString().padLeft(2, '0')}:${selectedDate.second.toString().padLeft(2, '0')}";
+      String formattedDate2 =
+          "${selectedDate.year.toString().padLeft(4, '0')}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')} ${selectedDate.hour.toString().padLeft(2, '0')}:${selectedDate.minute.toString().padLeft(2, '0')}:${selectedDate.second.toString().padLeft(2, '0')}";
       dateStops = formattedDate2;
     }
   }
@@ -117,8 +147,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
   void initState() {
     super.initState();
 
-    loadInterests(); //โหลดความสนใจ
-    // สร้างตัวเลือก 2 ครั้งเมื่อเปิดหน้า
+    loadInterests();
     for (int i = 0; i < 2; i++) {
       choices.add(Choice(choiceName: ''));
     }
@@ -421,6 +450,28 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       child: Row(
                         children: [
+                          Center(
+                            child: fileImagesToDisplay != null &&
+                                    fileImagesToDisplay!.isNotEmpty &&
+                                    i < fileImagesToDisplay!.length
+                                ? GestureDetector(
+                                    child: Image.file(
+                                      fileImagesToDisplay![i],
+                                      width: 100,
+                                      height: 100,
+                                    ),
+                                    onTap: () {
+                                      _pickFileChoices(i);
+                                    },
+                                  )
+                                : GestureDetector(
+                                    onTap: () {
+                                      _pickFileChoices(i);
+                                    },
+                                    child: Icon(Icons.image,
+                                        size: 30, color: Colors.blue),
+                                  ),
+                          ),
                           Expanded(
                             child: TextFormField(
                               decoration: InputDecoration(
@@ -477,16 +528,19 @@ class _AddPostScreenState extends State<AddPostScreen> {
                             fileToDisplay!,
                             descriptionTextController.text,
                             postPointTextController.text,
-                            dateStarts??"",
-                            dateStops??"",
+                            dateStarts ?? "",
+                            dateStops ?? "",
                             qtyMaxTextController.text,
                             qtyMinTextController.text,
                             widget.username.toString(),
                             selectedInterest ?? '');
-                        for (Choice choice in choices) {
+                        for (int i = 0; i < choices.length; i++) {
+                          final choiceName = choices[i].choiceName ?? 'none';
+
+                          final imageName = fileImageName![i].isNotEmpty?fileImageName![i]: 'none';
                           await choiceController.addChoice(
-                            choice.choiceName ?? '',
-                            "choice.choiceImage",
+                            choiceName,
+                            imageName,
                             response["postId"],
                           );
                         }

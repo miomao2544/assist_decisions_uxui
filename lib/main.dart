@@ -14,7 +14,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       // home: PreviewPostScreen(),
-      home: AddPostScreen(username: "postmember",),
+      home: AddPostScreen(username: "post",),
       debugShowCheckedModeBanner: false,
     );
   }
