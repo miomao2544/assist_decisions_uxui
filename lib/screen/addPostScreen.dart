@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:assist_decisions_app/controller/choice_controller.dart';
 import 'package:assist_decisions_app/controller/post_controller.dart';
-import 'package:assist_decisions_app/screen/chackPointScreen.dart';
 import 'package:assist_decisions_app/screen/homeScreen.dart';
 import 'package:assist_decisions_app/widgets/custom_text.dart';
 import 'package:file_picker/file_picker.dart';
@@ -14,7 +13,8 @@ import '../model/choice.dart';
 import '../model/interest.dart';
 
 class AddPostScreen extends StatefulWidget {
-  const AddPostScreen({super.key});
+  final String username;
+  const AddPostScreen({required this.username});
 
   @override
   State<AddPostScreen> createState() => _AddPostScreenState();
@@ -85,13 +85,12 @@ class _AddPostScreenState extends State<AddPostScreen> {
       lastDate: currentDate.add(Duration(days: 365)),
     );
     if (selectedDate != null && selectedDate != currentDate) {
-      // Format selectedDate to "yyyy-MM-dd HH:mm:ss"
-      dateStarts =
-          "${selectedDate.day.toString().padLeft(2, '0')}/${selectedDate.month.toString().padLeft(2, '0')}/${selectedDate.year.toString().padLeft(4, '0')}";
       String formattedDate =
-          "${selectedDate.year.toString().padLeft(4, '0')}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')} ${currentDate.hour.toString().padLeft(2, '0')}:${currentDate.minute.toString().padLeft(2, '0')}:${currentDate.second.toString().padLeft(2, '0')}";
+          "${selectedDate.day.toString().padLeft(2, '0')}/${selectedDate.month.toString().padLeft(2, '0')}/${selectedDate.year.toString().padLeft(4, '0')}";
 
       postDateStartController.text = formattedDate;
+      String formattedDate2 = "${selectedDate.year.toString().padLeft(4, '0')}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')} ${selectedDate.hour.toString().padLeft(2, '0')}:${selectedDate.minute.toString().padLeft(2, '0')}:${selectedDate.second.toString().padLeft(2, '0')}";
+      dateStarts = formattedDate2;
     }
   }
 
@@ -105,13 +104,12 @@ class _AddPostScreenState extends State<AddPostScreen> {
     );
 
     if (selectedDate != null && selectedDate != currentDate) {
-      // Format selectedDate to "yyyy-MM-dd HH:mm:ss"
-      dateStops =
-          "${selectedDate.day.toString().padLeft(2, '0')}/${selectedDate.month.toString().padLeft(2, '0')}/${selectedDate.year.toString().padLeft(4, '0')}";
       String formattedDate =
-          "${selectedDate.year.toString().padLeft(4, '0')}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')} ${currentDate.hour.toString().padLeft(2, '0')}:${currentDate.minute.toString().padLeft(2, '0')}:${currentDate.second.toString().padLeft(2, '0')}";
+          "${selectedDate.day.toString().padLeft(2, '0')}/${selectedDate.month.toString().padLeft(2, '0')}/${selectedDate.year.toString().padLeft(4, '0')}";
       postDateStopController.text = formattedDate;
       print(postDateStopController.text);
+      String formattedDate2 = "${selectedDate.year.toString().padLeft(4, '0')}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')} ${selectedDate.hour.toString().padLeft(2, '0')}:${selectedDate.minute.toString().padLeft(2, '0')}:${selectedDate.second.toString().padLeft(2, '0')}";
+      dateStops = formattedDate2;
     }
   }
 
@@ -151,7 +149,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
                     builder: (BuildContext context) {
-                      return const HomeScreen(username: "maihom2001",);
+                      return const HomeScreen(
+                        username: "maihom2001",
+                      );
                     },
                   ),
                 );
@@ -340,7 +340,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: SizedBox(
-                            width: 150,
+                            width: 160,
                             child: TextFormField(
                               controller: postDateStartController,
                               readOnly: true,
@@ -362,7 +362,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                           ),
                         ),
                         SizedBox(
-                          width: 150,
+                          width: 160,
                           child: TextFormField(
                             controller: postDateStopController,
                             readOnly: true,
@@ -384,19 +384,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
                         ),
                       ],
                     ),
-                  ),
-                  CustomTextFormField(
-                    controller: usernameTextController,
-                    hintText: "ผู้ใช้งาน",
-                    maxLength: 50,
-                    validator: (value) {
-                      if (value!.isNotEmpty) {
-                        return null;
-                      } else {
-                        return "กรุณากรอกผู้ใช้งาน";
-                      }
-                    },
-                    icon: const Icon(Icons.account_circle),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -490,11 +477,11 @@ class _AddPostScreenState extends State<AddPostScreen> {
                             fileToDisplay!,
                             descriptionTextController.text,
                             postPointTextController.text,
-                            postDateStartController.text,
-                            postDateStopController.text,
+                            dateStarts??"",
+                            dateStops??"",
                             qtyMaxTextController.text,
                             qtyMinTextController.text,
-                            usernameTextController.text,
+                            widget.username.toString(),
                             selectedInterest ?? '');
                         for (Choice choice in choices) {
                           await choiceController.addChoice(
@@ -504,17 +491,15 @@ class _AddPostScreenState extends State<AddPostScreen> {
                           );
                         }
                         // print(response);
-                        Navigator.of(context).pushReplacement(
+                        Navigator.push(
+                          context,
                           MaterialPageRoute(
-                            builder: (BuildContext context) {
-                              return const HomeScreen(username: "maihom2001",);
-                            },
-                          ),
+                              builder: (context) =>
+                                  HomeScreen(username: widget.username)),
                         );
                       }
                     },
                   ),
-                  ChackPointScreen(username: "vote",),
                   SizedBox(height: 30),
                 ],
               ),

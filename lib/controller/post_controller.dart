@@ -39,7 +39,7 @@ class PostController {
     http.Response response = await http.post(url, headers: headers, body: body);
     // print(response.body);
     var jsonResponse = jsonDecode(response.body);
-    // print(jsonResponse);
+    print(jsonResponse);
     return jsonResponse;
   }
 

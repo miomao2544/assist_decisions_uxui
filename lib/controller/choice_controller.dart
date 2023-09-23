@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:assist_decisions_app/model/choice.dart';
 import 'package:http/http.dart' as http;
 import '../constant/constant_value.dart';
@@ -25,6 +26,21 @@ class ChoiceController{
     var jsonResponse = jsonDecode(response.body);
     // print(jsonResponse); 
     return  jsonResponse;
+  }
+    Future upload(File file) async {
+    if (file == false) return;
+//null
+    var uri = Uri.parse(baseURL + "/choices/uploadimg");
+    var length = await file.length();
+    print(length);
+    http.MultipartRequest request = new http.MultipartRequest('POST', uri)
+      ..headers.addAll(headers)
+      ..files.add(
+        http.MultipartFile('image', file.openRead(), length,
+            filename: 'test.png'),
+      );
+    var response = await http.Response.fromStream(await request.send());
+    return response.body;
   }
 
     Future listAllChoicesById(String postId) async{

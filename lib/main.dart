@@ -1,3 +1,4 @@
+import 'package:assist_decisions_app/screen/addPostScreen.dart';
 import 'package:assist_decisions_app/screen/previewPostScreen.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +13,8 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: PreviewPostScreen(),
+      // home: PreviewPostScreen(),
+      home: AddPostScreen(username: "postmember",),
       debugShowCheckedModeBanner: false,
     );
   }

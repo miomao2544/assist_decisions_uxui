@@ -55,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
       Text("null"),
       ListPostScreen(username: widget.username),
       NotifyPostScreen(username: widget.username),
-      AddPostScreen(),
+      AddPostScreen(username: widget.username),
       ViewProfileScreen(
         username: widget.username,
       ),
