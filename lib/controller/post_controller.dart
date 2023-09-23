@@ -4,132 +4,163 @@ import 'package:assist_decisions_app/model/post.dart';
 import 'package:http/http.dart' as http;
 import '../constant/constant_value.dart';
 
-class PostController{
-   Post? posts;
+class PostController {
+  Post? posts;
 
-
-  Future addPost(String title,File image,String description,String postPoint,String dateStart,String dateStop,String qtyMax,String qtyMin,String username,String interestId) async{
-
+  Future addPost(
+      String title,
+      File image,
+      String description,
+      String postPoint,
+      String dateStart,
+      String dateStop,
+      String qtyMax,
+      String qtyMin,
+      String username,
+      String interestId) async {
     var imageName = await upload(image);
 
     Map data = {
-      "postImage" : imageName.toString(),
-      "title" : title,
-      "description" : description,
-      "postPoint" : postPoint,
-      "result" :"1",
-      "dateStart" :dateStart,
-      "dateStop" :dateStop,
-      "qtyMax" : qtyMax,
-      "qtyMin" : qtyMin,
-      "username" : username,
-      "interestId" : interestId,
+      "postImage": imageName.toString(),
+      "title": title,
+      "description": description,
+      "postPoint": postPoint,
+      "result": "1",
+      "dateStart": dateStart,
+      "dateStop": dateStop,
+      "qtyMax": qtyMax,
+      "qtyMin": qtyMin,
+      "username": username,
+      "interestId": interestId,
     };
     var body = json.encode(data);
     var url = Uri.parse(baseURL + '/posts/add');
 
-    http.Response response = await http.post(
-      url,
-      headers: headers,
-      body: body
-    );
+    http.Response response = await http.post(url, headers: headers, body: body);
     // print(response.body);
     var jsonResponse = jsonDecode(response.body);
-    // print(jsonResponse); 
-    return  jsonResponse;
+    // print(jsonResponse);
+    return jsonResponse;
   }
 
-   Future updatePost(String postID,String title,String image,String description,String postPoint,String dateStart,String dateStop,String qtyMax,String qtyMin,String username,String interestId) async{
+  Future updatePost(
+      String postID,
+      String title,
+      String image,
+      String description,
+      String postPoint,
+      String dateStart,
+      String dateStop,
+      String qtyMax,
+      String qtyMin,
+      String username,
+      String interestId) async {
     // var imageName = await upload(image);
-    print(postID+title+image+description+postPoint+dateStart+dateStop+qtyMax+qtyMin+username+interestId);
+    print(postID +
+        title +
+        image +
+        description +
+        postPoint +
+        dateStart +
+        dateStop +
+        qtyMax +
+        qtyMin +
+        username +
+        interestId);
     Map data = {
-      "postId" : postID,
-      "postImage" : image,
-      "title" : title,
-      "description" : description,
-      "postPoint" : postPoint,
-      "result" :"1",
-      "dateStart" :dateStart,
-      "dateStop" :dateStop,
-      "qtyMax" : qtyMax,
-      "qtyMin" : qtyMin,
-      "username" : username,
-      "interestId" : interestId,
+      "postId": postID,
+      "postImage": image,
+      "title": title,
+      "description": description,
+      "postPoint": postPoint,
+      "result": "1",
+      "dateStart": dateStart,
+      "dateStop": dateStop,
+      "qtyMax": qtyMax,
+      "qtyMin": qtyMin,
+      "username": username,
+      "interestId": interestId,
     };
-    
+
     var body = json.encode(data);
     var url = Uri.parse(baseURL + '/posts/update');
 
-    http.Response response = await http.post(
-      url,
-      headers: headers,
-      body: body
-    );
+    http.Response response = await http.post(url, headers: headers, body: body);
     print(response.body);
     var jsonResponse = jsonDecode(response.body);
-    print(jsonResponse); 
-    return  jsonResponse;
+    print(jsonResponse);
+    return jsonResponse;
   }
 
-  Future listAllPosts() async{
+  Future listAllPosts() async {
     var url = Uri.parse(baseURL + '/posts/list');
 
-    http.Response response = await http.post(
-      url,
-      headers: headers,
-      body: null
-    );
-    // print(response.body);
-    
+    http.Response response = await http.post(url, headers: headers, body: null);
     List<Post>? list;
 
     final utf8body = utf8.decode(response.bodyBytes);
     List<dynamic> jsonList = json.decode(utf8body);
-    list = jsonList.map((e) => Post.fromJsonToPost(e)).toList(); 
-    print("-------------------------------post-----------------");   
+    list = jsonList.map((e) => Post.fromJsonToPost(e)).toList();
     return list;
-  
-    }
+  }
 
-      Future listPostsAfter() async{
+  Future listPostsAfter() async {
     var url = Uri.parse(baseURL + '/posts/listpreview');
 
-    http.Response response = await http.post(
-      url,
-      headers: headers,
-      body: null
-    );
+    http.Response response = await http.post(url, headers: headers, body: null);
     // print(response.body);
-    
+
     List<Post>? list;
 
     final utf8body = utf8.decode(response.bodyBytes);
     List<dynamic> jsonList = json.decode(utf8body);
-    list = jsonList.map((e) => Post.fromJsonToPost(e)).toList(); 
-    print("-------------------------------post-----------------");   
+    list = jsonList.map((e) => Post.fromJsonToPost(e)).toList();
     return list;
-  
-    }
+  }
 
-    Future listPostsInterest(String username) async{
+  Future listPostsInterest(String username) async {
     var url = Uri.parse(baseURL + '/posts/list/${username}');
 
-    http.Response response = await http.post(
-      url,
-      headers: headers,
-      body: null
-    );
-    // print(response.body);
-    
+    http.Response response = await http.post(url, headers: headers, body: null);
     List<Post>? list;
 
     final utf8body = utf8.decode(response.bodyBytes);
     List<dynamic> jsonList = json.decode(utf8body);
-    list = jsonList.map((e) => Post.fromJsonToPost(e)).toList(); 
-    print("-------------------------------post-----------------");   
+    list = jsonList.map((e) => Post.fromJsonToPost(e)).toList();
+    print("-------------------------------post-----------------");
     return list;
-  
-    }
+  }
+
+  Future listPostsMember(String username) async {
+    var url = Uri.parse(baseURL + '/posts/listpost/${username}');
+
+    http.Response response = await http.post(url, headers: headers, body: null);
+    List<Post>? list;
+
+    final utf8body = utf8.decode(response.bodyBytes);
+    List<dynamic> jsonList = json.decode(utf8body);
+    list = jsonList.map((e) => Post.fromJsonToPost(e)).toList();
+    print("-------------------------------post-----------------");
+    return list;
+  }
+
+Future getListCountMember(String? postId) async {
+  var url = Uri.parse(baseURL + '/posts/count/$postId');
+
+  http.Response response = await http.post(
+    url,
+    headers: headers,
+    body: null,
+  );
+
+  final utf8body = utf8.decode(response.bodyBytes);
+
+  // ทำการแปลงค่าจาก String เป็น Int
+  int countInt = int.tryParse(utf8body) ?? 0;
+  print("----------count $countInt -----------");
+  return countInt;
+}
+
   Future upload(File file) async {
     if (file == false) return;
 //null
@@ -147,5 +178,4 @@ class PostController{
     //var jsonResponse = jsonDecode(response.body);
     return response.body;
   }
-
 }

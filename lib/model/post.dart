@@ -5,7 +5,7 @@ import 'package:assist_decisions_app/model/interest.dart';
 import 'package:assist_decisions_app/model/member.dart';
 
 class Post{
-  String? postID;
+  String? postId;
   String? postImage;
   String? title;
   String? description;
@@ -19,7 +19,7 @@ class Post{
   Interest? interest;
 
   Post({
-    this.postID,
+    this.postId,
     this.postImage,
     this.title,
     this.description,
@@ -34,7 +34,7 @@ class Post{
   });
 
   factory Post.fromJsonToPost(Map<String,dynamic> json) => Post(
-    postID: json["postID"],
+    postId: json["postId"],
     postImage: json["postImage"],
     title: json["title"],
     description: json["description"],
@@ -50,7 +50,7 @@ class Post{
   
   Map<String,dynamic> fromPostToJson(){
     return<String,dynamic>{
-      'postID' : postID,
+      'postId' : postId,
       'postImage' : postImage,
       'title' : title,
       'description' : description,

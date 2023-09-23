@@ -6,7 +6,8 @@ import '../constant/constant_value.dart';
 import 'package:intl/intl.dart';
 
 class NotifyPostScreen extends StatefulWidget {
-  const NotifyPostScreen({super.key});
+  final String username;
+  const NotifyPostScreen({required this.username});
 
   @override
   State<NotifyPostScreen> createState() => _NotifyPostScreenState();
@@ -18,7 +19,7 @@ class _NotifyPostScreenState extends State<NotifyPostScreen> {
   final PostController postController = PostController();
 
   void fetchPost() async {
-    posts = await postController.listAllPosts();
+    posts = await postController.listPostsInterest(widget.username.toString());
     print(posts?[0].member?.username);
 
     setState(() {

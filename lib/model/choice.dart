@@ -1,20 +1,20 @@
 import 'package:assist_decisions_app/model/post.dart';
 
 class Choice{
-  String? choiceID;
+  String? choiceId;
   String? choiceName;
   String? choiceImage;
   Post? post;
 
   Choice({
-    this.choiceID,
+    this.choiceId,
     this.choiceName,
     this.choiceImage,
     this.post,
   });
 
   factory Choice.fromJsonToChoice(Map<String,dynamic> json) => Choice(
-    choiceID: json["choiceID"],
+    choiceId: json["choiceId"],
     choiceName: json["choiceName"],
     choiceImage: json["choiceImage"],
     post: json["post"] == null?null: Post.fromJsonToPost(json["post"]),
@@ -22,10 +22,10 @@ class Choice{
 
   Map<String,dynamic> fromChoiceToJson(){
     return<String,dynamic>{
-      'choiceID' : choiceID,
+      'choiceID' : choiceId,
       'choiceName' : choiceName,
       'choiceImage' : choiceImage,
-      'post' : post?.postID
+      'post' : post?.postId
     };
   }
 

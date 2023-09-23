@@ -30,7 +30,7 @@ class MyNotificationWidget extends StatelessWidget {
                   '$notificationCount',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 12,
+                    fontSize: 10,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

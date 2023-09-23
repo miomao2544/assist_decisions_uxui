@@ -1,6 +1,5 @@
 import 'package:assist_decisions_app/controller/member_controller.dart';
 import 'package:assist_decisions_app/model/member.dart';
-import 'package:assist_decisions_app/screen/loginMemberScreen.dart';
 import 'package:assist_decisions_app/screen/viewProfileScreen.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';

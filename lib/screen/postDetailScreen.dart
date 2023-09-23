@@ -36,7 +36,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
 
   Future<void> fetchChoice() async {
     choices =
-        await choiceController.listAllChoicesById(widget.post?.postID ?? "");
+        await choiceController.listAllChoicesById(widget.post?.postId ?? "");
   }
 
   Future<void> _refreshChoices() async {

@@ -6,7 +6,8 @@ import '../constant/constant_value.dart';
 import 'package:intl/intl.dart';
 
 class ListPostScreen extends StatefulWidget {
-  const ListPostScreen({super.key});
+  final String username;
+  const ListPostScreen({required this.username});
 
   @override
   State<ListPostScreen> createState() => _ListPostScreenState();
@@ -14,17 +15,23 @@ class ListPostScreen extends StatefulWidget {
 
 class _ListPostScreenState extends State<ListPostScreen> {
   List<Post>? posts;
+  List<int>? counts;
   bool? isDataLoaded = false;
   final PostController postController = PostController();
 
-  void fetchPost() async {
-    posts = await postController.listAllPosts();
-    print(posts?[0].member?.username);
-
+Future fetchPost() async {
+    posts = await postController.listPostsMember(widget.username.toString());
+    counts = List<int>.filled(posts!.length, 0);
+    for (int i = 0; i < posts!.length; i++) {
+      int count = await postController.getListCountMember(posts![i].postId.toString());
+      counts![i] = count;
+      print("---------------${posts![i].postId.toString()}--------------${count}----------------");
+    }
     setState(() {
       isDataLoaded = true;
     });
   }
+
 
   String formatDate(String? inputDate) {
     if (inputDate != null) {
@@ -46,104 +53,98 @@ class _ListPostScreenState extends State<ListPostScreen> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
-        body: Container(
-          padding: EdgeInsets.all(10.0),
-          child: ListView.builder(
-            itemCount: posts?.length ?? 0,
-            scrollDirection: Axis.vertical,
-            itemBuilder: (context, index) {
-              if (posts == null || posts!.isEmpty) {
-                return Center(child: Text("ไม่มีโพสต์ของคุณ"));
-              } else {
-                return Card(
-                  elevation: 5,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: ListTile(
-                    contentPadding: EdgeInsets.all(10.0),
-                    leading: Container(
-                      width: 100,
-                      // height: double.infinity,
-                      child: Column(
-                        children: [
-                          ClipOval(
-                            child: Image.network(
-                              baseURL +
-                                  '/posts/downloadimg/${posts?[index].postImage}',
-                              fit: BoxFit.cover,
-                              width: 36,
-                              height: 36,
+        body: isDataLoaded == true
+            ? posts != null && posts!.isNotEmpty
+                ? Container(
+                    padding: EdgeInsets.all(10.0),
+                    child: ListView.builder(
+                      itemCount: posts!.length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: ListTile(
+                            contentPadding: EdgeInsets.all(10.0),
+                            // ตรงนี้คือส่วนที่แสดงข้อมูลของโพสต์
+                            leading: Container(
+                              width: 100,
+                              height: 100,
+                              child: Column(
+                                children: [
+                                  ClipOval(
+                                    child: Image.network(
+                                      baseURL +
+                                          '/posts/downloadimg/${posts![index].postImage}',
+                                      fit: BoxFit.cover,
+                                      width: 36,
+                                      height: 36,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 1),
+                                  Text(
+                                    " ${counts![index]} คน",
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 5),
-                          Text(
-                            // "${posts?[index].member?.nickname}",
-                             " 0 คน",
-                            style: TextStyle(
-                              fontFamily: 'Itim',
-                              fontSize: 10,
-                              color: Colors.black,
+                            title: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "สิ้นสุดการโหวต ${formatDate(posts![index].dateStop)}",
+                                  style: const TextStyle(
+                                    fontFamily: 'Itim',
+                                    fontSize: 10,
+                                  ),
+                                ),
+                                Text(
+                                  "${posts![index].title}",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                      fontFamily: 'Itim', fontSize: 20),
+                                ),
+                                Text(
+                                  "คะแนน : ${posts![index].postPoint?.toInt()}",
+                                  style: const TextStyle(
+                                      fontFamily: 'Itim', fontSize: 16),
+                                ),
+                                Text(
+                                  "${posts![index].description}",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                      fontFamily: 'Itim', fontSize: 16),
+                                ),
+                              ],
                             ),
+                            trailing: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.chevron_right_sharp),
+                              ],
+                            ),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => PostDetailScreen(
+                                    post: posts![index],
+                                  ),
+                                ),
+                              );
+                            },
                           ),
-                        ],
-                      ),
+                        );
+                      },
                     ),
-                    title: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "สิ้นสุดการโหวต ${formatDate(posts?[index].dateStop)}",
-                          style: const TextStyle(
-                            fontFamily: 'Itim',
-                            fontSize: 10,
-                          ),
-                        ),
-                        Text(
-                          "${posts?[index].title}",
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style:
-                              const TextStyle(fontFamily: 'Itim', fontSize: 20),
-                        ),
-                        Text(
-                          "คะแนน : ${posts?[index].postPoint?.toInt()}",
-                          style:
-                              const TextStyle(fontFamily: 'Itim', fontSize: 16),
-                        ),
-                        Text(
-                          "${posts?[index].description}",
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style:
-                              const TextStyle(fontFamily: 'Itim', fontSize: 16),
-                        ),
-                      ],
-                    ),
-                    trailing: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.chevron_right_sharp),
-                      ],
-                    ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PostDetailScreen(
-                            post: posts?[index],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                );
-              }
-            },
-          ),
-        ),
+                  )
+                : Center(child: Text("ไม่มีโพสต์ของคุณ"))
+            : Center(child: CircularProgressIndicator()),
       ),
     );
   }

@@ -1,5 +1,7 @@
 import 'package:assist_decisions_app/controller/member_controller.dart';
+import 'package:assist_decisions_app/controller/post_controller.dart';
 import 'package:assist_decisions_app/model/member.dart';
+import 'package:assist_decisions_app/model/post.dart';
 import 'package:assist_decisions_app/screen/addPostScreen.dart';
 import 'package:assist_decisions_app/screen/chackPointScreen.dart';
 import 'package:assist_decisions_app/screen/listPostScreen.dart';
@@ -27,16 +29,18 @@ class _HomeScreenState extends State<HomeScreen> {
   String username = '';
   String? imageUser = '';
   List<Widget> widgets = [];
+  List<Post>? posts;
   final MemberController memberController = MemberController();
+  final PostController postController = PostController();
   Member? member;
 
   void fetchMember() async {
     member = await memberController.getMemberById(widget.username);
+    posts = await postController.listPostsInterest(widget.username.toString());
     imageUser = member?.image.toString();
     setState(() {
       isDataLoaded = true;
     });
-
   }
 
   @override
@@ -49,8 +53,8 @@ class _HomeScreenState extends State<HomeScreen> {
       MemberScreen(
           username: widget.username), // ใช้ username ที่เรากำหนดใน initState
       Text("null"),
-      ListPostScreen(),
-      NotifyPostScreen(),
+      ListPostScreen(username: widget.username),
+      NotifyPostScreen(username: widget.username),
       AddPostScreen(),
       ViewProfileScreen(
         username: widget.username,
@@ -61,156 +65,166 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return isDataLoaded == true?Scaffold(
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            DrawerHeader(
-              child: Column(
+    return isDataLoaded == true
+        ? Scaffold(
+            drawer: Drawer(
+              child: ListView(
                 children: [
-                  Container(
-                    height: 100,
-                    width: 100,
-                    decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(50)),
+                  DrawerHeader(
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 100,
+                          width: 100,
+                          decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(50)),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text("@username"),
+                      ],
+                    ),
                   ),
-                  SizedBox(
-                    height: 10,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: 60,
+                      child: ElevatedButton.icon(
+                        icon: Icon(Icons.ac_unit),
+                        label:
+                            Text("ออกจากระบบ", style: TextStyle(fontSize: 20)),
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              Color(0xFFe6a53b)), // กำหนดสีพื้นหลังของปุ่ม
+                        ),
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return LoginMemberScreen();
+                          }));
+                        },
+                      ),
+                    ),
                   ),
-                  Text("@username"),
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 60,
-                child: ElevatedButton.icon(
-                  icon: Icon(Icons.ac_unit),
-                  label: Text("ออกจากระบบ", style: TextStyle(fontSize: 20)),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                        Color(0xFFe6a53b)), // กำหนดสีพื้นหลังของปุ่ม
+            appBar: AppBar(
+              backgroundColor: Colors.teal,
+              title: Text("Home Page"),
+              centerTitle: true,
+              actions: <Widget>[
+                ClipOval(
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (BuildContext context) {
+                            return widgets[5];
+                          },
+                        ),
+                      );
+                    },
+                    child: Container(
+                      width: 50,
+                      child: Image.network(
+                        baseURL + '/members/downloadimg/${imageUser}',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return LoginMemberScreen();
-                    }));
-                  },
-                ),
-              ),
+                )
+              ],
             ),
-          ],
-        ),
-      ),
-      appBar: AppBar(
-        backgroundColor: Colors.teal,
-        title: Text("Home Page"),
-        centerTitle: true,
-        actions: <Widget>[
-          ClipOval(
-            child: GestureDetector(
-              onTap: () {
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerDocked,
+            floatingActionButton: FloatingActionButton(
+              backgroundColor: Colors.teal,
+              onPressed: () {
+                Widget destinationWidget;
+                if ((member?.point ?? 0) >= 100) {
+                  destinationWidget = widgets[4];
+                } else {
+                  destinationWidget = widgets[6];
+                }
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (BuildContext context) {
-                      return widgets[5];
+                      return destinationWidget;
                     },
                   ),
                 );
               },
+              child: Icon(Icons.add),
+            ),
+            bottomNavigationBar: BottomAppBar(
+              color: Colors.teal,
+              shape: CircularNotchedRectangle(),
+              notchMargin: 12,
               child: Container(
-                width: 50,
-                child: Image.network(
-                  baseURL + '/members/downloadimg/${imageUser}',
-                  fit: BoxFit.cover,
+                height: 60,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        IconButton(
+                          onPressed: () {
+                            setState(() {
+                              selectedChoice = 0;
+                            });
+                          },
+                          icon: Icon(Icons.home),
+                          iconSize: 30,
+                          color: (selectedChoice == 0)
+                              ? Colors.amber
+                              : Colors.white,
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            setState(() {
+                              selectedChoice = 1;
+                            });
+                          },
+                          icon: Icon(Icons.search),
+                          iconSize: 30,
+                          color: (selectedChoice == 1)
+                              ? Colors.amber
+                              : Colors.white,
+                        ),
+                        SizedBox(width: 60.0),
+                        IconButton(
+                          onPressed: () {
+                            setState(() {
+                              selectedChoice = 2;
+                            });
+                          },
+                          icon: Icon(Icons.list_alt),
+                          iconSize: 30,
+                          color: (selectedChoice == 2)
+                              ? Colors.amber
+                              : Colors.white,
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            setState(() {
+                              selectedChoice = 3;
+                            });
+                          },
+                          icon: MyNotificationWidget(
+                            selectedChoice: selectedChoice,
+                            notificationCount: posts!.length,
+                          ),
+                        ),
+                      ]),
                 ),
               ),
             ),
+            body: widgets[selectedChoice],
           )
-        ],
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.teal,
-        onPressed: () {
-          Widget destinationWidget;
-          if ((member?.point??0) >= 100) {
-            destinationWidget = widgets[4];
-          } else {
-            destinationWidget = widgets[6];
-          }
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (BuildContext context) {
-                return destinationWidget;
-              },
-            ),
-          );
-        },
-        child: Icon(Icons.add),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.teal,
-        shape: CircularNotchedRectangle(),
-        notchMargin: 12,
-        child: Container(
-          height: 60,
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10.0),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  IconButton(
-                    onPressed: () {
-                      setState(() {
-                        selectedChoice = 0;
-                      });
-                    },
-                    icon: Icon(Icons.home),
-                    iconSize: 30,
-                    color: (selectedChoice == 0) ? Colors.amber : Colors.white,
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      setState(() {
-                        selectedChoice = 1;
-                      });
-                    },
-                    icon: Icon(Icons.search),
-                    iconSize: 30,
-                    color: (selectedChoice == 1) ? Colors.amber : Colors.white,
-                  ),
-                  SizedBox(width: 60.0),
-                  IconButton(
-                    onPressed: () {
-                      setState(() {
-                        selectedChoice = 2;
-                      });
-                    },
-                    icon: Icon(Icons.list_alt),
-                    iconSize: 30,
-                    color: (selectedChoice == 2) ? Colors.amber : Colors.white,
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      setState(() {
-                        selectedChoice = 3;
-                      });
-                    },
-                    icon: MyNotificationWidget(
-                      selectedChoice: selectedChoice,
-                      notificationCount: 1,
-                    ),
-                  ),
-                ]),
-          ),
-        ),
-      ),
-      body: widgets[selectedChoice],
-    ):CircularProgressIndicator();
+        : CircularProgressIndicator();
   }
 }

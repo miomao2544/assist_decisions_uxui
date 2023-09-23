@@ -506,7 +506,7 @@ DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(widget.post?.dateStop??"
                     onPressed: () async {
                       if (fromKey.currentState!.validate()) {
                         var response = await postController.updatePost(
-                            widget.post?.postID ?? "",
+                            widget.post?.postId ?? "",
                             titleTextController.text,
                             postImageTextController.text,
                             descriptionTextController.text,
