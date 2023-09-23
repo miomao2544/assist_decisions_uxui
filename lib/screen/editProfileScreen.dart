@@ -1,6 +1,7 @@
 import 'package:assist_decisions_app/controller/member_controller.dart';
 import 'package:assist_decisions_app/model/member.dart';
 import 'package:assist_decisions_app/screen/loginMemberScreen.dart';
+import 'package:assist_decisions_app/screen/viewProfileScreen.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
@@ -28,11 +29,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   String? password;
   String? confirmPassword;
   String? nickname;
-  String? gender = "M";
+  String? gender;
   String? firstname;
   String? lastname;
   String? email;
   String? tel;
+  String? point;
+  String? status;
   String? formattedInterestSelect;
   Member? member;
   TextEditingController memberImageTextController = TextEditingController();
@@ -44,7 +47,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   PlatformFile? pickedFile;
   File? fileToDisplay;
   bool isLoadingPicture = true;
- bool? isDataLoaded = false;
+  bool? isDataLoaded = false;
+  bool isUsernameTaken = true;
   void _pickFile() async {
     try {
       setState(() {
@@ -87,506 +91,537 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return emailRegex.hasMatch(email);
   }
 
+  @override
+  void initState() {
+    super.initState();
+    loadInterests();
+    isSelected = List<bool>.filled(interests.length, false);
+  }
 
-
-@override
-void initState() {
-  super.initState();
-  loadInterests();
-  isSelected = List<bool>.filled(interests.length, false);
-}
-Future<void> initializeData() async {
-
-     member =  await memberController.getMemberById(widget.username.toString());
- if (member != null) {
+  Future<void> initializeData() async {
+    member = await memberController.getMemberById(widget.username.toString());
+    if (member != null) {
       firstname = member?.firstname.toString();
- 
+      username = member?.username.toString();
+      nickname = member?.nickname.toString();
+      gender = member?.gender.toString();
+      lastname = member?.lastname.toString();
+      email = member?.email.toString();
+      tel = member?.tel.toString();
+      point = member?.point.toString();
+      status = member?.status.toString();
+      interestSelect = member!.interests!
+          .map((interest) => interest.interestId.toString())
+          .toList();
+      formattedInterestSelect =
+          interestSelect.where((item) => item != null).join(',');
+      print("object>>>>> ${formattedInterestSelect}");
     }
-  setState(() {
-     isDataLoaded = true;
-  });
-}
-@override
-void didChangeDependencies() {
-  super.didChangeDependencies();
-  initializeData();
+    setState(() {
+      isDataLoaded = true;
+    });
+  }
 
-  
-}
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    initializeData();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:isDataLoaded==true?Padding(
-          padding: EdgeInsets.all(16.0),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Form(
-                  key: fromKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Align(
-                        alignment: Alignment.center,
-                        child: Image.asset(
-                          "assets/images/logo.png",
-                          width: 100,
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          'แพลตฟอร์มสนับสนุนการตัดสินใจ',
-                          style: TextStyle(fontSize: 18.0),
-                        ),
-                      ),
-                      SizedBox(height: 12.0),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          'ส่วนของข้อมูลส่วนตัว',
-                        ),
-                      ),
-                      Text('เพศ'),
-                      Row(
+            appBar: AppBar(
+        title: Text('EditProfile'),
+      ),
+      body: isDataLoaded == true
+          ? Padding(
+              padding: EdgeInsets.all(16.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Form(
+                      key: fromKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                gender = 'M';
-                              });
-                            },
-                            style: ElevatedButton.styleFrom(
-                              primary: gender == 'M'
-                                  ? Color(0xFF479f76)
-                                  : Color(0xFF1c174d),
+                          Align(
+                            alignment: Alignment.center,
+                            child: Image.asset(
+                              "assets/images/logo.png",
+                              width: 100,
                             ),
-                            child: Text('ชาย'),
                           ),
-                          SizedBox(width: 16.0),
-                          ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                gender = 'F';
-                              });
-                            },
-                            style: ElevatedButton.styleFrom(
-                              primary: gender == 'F'
-                                  ? Color(0xFF479f76)
-                                  : Color(0xFF1c174d),
+                          Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              'แพลตฟอร์มสนับสนุนการตัดสินใจ',
+                              style: TextStyle(fontSize: 18.0),
                             ),
-                            child: Text('หญิง'),
                           ),
-                        ],
-                      ),
-                      TextFormField(
-                        initialValue: firstname ,
-                        decoration: InputDecoration(
-                          labelText: 'ชื่อ',
-                          prefixIcon:
-                              Icon(Icons.person, color: Color(0xFF1c174d)),
-                          labelStyle: TextStyle(color: Color(0xFF1c174d)),
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            firstname = value;
-                          });
-                        },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'กรุณากรอกชื่อ';
-                          } else if (!isThaiOrEnglish(value)) {
-                            return 'กรุณาเขียนเป็นภาษาไทย หรือ อังกฤษเท่านั้น';
-                          } else if (value.length < 2 || value.length > 100) {
-                            return 'อักษรของคุณควรอยู่ระหว่าง 2 และ 100 ตัวอักษร';
-                          }
-                          return null;
-                        },
-                      ),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          labelText: 'นามสกุล',
-                          prefixIcon:
-                              Icon(Icons.person, color: Color(0xFF1c174d)),
-                          labelStyle: TextStyle(color: Color(0xFF1c174d)),
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            lastname = value;
-                          });
-                        },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'กรุณากรอกนามสกุล';
-                          } else if (!isThaiOrEnglish(value)) {
-                            return 'กรุณาเขียนเป็นภาษาไทย หรือ อังกฤษเท่านั้น';
-                          } else if (value.length < 2 || value.length > 100) {
-                            return 'อักษรของคุณควรอยู่ระหว่าง 2 และ 100 ตัวอักษร';
-                          }
-                          return null;
-                        },
-                      ),
-                      SizedBox(height: 16.0),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          labelText: 'อีเมล์',
-                          prefixIcon:
-                              Icon(Icons.email, color: Color(0xFF1c174d)),
-                          labelStyle: TextStyle(color: Color(0xFF1c174d)),
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            email = value;
-                          });
-                        },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'กรุณากรอกอีเมล์';
-                          } else if (!isValidEmail(value)) {
-                            return 'รูปแบบของคุณอีเมล์ไม่ถูกต้อง';
-                          } else if (value.length < 5 || value.length > 60) {
-                            return 'อักษรของคุณควรอยู่ระหว่าง 5 และ 60 ตัวอักษร';
-                          } else if (value.contains(' ')) {
-                            return 'ไม่อนุญาตให้มีช่องว่างในข้อมูล';
-                          }
-                          return null;
-                        },
-                      ),
-                      SizedBox(height: 16.0),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          labelText: 'หมายเลขโทรศัพท์',
-                          prefixIcon:
-                              Icon(Icons.phone, color: Color(0xFF1c174d)),
-                          labelStyle: TextStyle(color: Color(0xFF1c174d)),
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            tel = value;
-                          });
-                        },
-                        validator: (value) {
-                          final validDigits = RegExp(r'^[0-9]{10}$');
-
-                          if (value == null || value.isEmpty) {
-                            return 'กรุณากรอกหมายเลขโทรศัพท์';
-                          } else if (!value.startsWith('06') &&
-                              !value.startsWith('08') &&
-                              !value.startsWith('09')) {
-                            return 'หมายเลขโทรศัพท์ต้องขึ้นต้นด้วย 06, 08, หรือ 09';
-                          }
-                          if (!validDigits.hasMatch(value.toString())) {
-                            return 'หมายเลขโทรศัพท์ต้องประกอบด้วยตัวเลข 0-9';
-                          } else if (value.length != 10) {
-                            return 'หมายเลขโทรศัพท์ต้องมี 10 ตัวเท่านั้น';
-                          }
-                          return null;
-                        },
-                      ),
-                      SizedBox(height: 16.0),
-                      Text('ความสนใจ'),
-                      Container(
-                        height: 30.0,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: interests.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            final interest = interests[index];
-                            final isSelected =
-                                interestSelect.contains(interest.interestId);
-
-                            return Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 8.0),
-                              child: ElevatedButton(
+                          SizedBox(height: 12.0),
+                          Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              'ส่วนของข้อมูลส่วนตัว',
+                            ),
+                          ),
+                          Text('เพศ'),
+                          Row(
+                            children: [
+                              ElevatedButton(
                                 onPressed: () {
                                   setState(() {
-                                    if (isSelected) {
-                                      interestSelect
-                                          .remove(interest.interestId);
-                                    } else {
-                                      interestSelect.add(interest.interestId);
-                                    }
-                                    formattedInterestSelect = interestSelect
-                                        .where((item) => item != null)
-                                        .join(',');
-                                    print(
-                                        "interestSelect is ----------------- > = " +
-                                            formattedInterestSelect.toString());
+                                    gender = 'M';
                                   });
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  primary: isSelected
+                                  primary: gender == 'M'
                                       ? Color(0xFF479f76)
                                       : Color(0xFF1c174d),
                                 ),
-                                child: Text(interest.interestName ?? ""),
+                                child: Text('ชาย'),
                               ),
-                            );
-                          },
-                        ),
-                      ),
-                      SizedBox(height: 12.0),
-                      Text(
-                        'สามารถเลือกได้มากกว่า 1 ตัวเลือก',
-                        style:
-                            TextStyle(fontSize: 16.0, color: Color(0xFF1c174d)),
-                      ),
-                      SizedBox(height: 20.0),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          'ส่วนของข้อมูลทั่วไป',
-                          style: TextStyle(
-                              fontSize: 22.0,
-                              color: Color(0xFF1c174d),
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Center(
-                        child: isLoadingPicture
-                            ? Image.asset(
-                                "assets/images/logo.png",
-                                width: 250,
-                              ) // Add a loading indicator while loading the picture
-                            : fileToDisplay != null
-                                ? Image.file(
-                                    fileToDisplay!,
-                                    height: 200, // Set the desired image height
-                                  )
-                                : Container(), // Display an empty container if no image is selected
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: ElevatedButton.icon(
-                          onPressed: () {
-                            _pickFile();
-                          },
-                          icon: Icon(Icons.image),
-                          label: Text("เลือกรูปภาพ"),
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                              isLoadingPicture
-                                  ? Color(0xFF1c174d)
-                                  : Colors.teal,
+                              SizedBox(width: 16.0),
+                              ElevatedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    gender = 'F';
+                                  });
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  primary: gender == 'F'
+                                      ? Color(0xFF479f76)
+                                      : Color(0xFF1c174d),
+                                ),
+                                child: Text('หญิง'),
+                              ),
+                            ],
+                          ),
+                          TextFormField(
+                            initialValue: firstname,
+                            decoration: InputDecoration(
+                              labelText: 'ชื่อ',
+                              prefixIcon:
+                                  Icon(Icons.person, color: Color(0xFF1c174d)),
+                              labelStyle: TextStyle(color: Color(0xFF1c174d)),
+                            ),
+                            onChanged: (value) {
+                              setState(() {
+                                firstname = value;
+                              });
+                            },
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'กรุณากรอกชื่อ';
+                              } else if (!isThaiOrEnglish(value)) {
+                                return 'กรุณาเขียนเป็นภาษาไทย หรือ อังกฤษเท่านั้น';
+                              } else if (value.length < 2 ||
+                                  value.length > 100) {
+                                return 'อักษรของคุณควรอยู่ระหว่าง 2 และ 100 ตัวอักษร';
+                              }
+                              return null;
+                            },
+                          ),
+                          TextFormField(
+                            initialValue: lastname,
+                            decoration: InputDecoration(
+                              labelText: 'นามสกุล',
+                              prefixIcon:
+                                  Icon(Icons.person, color: Color(0xFF1c174d)),
+                              labelStyle: TextStyle(color: Color(0xFF1c174d)),
+                            ),
+                            onChanged: (value) {
+                              setState(() {
+                                lastname = value;
+                              });
+                            },
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'กรุณากรอกนามสกุล';
+                              } else if (!isThaiOrEnglish(value)) {
+                                return 'กรุณาเขียนเป็นภาษาไทย หรือ อังกฤษเท่านั้น';
+                              } else if (value.length < 2 ||
+                                  value.length > 100) {
+                                return 'อักษรของคุณควรอยู่ระหว่าง 2 และ 100 ตัวอักษร';
+                              }
+                              return null;
+                            },
+                          ),
+                          SizedBox(height: 16.0),
+                          TextFormField(
+                            initialValue: email,
+                            decoration: InputDecoration(
+                              labelText: 'อีเมล์',
+                              prefixIcon:
+                                  Icon(Icons.email, color: Color(0xFF1c174d)),
+                              labelStyle: TextStyle(color: Color(0xFF1c174d)),
+                            ),
+                            onChanged: (value) {
+                              setState(() {
+                                email = value;
+                              });
+                            },
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'กรุณากรอกอีเมล์';
+                              } else if (!isValidEmail(value)) {
+                                return 'รูปแบบของคุณอีเมล์ไม่ถูกต้อง';
+                              } else if (value.length < 5 ||
+                                  value.length > 60) {
+                                return 'อักษรของคุณควรอยู่ระหว่าง 5 และ 60 ตัวอักษร';
+                              } else if (value.contains(' ')) {
+                                return 'ไม่อนุญาตให้มีช่องว่างในข้อมูล';
+                              }
+                              return null;
+                            },
+                          ),
+                          SizedBox(height: 16.0),
+                          TextFormField(
+                            initialValue: tel,
+                            decoration: InputDecoration(
+                              labelText: 'หมายเลขโทรศัพท์',
+                              prefixIcon:
+                                  Icon(Icons.phone, color: Color(0xFF1c174d)),
+                              labelStyle: TextStyle(color: Color(0xFF1c174d)),
+                            ),
+                            onChanged: (value) {
+                              setState(() {
+                                tel = value;
+                              });
+                            },
+                            validator: (value) {
+                              final validDigits = RegExp(r'^[0-9]{10}$');
+
+                              if (value == null || value.isEmpty) {
+                                return 'กรุณากรอกหมายเลขโทรศัพท์';
+                              } else if (!value.startsWith('06') &&
+                                  !value.startsWith('08') &&
+                                  !value.startsWith('09')) {
+                                return 'หมายเลขโทรศัพท์ต้องขึ้นต้นด้วย 06, 08, หรือ 09';
+                              }
+                              if (!validDigits.hasMatch(value.toString())) {
+                                return 'หมายเลขโทรศัพท์ต้องประกอบด้วยตัวเลข 0-9';
+                              } else if (value.length != 10) {
+                                return 'หมายเลขโทรศัพท์ต้องมี 10 ตัวเท่านั้น';
+                              }
+                              return null;
+                            },
+                          ),
+                          SizedBox(height: 16.0),
+                          Text('ความสนใจ'),
+                          Container(
+                            height: 30.0,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: interests.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                final interest = interests[index];
+                                final isSelected = interestSelect
+                                    .contains(interest.interestId);
+
+                                return Padding(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        if (isSelected) {
+                                          interestSelect
+                                              .remove(interest.interestId);
+                                        } else {
+                                          interestSelect
+                                              .add(interest.interestId);
+                                        }
+                                        formattedInterestSelect = interestSelect
+                                            .where((item) => item != null)
+                                            .join(',');
+                                        print(
+                                            "interestSelect is ----------------- > = " +
+                                                formattedInterestSelect
+                                                    .toString());
+                                      });
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      primary: isSelected
+                                          ? Color(0xFF479f76)
+                                          : Color(0xFF1c174d),
+                                    ),
+                                    child: Text(interest.interestName ?? ""),
+                                  ),
+                                );
+                              },
                             ),
                           ),
-                        ),
-                      ),
-                      SizedBox(height: 12.0),
-                      TextFormField(
-                        decoration: InputDecoration(
-                            labelText: 'ชื่อบัญชี',
-                            prefixIcon: Icon(Icons.account_circle)),
-                        onChanged: (value) {
-                          setState(() {
-                            nickname = value;
-                          });
-                        },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'กรุณากรอกชื่อ';
-                          } else if (!isThaiOrEnglish(value)) {
-                            return 'กรุณาเขียนเป็นภาษาไทย หรือ อังกฤษเท่านั้น';
-                          } else if (value.length < 2 || value.length > 100) {
-                            return 'อักษรของคุณควรอยู่ระหว่าง 2 และ 100 ตัวอักษร';
-                          }
-                          return null;
-                        },
-                      ),
-                      SizedBox(height: 16.0),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          labelText: 'ชื่อผู้ใช้งาน (ห้ามซ้ำ)',
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            username = value;
-                          });
-                        },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'กรุณากรอกชื่อผู้ใช้งาน';
-                          } else if (!RegExp(r'^[a-zA-Z0-9]+$')
-                              .hasMatch(value)) {
-                            return 'กรุณากรอกตัวอักษรภาษาอังกฤษหรือตัวเลขเท่านั้น';
-                          } else if (value.length < 6 || value.length > 12) {
-                            return 'อักษรของคุณควรอยู่ระหว่าง 6 และ 12 ตัวอักษร';
-                          }
-                          return null;
-                        },
-                      ),
-                      SizedBox(height: 16.0),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          labelText: 'รหัสผ่าน',
-                        ),
-                        obscureText: true,
-                        onChanged: (value) {
-                          setState(() {
-                            password = value;
-                          });
-                        },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'กรุณากรอกรหัสผ่าน';
-                          } else if (value.length < 8 || value.length > 16) {
-                            return 'รหัสผ่านควรมีความยาวระหว่าง 8 และ 16 ตัวอักษร';
-                          } else if (!RegExp(r'^[a-zA-Z0-9@_\-\.]+$')
-                              .hasMatch(value)) {
-                            return 'รหัสผ่านควรประกอบด้วยตัวอักษรภาษาอังกฤษ, ตัวเลข, @, _, -, หรือ . เท่านั้น';
-                          }
-                          return null;
-                        },
-                      ),
-                      SizedBox(height: 16.0),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          labelText: 'ยืนยันรหัสผ่าน',
-                        ),
-                        obscureText: true,
-                        onChanged: (value) {
-                          setState(() {
-                            confirmPassword = value;
-                          });
-                        },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'กรุณารหัสผ่านอีกครั้งเพื่อยืนยัน';
-                          } else if (value.toString() != password) {
-                            return 'รหัสผ่านของคุณไม่เหมือนเดิม กรุณากรอกใหม่อีกครั้ง';
-                          }
-                          return null;
-                        },
-                      ),
-                      SizedBox(height: 16.0),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: SizedBox(
-                          width: double.infinity,
-                          height: 60,
-                          child: ElevatedButton.icon(
-                              icon: Icon(Icons.add),
-                              label:
-                                  Text("สมัคร", style: TextStyle(fontSize: 20)),
+                          SizedBox(height: 12.0),
+                          Text(
+                            'สามารถเลือกได้มากกว่า 1 ตัวเลือก',
+                            style: TextStyle(
+                                fontSize: 16.0, color: Color(0xFF1c174d)),
+                          ),
+                          SizedBox(height: 20.0),
+                          Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              'ส่วนของข้อมูลทั่วไป',
+                              style: TextStyle(
+                                  fontSize: 22.0,
+                                  color: Color(0xFF1c174d),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Center(
+                            child: isLoadingPicture
+                                ? Image.asset(
+                                    "assets/images/logo.png",
+                                    width: 250,
+                                  ) // Add a loading indicator while loading the picture
+                                : fileToDisplay != null
+                                    ? Image.file(
+                                        fileToDisplay!,
+                                        height:
+                                            200, // Set the desired image height
+                                      )
+                                    : Container(), // Display an empty container if no image is selected
+                          ),
+                          Align(
+                            alignment: Alignment.center,
+                            child: ElevatedButton.icon(
+                              onPressed: () {
+                                _pickFile();
+                              },
+                              icon: Icon(Icons.image),
+                              label: Text("เลือกรูปภาพ"),
                               style: ButtonStyle(
                                 backgroundColor:
-                                    MaterialStateProperty.all<Color>(Color(
-                                        0xFF479f76)), // กำหนดสีพื้นหลังของปุ่ม
+                                    MaterialStateProperty.all<Color>(
+                                  isLoadingPicture
+                                      ? Color(0xFF1c174d)
+                                      : Colors.teal,
+                                ),
                               ),
-                              onPressed: () async {
-                                if (fromKey.currentState!.validate()) {
-                                  if (interestSelect.isEmpty) {
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        Future.delayed(Duration(seconds: 3),
-                                            () {
-                                          Navigator.of(context).pop();
-                                        });
+                            ),
+                          ),
+                          SizedBox(height: 12.0),
+                          TextFormField(
+                            initialValue: nickname,
+                            decoration: InputDecoration(
+                                labelText: 'ชื่อบัญชี',
+                                prefixIcon: Icon(Icons.account_circle)),
+                            onChanged: (value) {
+                              setState(() {
+                                nickname = value;
+                              });
+                            },
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'กรุณากรอกชื่อ';
+                              } else if (!isThaiOrEnglish(value)) {
+                                return 'กรุณาเขียนเป็นภาษาไทย หรือ อังกฤษเท่านั้น';
+                              } else if (value.length < 2 ||
+                                  value.length > 100) {
+                                return 'อักษรของคุณควรอยู่ระหว่าง 2 และ 100 ตัวอักษร';
+                              }
+                              return null;
+                            },
+                          ),
+                          SizedBox(height: 16.0),
+                          TextFormField(
+                            initialValue: username,
+                            decoration: InputDecoration(
+                              labelText: 'ชื่อผู้ใช้งาน (ห้ามซ้ำ)',
+                            ),
+                            enabled: false,
+                          ),
+                          SizedBox(height: 16.0),
+                          TextFormField(
+                            decoration: InputDecoration(
+                              labelText: 'รหัสผ่าน',
+                            ),
+                            obscureText: true,
+                            onChanged: (value) {
+                              setState(() {
+                                password = value;
+                              });
+                            },
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'กรุณากรอกรหัสผ่าน';
+                              } else if (value.length < 8 ||
+                                  value.length > 16) {
+                                return 'รหัสผ่านควรมีความยาวระหว่าง 8 และ 16 ตัวอักษร';
+                              } else if (!RegExp(r'^[a-zA-Z0-9@_\-\.]+$')
+                                  .hasMatch(value)) {
+                                return 'รหัสผ่านควรประกอบด้วยตัวอักษรภาษาอังกฤษ, ตัวเลข, @, _, -, หรือ . เท่านั้น';
+                              }
+                              return null;
+                            },
+                          ),
+                          SizedBox(height: 16.0),
+                          TextFormField(
+                            decoration: InputDecoration(
+                              labelText: 'ยืนยันรหัสผ่าน',
+                            ),
+                            obscureText: true,
+                            onChanged: (value) {
+                              setState(() {
+                                confirmPassword = value;
+                              });
+                            },
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'กรุณารหัสผ่านอีกครั้งเพื่อยืนยัน';
+                              } else if (value.toString() != password) {
+                                return 'รหัสผ่านของคุณไม่เหมือนเดิม กรุณากรอกใหม่อีกครั้ง';
+                              }
+                              return null;
+                            },
+                          ),
+                          SizedBox(height: 16.0),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SizedBox(
+                              width: double.infinity,
+                              height: 60,
+                              child: ElevatedButton.icon(
+                                  icon: Icon(Icons.add),
+                                  label: Text("บันทึก",
+                                      style: TextStyle(fontSize: 20)),
+                                  style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(Color(
+                                            0xFF479f76)), // กำหนดสีพื้นหลังของปุ่ม
+                                  ),
+                                  onPressed: () async {
+                                    if (fromKey.currentState!.validate()) {
+                                      if (interestSelect.isEmpty) {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            Future.delayed(Duration(seconds: 3),
+                                                () {
+                                              Navigator.of(context).pop();
+                                            });
 
-                                        return AlertDialog(
-                                          title: Text('แจ้งเตือน'),
-                                          content: Text(
-                                              'กรุณาเลือกความสนใจอย่างน้อย 1 ตัวเลือก'),
-                                          actions: [
-                                            ElevatedButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: Text('ปิด'),
-                                            ),
-                                          ],
+                                            return AlertDialog(
+                                              title: Text('แจ้งเตือน'),
+                                              content: Text(
+                                                  'กรุณาเลือกความสนใจอย่างน้อย 1 ตัวเลือก'),
+                                              actions: [
+                                                ElevatedButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: Text('ปิด'),
+                                                ),
+                                              ],
+                                            );
+                                          },
                                         );
-                                      },
-                                    );
-                                  } else {
-                                    String? fileToSend =
-                                        "I00001.png"; // เริ่มต้นให้ใช้ fileToDisplay
+                                      } else {
+                                        String? fileToSend = member?.image
+                                            .toString(); // เริ่มต้นให้ใช้ fileToDisplay
 
-                                    if (fileToDisplay != null) {
-                                      // รอผลลัพธ์จากการอัปโหลด
-                                      var uploadedFile = await memberController
-                                          .upload(fileToDisplay!);
+                                        if (fileToDisplay != null) {
+                                          // รอผลลัพธ์จากการอัปโหลด
+                                          var uploadedFile =
+                                              await memberController
+                                                  .upload(fileToDisplay!);
 
-                                      // ตรวจสอบว่า uploadedFile ไม่เป็น null
-                                      if (uploadedFile != null) {
-                                        fileToSend = uploadedFile;
+                                          // ตรวจสอบว่า uploadedFile ไม่เป็น null
+                                          if (uploadedFile != null) {
+                                            fileToSend = uploadedFile;
+                                          }
+                                        }
+                                        print("---------- result------------");
+                                        print(username);
+                                        print(password);
+                                        print(nickname);
+                                        print(gender);
+                                        print(firstname);
+                                        print(lastname);
+                                        print(email);
+                                        print(tel);
+                                        print(point);
+                                        print(status);
+                                        print(fileToSend);
+                                        print(formattedInterestSelect);
+                                        var result =
+                                            await memberController.updateMember(
+                                                username ?? "",
+                                                password ?? "",
+                                                nickname ?? "",
+                                                gender ?? "",
+                                                firstname ?? "",
+                                                lastname ?? "",
+                                                email ?? "",
+                                                tel ?? "",
+                                                point ?? "",
+                                                status ?? "",
+                                                fileToSend ?? "",
+                                                formattedInterestSelect ?? "");
+                                        if (result != null) {
+                                          // แสดงอนิเมชันแจ้งเตือนเมื่อสมัครสมาชิกสำเร็จ
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                title: Text('สำเร็จ'),
+                                                content:
+                                                    Text('บันทึกสมาชิกสำเร็จ'),
+                                                actions: [
+                                                  ElevatedButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                    child: Text('ปิด'),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                          Future.delayed(
+                                              Duration(milliseconds: 1000), () {
+                                            Navigator.push(context,
+                                                MaterialPageRoute(
+                                                    builder: (context) {
+                                              return ViewProfileScreen(username: widget.username.toString());
+                                            }));
+                                          });
+                                        } else {
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                title: Text('ข้อผิดพลาด'),
+                                                content:
+                                                    Text('ข้อมูลไม่ถูกต้อง'),
+                                                actions: [
+                                                  ElevatedButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                    child: Text('ปิด'),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        }
                                       }
                                     }
-                                    var result =
-                                        await memberController.updateMember(
-                                            username ?? "",
-                                            password ?? "",
-                                            nickname ?? "",
-                                            gender ?? "",
-                                            firstname ?? "",
-                                            lastname ?? "",
-                                            email ?? "",
-                                            tel ?? "",
-                                            fileToSend ?? "",
-                                            formattedInterestSelect ?? "");
-                                    if (result == false) {
-                                      // แสดงอนิเมชันแจ้งเตือนเมื่อสมัครสมาชิกสำเร็จ
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title: Text('สำเร็จ'),
-                                            content: Text('บันทึกสมาชิกสำเร็จ'),
-                                            actions: [
-                                              ElevatedButton(
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: Text('ปิด'),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
-
-                                      // เปลี่ยนหน้าไปยัง LoginMemberScreen หลังจากปิดกล่องข้อความแจ้งเตือน
-                                      Future.delayed(
-                                          Duration(milliseconds: 1000), () {
-                                        Navigator.push(context,
-                                            MaterialPageRoute(
-                                                builder: (context) {
-                                          return LoginMemberScreen();
-                                        }));
-                                      });
-                                    } else {
-                                      // แสดงอนิเมชันแจ้งเตือนถ้า Username ซ้ำ
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title: Text('ข้อผิดพลาด'),
-                                            content: Text('Username ซ้ำ'),
-                                            actions: [
-                                              ElevatedButton(
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: Text('ปิด'),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
-                                    }
-                                  }
-                                }
-                              }),
-                        ),
+                                  }),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-          ):CircularProgressIndicator(),
+              ))
+          : CircularProgressIndicator(),
     );
   }
 }

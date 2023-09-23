@@ -41,7 +41,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   PlatformFile? pickedFile;
   File? fileToDisplay;
   bool isLoadingPicture = true;
-
+  bool isUsernameTaken = true;
   void _pickFile() async {
     try {
       setState(() {
@@ -84,6 +84,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return emailRegex.hasMatch(email);
   }
 
+  Future checkUsernameExists(String username) async{
+     isUsernameTaken = await memberController.checkUsernameExists(username);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -96,6 +100,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Register'),
+      ),
       body: Padding(
           padding: EdgeInsets.all(16.0),
           child: SingleChildScrollView(
@@ -382,7 +389,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             username = value;
                           });
                         },
-                        validator: (value) {
+                        validator: (value){
                           if (value == null || value.isEmpty) {
                             return 'กรุณากรอกชื่อผู้ใช้งาน';
                           } else if (!RegExp(r'^[a-zA-Z0-9]+$')
@@ -391,7 +398,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           } else if (value.length < 6 || value.length > 12) {
                             return 'อักษรของคุณควรอยู่ระหว่าง 6 และ 12 ตัวอักษร';
                           }
-                          return null;
+                          checkUsernameExists(value);
+                          if (isUsernameTaken) {
+                            return 'ชื่อผู้ใช้งานนี้มีอยู่ในระบบแล้ว';
+                          }else{
+                            return null;
+                          }
                         },
                       ),
                       SizedBox(height: 16.0),
@@ -492,7 +504,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         fileToSend = uploadedFile;
                                       }
                                     }
-                                    var result = await memberController.addMember(
+                                    checkUsernameExists(username??"");
+                                    if(isUsernameTaken == false){
+                                    var result =
+                                        await memberController.addMember(
                                             username ?? "",
                                             password ?? "",
                                             nickname ?? "",
@@ -503,7 +518,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                             tel ?? "",
                                             fileToSend ?? "",
                                             formattedInterestSelect ?? "");
-                                    if (result == false) {
+                                    if (result != null) {
                                       // แสดงอนิเมชันแจ้งเตือนเมื่อสมัครสมาชิกสำเร็จ
                                       showDialog(
                                         context: context,
@@ -522,8 +537,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                           );
                                         },
                                       );
-
-                                      // เปลี่ยนหน้าไปยัง LoginMemberScreen หลังจากปิดกล่องข้อความแจ้งเตือน
                                       Future.delayed(
                                           Duration(milliseconds: 1000), () {
                                         Navigator.push(context,
@@ -533,13 +546,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         }));
                                       });
                                     } else {
-                                      // แสดงอนิเมชันแจ้งเตือนถ้า Username ซ้ำ
                                       showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
                                           return AlertDialog(
                                             title: Text('ข้อผิดพลาด'),
-                                            content: Text('Username ซ้ำ'),
+                                            content: Text('ข้อมูลไม่ถูกต้อง'),
+                                            actions: [
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text('ปิด'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    }
+                                    }else{
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: Text('ข้อผิดพลาด'),
+                                            content: Text('Username ของคุณมีในระบบแล้ว'),
                                             actions: [
                                               ElevatedButton(
                                                 onPressed: () {

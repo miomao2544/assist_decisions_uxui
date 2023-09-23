@@ -22,6 +22,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int selectedChoice = 0;
+  bool isDataLoaded = false;
   int currentState = 0;
   String username = '';
   String? imageUser = '';
@@ -31,10 +32,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void fetchMember() async {
     member = await memberController.getMemberById(widget.username);
-    print(
-        "--------------------------------${member?.image.toString()}---------------------");
     imageUser = member?.image.toString();
-    print("--------------------------------${imageUser}---------------------");
+    setState(() {
+      isDataLoaded = true;
+    });
+
   }
 
   @override
@@ -59,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return isDataLoaded == true?Scaffold(
       drawer: Drawer(
         child: ListView(
           children: [
@@ -209,6 +211,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       body: widgets[selectedChoice],
-    );
+    ):CircularProgressIndicator();
   }
 }
