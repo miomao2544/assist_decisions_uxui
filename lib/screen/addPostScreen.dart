@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:js_interop';
 
 import 'package:assist_decisions_app/controller/choice_controller.dart';
 import 'package:assist_decisions_app/controller/post_controller.dart';
@@ -74,7 +75,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
     }
   }
 
-  void _pickFileChoices(int index) async {
+  void _pickFileChoices() async {
     try {
       setState(() {
         isLoadingPicture = true;
@@ -85,9 +86,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
       if (filePickerResult != null) {
         fileImageName?.add(filePickerResult!.files.first.name);
         pickedFile = filePickerResult!.files.first;
-        fileImagesToDisplay?.add(File(pickedFile!.path.toString()));
-        
+        fileImagesToDisplay?.add(File(pickedFile!.path.toString()));   
       }
+      print("File is ${fileImageName![0]}");
       setState(() {
         isLoadingPicture = false;
       });
@@ -461,12 +462,12 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                       height: 100,
                                     ),
                                     onTap: () {
-                                      _pickFileChoices(i);
+                                      _pickFileChoices();
                                     },
                                   )
                                 : GestureDetector(
                                     onTap: () {
-                                      _pickFileChoices(i);
+                                      _pickFileChoices();
                                     },
                                     child: Icon(Icons.image,
                                         size: 30, color: Colors.blue),
@@ -536,11 +537,10 @@ class _AddPostScreenState extends State<AddPostScreen> {
                             selectedInterest ?? '');
                         for (int i = 0; i < choices.length; i++) {
                           final choiceName = choices[i].choiceName ?? 'none';
-
-                          final imageName = fileImageName![i].isNotEmpty?fileImageName![i]: 'none';
+                          print("-------imageName---${fileImagesToDisplay![i].toString()}---choiceName-----${choiceName}-------");
                           await choiceController.addChoice(
                             choiceName,
-                            imageName,
+                            "image.png",
                             response["postId"],
                           );
                         }

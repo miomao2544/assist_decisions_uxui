@@ -43,14 +43,14 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
     interestListSelect = interestList.where((item) => item != null).join(',');
     posts = await postController.listSearchPostsAll(search.toString(),
         interestListSelect.toString(), point.toString(), dateStops.toString());
-    setState(() {
-      
-    });
+    setState(() {});
   }
-    Future loadInterests() async {
+
+  Future loadInterests() async {
     List<Interest> interestList = await interestController.listAllInterests();
     setState(() {
-      print("---------------------------interests-----is ${interestList[0].interestName}----------------------");
+      print(
+          "---------------------------interests-----is ${interestList[0].interestName}----------------------");
       interests = interestList;
       isDataLoaded = true;
     });
@@ -92,128 +92,144 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
   }
 
   void _showSearchDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return Scaffold(
-        appBar: AppBar(
-          title: Text("ค้นหาโพสต์"),
-        ),
-        body: AlertDialog(
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  onChanged: (value) {
-                    search = value; // อัปเดตค่า search เมื่อผู้ใช้พิมพ์
-                  },
-                  decoration: InputDecoration(
-                    labelText: "ค้นหา",
-                    hintText: "ค้นหาโพสต์...",
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text("ค้นหาโพสต์"),
+          ),
+          body: Container(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(height: 16.0),
+                  Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 300,
+                          height: 50,
+                          child: TextField(
+                            onChanged: (value) {
+                              search =
+                                  value; // อัปเดตค่า search เมื่อผู้ใช้พิมพ์
+                            },
+                            decoration: InputDecoration(
+                              labelText: "ค้นหา",
+                              hintText: "ค้นหาโพสต์...",
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10.0),
+                        SizedBox(
+                          height:
+                              50.0, 
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              fetchPost();
+                            },
+                            child: Icon(
+                              Icons.search,
+                              color: Colors.black,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(height: 16.0),
-                SizedBox(
-                  width: 160,
-                  child: TextFormField(
-                    controller: postDateStopController,
-                    readOnly: true,
-                    onTap: () => _selectDateStop(context),
-                    decoration: InputDecoration(
-                      labelText: "วันที่",
-                      counterText: "",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
+                  SizedBox(height: 16.0),
+                  Text('วัน เดือน ปี'),
+                  SizedBox(
+                    width: 160,
+                    height: 50,
+                    child: TextFormField(
+                      controller: postDateStopController,
+                      readOnly: true,
+                      onTap: () => _selectDateStop(context),
+                      decoration: InputDecoration(
+                        labelText: "วันที่",
+                        counterText: "",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        prefixIcon: Icon(Icons.calendar_today),
+                        prefixIconColor: Colors.black,
                       ),
-                      prefixIcon: Icon(Icons.calendar_today),
-                      prefixIconColor: Colors.black,
-                    ),
-                    style: TextStyle(
-                      fontFamily: 'Itim',
-                      fontSize: 18,
+                      style: TextStyle(
+                        fontFamily: 'Itim',
+                        fontSize: 18,
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(height: 16.0),
-                DropdownButton<String>(
-                  value: point, // ค่าที่ถูกเลือก
-                  onChanged: (String? newValue) {
-                    updatePoint(newValue!);
-                  },
-                  items: numbers.map<DropdownMenuItem<String>>((String point) {
-                    return DropdownMenuItem<String>(
-                      value: point,
-                      child: Text(point),
-                    );
-                  }).toList(),
-                ),
-                SizedBox(height: 16.0),
-                Text('ความสนใจ'),
-                // Container(
-                //   height: 30.0,
-                //   child: ListView.builder(
-                //     scrollDirection: Axis.horizontal,
-                //     itemCount: interests.length,
-                //     itemBuilder: (BuildContext context, int index) {
-                //       final interest = interests[index];
-                //       final isSelected = interestSelect.contains(interest.interestId);
+                  SizedBox(height: 16.0),
+                  Text('คะแนน'),
+                  DropdownButton<String>(
+                    value: point, // ค่าที่ถูกเลือก
+                    onChanged: (String? newValue) {
+                      updatePoint(newValue!);
+                    },
+                    items:
+                        numbers.map<DropdownMenuItem<String>>((String point) {
+                      return DropdownMenuItem<String>(
+                        value: point,
+                        child: Text(point),
+                      );
+                    }).toList(),
+                  ),
+                  SizedBox(height: 16.0),
+                  Text('ความสนใจ'),
+                  Container(
+                    height: 30.0,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: interests.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final interest = interests[index];
+                        final isSelected =
+                            interestSelect.contains(interest.interestId);
 
-                //       return Padding(
-                //         padding: EdgeInsets.symmetric(horizontal: 8.0),
-                //         child: ElevatedButton(
-                //           onPressed: () {
-                //             setState(() {
-                //               if (isSelected) {
-                //                 interestSelect.remove(interest.interestId);
-                //               } else {
-                //                 interestSelect.add(interest.interestId);
-                //               }
-                //               interestListSelect = interestSelect
-                //                   .where((item) => item != null)
-                //                   .join(',');
-                //               print(
-                //                   "interestSelect is ----------------- > = " +
-                //                       interestListSelect.toString());
-                //             });
-                //           },
-                //           style: ElevatedButton.styleFrom(
-                //             primary: isSelected ? Color(0xFF479f76) : Color(0xFF1c174d),
-                //           ),
-                //           child: Text(interest.interestName ?? ""),
-                //         ),
-                //       );
-                //     },
-                //   ),
-                // ),
-                SizedBox(height: 16.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        fetchPost();
+                        return Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.0),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                if (isSelected) {
+                                  interestSelect.remove(interest.interestId);
+                                } else {
+                                  interestSelect.add(interest.interestId);
+                                }
+                                interestListSelect = interestSelect
+                                    .where((item) => item != null)
+                                    .join(',');
+                                print(
+                                    "interestSelect is ----------------- > = " +
+                                        interestListSelect.toString());
+                              });
+                            },
+                            style: ElevatedButton.styleFrom(
+                              primary: isSelected
+                                  ? Color(0xFF479f76)
+                                  : Color(0xFF1c174d),
+                            ),
+                            child: Text(interest.interestName ?? ""),
+                          ),
+                        );
                       },
-                      child: Text("ค้นหา"),
                     ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Text("ยกเลิก"),
-                    ),
-                  ],
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      );
-    },
-  );
-}
-
+        );
+      },
+    );
+  }
 
   @override
   void initState() {
