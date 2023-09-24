@@ -3,13 +3,13 @@ class Interest{
   String? interestName;
 
   Interest({
-    required this.interestId,
-    required this.interestName
+     this.interestId,
+     this.interestName
   });
 
   factory Interest.fromJsonToInterest(Map<String,dynamic> json) => Interest(
     interestId: json["interestId"],
-    interestName: json["interestName"]
+    interestName: json["interestName"],
   );
 
   Map<String,dynamic> fromInterestToJson(){

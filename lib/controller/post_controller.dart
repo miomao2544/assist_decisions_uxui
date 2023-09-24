@@ -104,6 +104,19 @@ class PostController {
     return list;
   }
 
+    Future listSearchPostsAll(String title,String interests,String point,String daterequest)async {
+    var url = Uri.parse(baseURL + '/posts/search?title=$title&interests=$interests&point=$point&daterequest=$daterequest');
+
+    http.Response response = await http.post(url, headers: headers, body: null);
+    List<Post>? list;
+
+    final utf8body = utf8.decode(response.bodyBytes);
+    List<dynamic> jsonList = json.decode(utf8body);
+    list = jsonList.map((e) => Post.fromJsonToPost(e)).toList();
+    print("-------------------------------Search post-----------------");
+    return list;
+  }
+
   Future listPostsAfter() async {
     var url = Uri.parse(baseURL + '/posts/listpreview');
 

@@ -8,6 +8,7 @@ import 'package:assist_decisions_app/screen/listPostScreen.dart';
 import 'package:assist_decisions_app/screen/loginMemberScreen.dart';
 import 'package:assist_decisions_app/screen/memberScreen.dart';
 import 'package:assist_decisions_app/screen/notifyPostScreen.dart';
+import 'package:assist_decisions_app/screen/searchPostScreen.dart';
 import 'package:assist_decisions_app/screen/viewProfileScreen.dart';
 import 'package:assist_decisions_app/widgets/myNotificationWidget%20.dart';
 import 'package:flutter/material.dart';
@@ -51,8 +52,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
     widgets = [
       MemberScreen(
-          username: widget.username), // ใช้ username ที่เรากำหนดใน initState
-      Text("null"),
+          username: widget.username), 
+      SearchPostScreen(username: widget.username),
       ListPostScreen(username: widget.username),
       NotifyPostScreen(username: widget.username),
       AddPostScreen(username: widget.username),

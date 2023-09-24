@@ -1,5 +1,7 @@
 import 'package:assist_decisions_app/screen/addPostScreen.dart';
+import 'package:assist_decisions_app/screen/homeScreen.dart';
 import 'package:assist_decisions_app/screen/previewPostScreen.dart';
+import 'package:assist_decisions_app/screen/searchPostScreen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -14,7 +16,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       // home: PreviewPostScreen(),
-      home: AddPostScreen(username: "post",),
+      home: HomeScreen(username: "post",),
       debugShowCheckedModeBanner: false,
     );
   }
