@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:js_interop';
 
 import 'package:assist_decisions_app/controller/choice_controller.dart';
 import 'package:assist_decisions_app/controller/post_controller.dart';

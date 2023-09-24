@@ -28,7 +28,4 @@ class Choice{
       'post' : post?.postId
     };
   }
-
-
-  
 }
