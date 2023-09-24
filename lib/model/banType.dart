@@ -1,15 +1,15 @@
-class Ban_Type{
+class BanType{
   String? banTypeId;
   String? typeName;
   String? numberOfDay;
 
-  Ban_Type({
+  BanType({
     this.banTypeId,
     this.typeName,
     this.numberOfDay,
   });
 
-  factory Ban_Type.fromJsonToBanType(Map<String,dynamic> json) => Ban_Type(
+  factory BanType.fromJsonToBanType(Map<String,dynamic> json) => BanType(
     banTypeId: json["banTypeId"],
     typeName: json["typeName"],
     numberOfDay: json["numberOfDay"],

@@ -40,7 +40,7 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
         interestList.add(interest[i].interestId.toString());
       }
     }
-    interestListSelect = interestList.where((item) => item != null).join(',');
+    interestListSelect = interestList.where((item) => item != true).join(',');
     posts = await postController.listSearchPostsAll(search.toString(),
         interestListSelect.toString(), point.toString(), dateStops.toString());
     setState(() {});
@@ -152,7 +152,6 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
                       readOnly: true,
                       onTap: () => _selectDateStop(context),
                       decoration: InputDecoration(
-                        labelText: "วันที่",
                         counterText: "",
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),

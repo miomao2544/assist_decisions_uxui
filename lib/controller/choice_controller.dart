@@ -6,12 +6,12 @@ import '../constant/constant_value.dart';
 
 class ChoiceController{
   Choice? choices;
-  Future addChoice(String choiceName,String choiceImage,String postID)async{
-
+  Future addChoice(String choiceName,File choiceImages,String postId)async{
+    var choiceImage = await upload(choiceImages);
     Map data = {
       "choiceName" : choiceName,
       "choiceImage" : choiceImage,
-      "postID" : postID,
+      "postId" : postId,
     };
 
    var body = json.encode(data);

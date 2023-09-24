@@ -85,7 +85,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
       if (filePickerResult != null) {
         fileImageName?.add(filePickerResult!.files.first.name);
         pickedFile = filePickerResult!.files.first;
-        fileImagesToDisplay?.add(File(pickedFile!.path.toString()));   
+        fileImagesToDisplay?.add(File(pickedFile!.path.toString()));
       }
       print("File is ${fileImageName![0]}");
       setState(() {
@@ -522,6 +522,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       elevation: 0,
                     ),
                     onPressed: () async {
+                      print(
+                          "------fileToDisplay-------${fileToDisplay!}-----------");
                       if (fromKey.currentState!.validate()) {
                         var response = await postController.addPost(
                             titleTextController.text,
@@ -535,15 +537,13 @@ class _AddPostScreenState extends State<AddPostScreen> {
                             widget.username.toString(),
                             selectedInterest ?? '');
                         for (int i = 0; i < choices.length; i++) {
-                          final choiceName = choices[i].choiceName ?? 'none';
-                          print("-------imageName---${fileImagesToDisplay![i].toString()}---choiceName-----${choiceName}-------");
+                          Choice choice = choices[i];
                           await choiceController.addChoice(
-                            choiceName,
-                            "image.png",
+                            choice.choiceName ?? '',
+                            fileImagesToDisplay![i],
                             response["postId"],
                           );
                         }
-                        // print(response);
                         Navigator.push(
                           context,
                           MaterialPageRoute(
