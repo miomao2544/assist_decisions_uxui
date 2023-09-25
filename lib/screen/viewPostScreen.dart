@@ -194,7 +194,7 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
                             child: Text("ยืนยันคำตอบ"),
                           ),
                           SizedBox(height: 16.0),
-                          CommentScreen(member: member,),
+                          CommentScreen(member: member,postId: post!.postId.toString(),),
                         ],
                       ),
                     ),
