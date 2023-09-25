@@ -22,7 +22,7 @@ class Choice{
 
   Map<String,dynamic> fromChoiceToJson(){
     return<String,dynamic>{
-      'choiceID' : choiceId,
+      'choiceId' : choiceId,
       'choiceName' : choiceName,
       'choiceImage' : choiceImage,
       'post' : post?.postId
