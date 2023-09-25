@@ -12,7 +12,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return  MaterialApp(
       // home: QuizPage(),
-      home: HomeScreen(username: "post",),
+      home: HomeScreen(username: "vote",),
       debugShowCheckedModeBanner: false,
     );
   }

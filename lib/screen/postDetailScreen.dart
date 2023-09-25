@@ -53,122 +53,124 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
   @override
   Widget build(BuildContext context) {
     _refreshChoices();
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-            "${formatDate(widget.post?.dateStart)} - ${formatDate(widget.post?.dateStop)}"),
-        actions: [
-          IconButton(
-            onPressed: () {
-              HomeScreen(username: "maihom2001");
-            },
-            icon: Icon(Icons.report),
-          ),
-        ],
-      ),
-      body: RefreshIndicator(
-        onRefresh: _refreshChoices,
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text('${widget.post?.title ?? ""}',
-                      style: TextStyle(fontSize: 30)),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Image.network(
-                    baseURL + '/posts/downloadimg/${widget.post?.postImage}',
-                    fit: BoxFit.cover,
-                    width: 250,
-                    height: 250,
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Text('รายละเอียด : ${widget.post?.description ?? ""}'),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    children: [
-                      PostInfoWidget(
-                        title: "คะแนน",
-                        value: "${widget.post?.postPoint?.toInt()}",
-                      ),
-                      PostInfoWidget(
-                        title: "จำนวนต่ำสุด",
-                        value: "${widget.post?.qtyMin}",
-                      ),
-                      PostInfoWidget(
-                        title: "จำนวนสูงสุด",
-                        value: "${widget.post?.qtyMax}",
-                      ),
-                      PostInfoWidget(
-                        title: "จำนวนผู้โหวต",
-                        value: "20",
-                      ),
-                    ],
-                  ),
-                  DividerBoxBlack(),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: choices?.length ?? 0,
-                    itemBuilder: (context, index) {
-                      return Card(
-                        elevation: 2,
-                        shape: Border.all(
-                          color: selectedChoiceIndex == index
-                              ? Colors.green
-                              : Colors.transparent,
-                          width: 2,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "${index + 1}",
-                                style: TextStyle(fontSize: 16),
-                              ),
-                              Text(
-                                choices![index].choiceName ?? "",
-                                style: TextStyle(fontSize: 16),
-                              ),
-                              Text(
-                                "20",
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                  Text("จำนวนผู้โหวต : 100 ",style: TextStyle(fontSize: 18),),
-                  Container(
-                    child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) =>EditPostScreen(post: widget.post)),);
-                            },
-                            child: Text("แก้ไข"),
-                          ),
-                          SizedBox(width: 20),
-                         ChackDeletePostScreen(),
-                        ],
-                      ),
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+              "${formatDate(widget.post?.dateStart)} - ${formatDate(widget.post?.dateStop)}"),
+          actions: [
+            IconButton(
+              onPressed: () {
+                HomeScreen(username: "maihom2001");
+              },
+              icon: Icon(Icons.report),
+            ),
+          ],
+        ),
+        body: RefreshIndicator(
+          onRefresh: _refreshChoices,
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text('${widget.post?.title ?? ""}',
+                        style: TextStyle(fontSize: 30)),
+                    SizedBox(
+                      height: 20,
                     ),
-                  )
-                ],
+                    Image.network(
+                      baseURL + '/posts/downloadimg/${widget.post?.postImage}',
+                      fit: BoxFit.cover,
+                      width: 250,
+                      height: 250,
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Text('รายละเอียด : ${widget.post?.description ?? ""}'),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      children: [
+                        PostInfoWidget(
+                          title: "คะแนน",
+                          value: "${widget.post?.postPoint?.toInt()}",
+                        ),
+                        PostInfoWidget(
+                          title: "จำนวนต่ำสุด",
+                          value: "${widget.post?.qtyMin}",
+                        ),
+                        PostInfoWidget(
+                          title: "จำนวนสูงสุด",
+                          value: "${widget.post?.qtyMax}",
+                        ),
+                        PostInfoWidget(
+                          title: "จำนวนผู้โหวต",
+                          value: "20",
+                        ),
+                      ],
+                    ),
+                    DividerBoxBlack(),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: choices?.length ?? 0,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          elevation: 2,
+                          shape: Border.all(
+                            color: selectedChoiceIndex == index
+                                ? Colors.green
+                                : Colors.transparent,
+                            width: 2,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "${index + 1}",
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                Text(
+                                  choices![index].choiceName ?? "",
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                Text(
+                                  "20",
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    Text("จำนวนผู้โหวต : 100 ",style: TextStyle(fontSize: 18),),
+                    Container(
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) =>EditPostScreen(post: widget.post)),);
+                              },
+                              child: Text("แก้ไข"),
+                            ),
+                            SizedBox(width: 20),
+                           ChackDeletePostScreen(),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ),

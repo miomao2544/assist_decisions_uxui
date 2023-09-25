@@ -1,11 +1,11 @@
 import 'package:assist_decisions_app/controller/post_controller.dart';
 import 'package:assist_decisions_app/model/post.dart';
+import 'package:assist_decisions_app/screen/postDetailScreen.dart';
+import 'package:assist_decisions_app/screen/viewPostScreen.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../widgets/customPostCard.dart';
-import 'loginMemberScreen.dart';
-
 
 class MemberScreen extends StatefulWidget {
   final String username;
@@ -101,7 +101,7 @@ class _MemberScreenState extends State<MemberScreen> {
                         openPosts?[index].interest?.interestName ?? '',
                     title: openPosts?[index].title ?? '',
                     description: openPosts?[index].description ?? '',
-                    screen: LoginMemberScreen()
+                    screen: widget.username ==  openPosts?[index].postId? PostDetailScreen(post: null,):ViewPostScreen(postId: openPosts![index].postId.toString(),username: widget.username.toString()),
                   );
                 },
               ),
@@ -124,7 +124,7 @@ class _MemberScreenState extends State<MemberScreen> {
                         closedPosts?[index].interest?.interestName ?? '',
                     title: closedPosts?[index].title ?? '',
                     description: closedPosts?[index].description ?? '',
-                    screen: LoginMemberScreen()
+                    screen: widget.username ==  closedPosts?[index].postId? PostDetailScreen(post: null,):ViewPostScreen(postId: closedPosts![index].postId.toString(),username: widget.username.toString()),
                   );
                 },
               ),

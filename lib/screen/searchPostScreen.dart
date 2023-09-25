@@ -126,8 +126,7 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
                         ),
                         SizedBox(width: 10.0),
                         SizedBox(
-                          height:
-                              50.0, 
+                          height: 50.0,
                           child: ElevatedButton(
                             onPressed: () {
                               Navigator.of(context).pop();
@@ -410,14 +409,12 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
                                         ),
                                       ),
                                     )
-                                  : Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => ViewPostScreen(
-                                          post: posts?[index],
-                                        ),
-                                      ),
-                                    );
+                                  : Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) {
+                                      return ViewPostScreen(
+                                          postId:
+                                              posts![index].postId.toString(),username: widget.username.toString(),);
+                                    }));
                             },
                           ),
                         );

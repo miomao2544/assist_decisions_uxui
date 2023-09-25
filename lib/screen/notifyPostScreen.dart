@@ -93,7 +93,6 @@ class _NotifyPostScreenState extends State<NotifyPostScreen> {
                       mainAxisSize: MainAxisSize.max,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                      
                         Text(
                           "${posts?[index].title}",
                           maxLines: 1,
@@ -113,7 +112,7 @@ class _NotifyPostScreenState extends State<NotifyPostScreen> {
                           style:
                               const TextStyle(fontFamily: 'Itim', fontSize: 16),
                         ),
-                          Text(
+                        Text(
                           "สิ้นสุดการโหวต ${formatDate(posts?[index].dateStop)}",
                           style: const TextStyle(
                             fontFamily: 'Itim',
@@ -121,7 +120,6 @@ class _NotifyPostScreenState extends State<NotifyPostScreen> {
                           ),
                         ),
                       ],
-                      
                     ),
                     trailing: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -130,16 +128,12 @@ class _NotifyPostScreenState extends State<NotifyPostScreen> {
                         const Icon(Icons.chevron_right_sharp),
                       ],
                     ),
-                    
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ViewPostScreen(
-                            post: posts?[index],
-                          ),
-                        ),
-                      );
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return ViewPostScreen(
+                            postId: posts![index].postId.toString(),username: widget.username.toString());
+                      }));
                     },
                   ),
                 );
