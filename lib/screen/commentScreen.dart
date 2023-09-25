@@ -1,6 +1,9 @@
 import 'package:assist_decisions_app/constant/constant_value.dart';
 import 'package:assist_decisions_app/controller/comment_controller.dart';
+
 import 'package:assist_decisions_app/model/member.dart';
+import 'package:assist_decisions_app/screen/listCommentComment.dart';
+import 'package:assist_decisions_app/screen/viewPostScreen.dart';
 import 'package:flutter/material.dart';
 
 class CommentScreen extends StatefulWidget {
@@ -16,85 +19,102 @@ class _CommentScreenState extends State<CommentScreen> {
   String? comment;
   final GlobalKey<FormState> fromKey = GlobalKey<FormState>();
   CommentController commentController = CommentController();
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(16.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CircleAvatar(
-            child: Image.network(
-              baseURL + '/members/downloadimg/${widget.member?.image}',
-              fit: BoxFit.cover,
-            ),
-          ),
-          SizedBox(width: 16.0),
-          Expanded(
-            child: Form(
-              key: fromKey,
-              child: Column(
-                children: [
-                  Container(
-                    width: 300,
+    return SingleChildScrollView(
+      child: Container(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CircleAvatar(
+                  child: Image.network(
+                    baseURL + '/members/downloadimg/${widget.member?.image}',
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                SizedBox(width: 16.0),
+                Expanded(
+                  child: Form(
+                    key: fromKey,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "${widget.member!.nickname}",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16.0,
+                        Container(
+                          width: 300,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${widget.member!.nickname}",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                              SizedBox(height: 8.0),
+                              TextFormField(
+                                decoration: InputDecoration(
+                                  labelText: 'คอมเม้น',
+                                  labelStyle: TextStyle(color: Color(0xFF1c174d)),
+                                ),
+                                maxLines: null,
+                                onChanged: (value) {
+                                  setState(() {
+                                    comment = value;
+                                  });
+                                },
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'กรุณากรอกคอมเมนต์';
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ],
                           ),
                         ),
-                        SizedBox(height: 8.0),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            labelText: 'คอมเม้น',
-                            labelStyle: TextStyle(color: Color(0xFF1c174d)),
+                        Container(
+                          width: 300,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              ElevatedButton(
+                                onPressed: () async {
+                                  if (fromKey.currentState!.validate()) {
+                                    await commentController.addChoice(
+                                        comment.toString(),
+                                        widget.member!.username.toString(),
+                                        widget.postId.toString());
+                                  }
+                                  
+                                  fromKey.currentState!.reset();
+                                  Navigator.push(context,
+                                            MaterialPageRoute(
+                                                builder: (context) {
+                                          return ViewPostScreen(postId: widget.postId.toString(),username:widget.member!.username.toString() ,);
+                                        }));
+                                    
+                                },
+                                child: Icon(Icons.add_comment_sharp,
+                                    color: Color(0xFF1c174d)),
+                              ),
+                            ],
                           ),
-                          maxLines: null,
-                          onChanged: (value) {
-                            setState(() {
-                              comment = value;
-                            });
-                          },
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'กรุณากรอกคอมเมนต์';
-                            }
-                            return null;
-                          },
                         ),
                       ],
                     ),
                   ),
-                  Container(
-                    width: 300,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () async {
-                            if (fromKey.currentState!.validate()) {
-                              await commentController.addChoice(
-                                  comment.toString(),
-                                  widget.member!.username.toString(),
-                                  widget.postId.toString());
-                            }
-                            fromKey.currentState!.reset();
-                          },
-                          child: Icon(Icons.add_comment_sharp,
-                              color: Color(0xFF1c174d)),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ),
-        ],
+            SizedBox(height: 16.0),
+            ListCommentScreen(postId: widget.postId.toString()),
+            SizedBox(height: 100.0),
+          ],
+        ),
       ),
     );
   }

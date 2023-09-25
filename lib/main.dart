@@ -1,4 +1,5 @@
 import 'package:assist_decisions_app/screen/homeScreen.dart';
+import 'package:assist_decisions_app/screen/listCommentComment.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -11,7 +12,6 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  MaterialApp(
-      // home: QuizPage(),
       home: HomeScreen(username: "vote",),
       debugShowCheckedModeBanner: false,
     );
