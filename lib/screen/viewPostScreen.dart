@@ -4,7 +4,7 @@ import 'package:assist_decisions_app/controller/post_controller.dart';
 import 'package:assist_decisions_app/model/choice.dart';
 import 'package:assist_decisions_app/model/member.dart';
 import 'package:assist_decisions_app/screen/commentScreen.dart';
-import 'package:assist_decisions_app/screen/listCommentComment.dart';
+import 'package:assist_decisions_app/screen/reportPostScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../constant/constant_value.dart';
@@ -70,7 +70,11 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
           actions: [
             IconButton(
               onPressed: () {
-                // Handle report button action
+                 Navigator.push(context,
+                                            MaterialPageRoute(
+                                                builder: (context) {
+                                          return ReportPostScreen (postId: post!.postId.toString(),username:widget.username.toString());
+                                        }));
               },
               icon: Icon(Icons.report),
             ),
