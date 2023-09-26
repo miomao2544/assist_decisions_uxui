@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:assist_decisions_app/controller/choice_controller.dart';
 import 'package:assist_decisions_app/controller/post_controller.dart';
 import 'package:assist_decisions_app/screen/chackPointScreen.dart';
-import 'package:assist_decisions_app/screen/postDetailScreen.dart';
+// import 'package:assist_decisions_app/screen/postDetailScreen.dart';
 import 'package:assist_decisions_app/widgets/custom_text.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -167,12 +167,12 @@ DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(widget.post?.dateStop??"
             centerTitle: true,
             leading: IconButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          PostDetailScreen(post: widget.post)),
-                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //       builder: (context) =>
+                //           PostDetailScreen(post: widget.post)),
+                // );
               },
               icon: Icon(Icons.arrow_back),
               color: Colors.white,

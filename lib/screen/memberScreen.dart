@@ -101,7 +101,8 @@ class _MemberScreenState extends State<MemberScreen> {
                         openPosts?[index].interest?.interestName ?? '',
                     title: openPosts?[index].title ?? '',
                     description: openPosts?[index].description ?? '',
-                    screen: widget.username ==  openPosts?[index].postId? PostDetailScreen(post: null,):ViewPostScreen(postId: openPosts![index].postId.toString(),username: widget.username.toString()),
+                    screen: widget.username ==  openPosts?[index].member?.username? PostDetailScreen(postId:
+                                              openPosts![index].postId.toString(),username: widget.username.toString(),):ViewPostScreen(postId: openPosts![index].postId.toString(),username: widget.username.toString()),
                   );
                 },
               ),
@@ -124,7 +125,7 @@ class _MemberScreenState extends State<MemberScreen> {
                         closedPosts?[index].interest?.interestName ?? '',
                     title: closedPosts?[index].title ?? '',
                     description: closedPosts?[index].description ?? '',
-                    screen: widget.username ==  closedPosts?[index].postId? PostDetailScreen(post: null,):ViewPostScreen(postId: closedPosts![index].postId.toString(),username: widget.username.toString()),
+                    screen: widget.username ==  closedPosts?[index].member?.username? PostDetailScreen(postId: openPosts![index].postId.toString(),username: widget.username.toString(),):ViewPostScreen(postId: closedPosts![index].postId.toString(),username: widget.username.toString()),
                   );
                 },
               ),

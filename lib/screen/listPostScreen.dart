@@ -133,7 +133,7 @@ Future fetchPost() async {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => PostDetailScreen(
-                                    post: posts![index],
+                                    postId: posts![index].postId.toString(),username: widget.username.toString(),
                                   ),
                                 ),
                               );

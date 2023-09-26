@@ -1,9 +1,11 @@
 import 'package:assist_decisions_app/controller/post_controller.dart';
+import 'package:assist_decisions_app/screen/homeScreen.dart';
 import 'package:flutter/material.dart';
 
 class ChackDeletePostScreen extends StatefulWidget {
   final String postId;
-  const ChackDeletePostScreen({required this.postId});
+  final String username;
+  const ChackDeletePostScreen({required this.postId ,required this.username});
 
   @override
   State<ChackDeletePostScreen> createState() => _ChackDeletePostScreenState();
@@ -47,6 +49,11 @@ class _ChackDeletePostScreenState extends State<ChackDeletePostScreen> {
                             ElevatedButton(
                               onPressed: ()async{
                               await postController.doDeletePost(widget.postId.toString());
+                               Navigator.push(context,
+                                            MaterialPageRoute(
+                                                builder: (context) {
+                                          return HomeScreen(username:widget.username.toString(),);
+                                        }));
                               },
                               child: Text("ตกลง"),
                               style: ElevatedButton.styleFrom(

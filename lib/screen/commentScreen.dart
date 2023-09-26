@@ -2,7 +2,7 @@ import 'package:assist_decisions_app/constant/constant_value.dart';
 import 'package:assist_decisions_app/controller/comment_controller.dart';
 
 import 'package:assist_decisions_app/model/member.dart';
-import 'package:assist_decisions_app/screen/listCommentComment.dart';
+import 'package:assist_decisions_app/screen/listCommentScreen.dart';
 import 'package:assist_decisions_app/screen/viewPostScreen.dart';
 import 'package:flutter/material.dart';
 

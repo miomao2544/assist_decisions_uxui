@@ -18,19 +18,18 @@ class VoteController{
     return jsonResponse;
   }
 
-  // Future findCommentById(String postId) async{
-  //   var url = Uri.parse(baseURL + '/comments/getCommentById/${postId}');
+  Future getVoteByChoice(String choiceId) async{
+    var url = Uri.parse(baseURL + '/votes/votechoice/${choiceId}');
 
-  //   http.Response response = await http.post(
-  //     url,
-  //     headers: headers,
-  //     body: null
-  //   );  
-  //   List<Comment>? list;
+    http.Response response = await http.post(
+      url,
+      headers: headers,
+      body: null
+    );  
+    String votes = "0";
 
-  //   final utf8body = utf8.decode(response.bodyBytes);
-  //   List<dynamic> jsonList = json.decode(utf8body);
-  //   list = jsonList.map((e) => Comment.fromJsonToComment(e)).toList();    
-  //   return list;
-  //   }
+    final utf8body = utf8.decode(response.bodyBytes); 
+    votes = utf8body; 
+    return votes;
+    }
 }

@@ -405,7 +405,8 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => PostDetailScreen(
-                                          post: posts?[index],
+                                        postId:
+                                              posts![index].postId.toString(),username: widget.username.toString(),
                                         ),
                                       ),
                                     )
