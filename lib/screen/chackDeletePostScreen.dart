@@ -1,13 +1,16 @@
+import 'package:assist_decisions_app/controller/post_controller.dart';
 import 'package:flutter/material.dart';
 
 class ChackDeletePostScreen extends StatefulWidget {
-  const ChackDeletePostScreen({super.key});
+  final String postId;
+  const ChackDeletePostScreen({required this.postId});
 
   @override
   State<ChackDeletePostScreen> createState() => _ChackDeletePostScreenState();
 }
 
 class _ChackDeletePostScreenState extends State<ChackDeletePostScreen> {
+   PostController postController = PostController();
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
@@ -42,8 +45,8 @@ class _ChackDeletePostScreenState extends State<ChackDeletePostScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             ElevatedButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
+                              onPressed: ()async{
+                              await postController.doDeletePost(widget.postId.toString());
                               },
                               child: Text("ตกลง"),
                               style: ElevatedButton.styleFrom(

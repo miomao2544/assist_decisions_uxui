@@ -72,183 +72,183 @@ class _ReportPostScreenState extends State<ReportPostScreen> {
               "${formatDate(post?.dateStart)} - ${formatDate(post?.dateStop)}"),
         ),
         body: isDataLoaded == true
-            ? Container(
-                height: double.infinity,
-                child: Center(
-                  child: SingleChildScrollView(
-                    child: Container(
-                      height: MediaQuery.of(context).size.height,
-                      child: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                                                        SizedBox(
-                              height: 20,
-                            ),
-                            Text('${post?.title ?? ""}',
-                                style: TextStyle(fontSize: 30)),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Image.network(
-                              baseURL + '/posts/downloadimg/${post?.postImage}',
-                              fit: BoxFit.cover,
-                              width: 250,
-                              height: 250,
-                            ),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            Text(' ${post?.description ?? ""}'),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Row(
-                              children: [
-                                PostInfoWidget(
-                                  title: "คะแนน",
-                                  value: "${post?.postPoint?.toInt()}",
-                                ),
-                                PostInfoWidget(
-                                  title: "จำนวนต่ำสุด",
-                                  value: "${post?.qtyMin}",
-                                ),
-                                PostInfoWidget(
-                                  title: "จำนวนสูงสุด",
-                                  value: "${post?.qtyMax}",
-                                ),
-                                PostInfoWidget(
-                                  title: "จำนวนผู้โหวต",
-                                  value: "20",
-                                ),
-                              ],
-                            ),
-                            DividerBoxBlack(),
-                            ListView.builder(
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              itemCount: choices?.length ?? 0,
-                              itemBuilder: (context, index) {
-                                return Card(
-                                  elevation: 2,
-                                  shape: Border.all(
-                                    color: selectedChoiceIndex == index
-                                        ? Colors.green
-                                        : Colors.transparent,
-                                    width: 2,
-                                  ),
-                                  child: RadioListTile<int>(
-                                    value: index,
-                                    groupValue: selectedChoiceIndex,
-                                    onChanged: (int? value) {
-                                      setState(() {
-                                        selectedChoiceIndex = value;
-                                      });
-                                    },
-                                    activeColor: Colors.green,
-                                    title: Row(
-                                      children: [
-                                        Image.network(
-                                          baseURL +
-                                              '/choices/downloadimg/${choices![index].choiceImage}',
-                                          fit: BoxFit.cover,
-                                          width: 50,
-                                          height: 50,
-                                        ),
-                                        Text(choices![index].choiceName ?? ""),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                            Container(
-                              padding: EdgeInsets.all(16.0),
-                              child: Column(
+            ? SizedBox(
+              child: Container(
+                  height: double.infinity,
+                  child: Center(
+                    child: SingleChildScrollView(
+                      child: Container(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                                                          SizedBox(
+                                height: 20,
+                              ),
+                              Text('${post?.title ?? ""}',
+                                  style: TextStyle(fontSize: 30)),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Image.network(
+                                baseURL + '/posts/downloadimg/${post?.postImage}',
+                                fit: BoxFit.cover,
+                                width: 250,
+                                height: 250,
+                              ),
+                              SizedBox(
+                                height: 15,
+                              ),
+                              Text(' ${post?.description ?? ""}'),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Row(
                                 children: [
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Expanded(
-                                        child: Form(
-                                          key: fromKey,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              CircleAvatar(
-                                                child: Image.network(
-                                                  baseURL +
-                                                      '/members/downloadimg/${post?.member?.image}',
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              ),
-                                              SizedBox(width: 16.0),
-                                              Text(
-                                                "${post!.member!.nickname}",
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16.0,
-                                                ),
-                                              ),
-                                              SizedBox(height: 8.0),
-                                              Container(
-                                                width: 300,
-                                                child: TextFormField(
-                                                  decoration: InputDecoration(
-                                                    labelText: 'รายงาน',
-                                                    labelStyle: TextStyle(
-                                                        color: Color(0xFF1c174d)),
-                                                  ),
-                                                  maxLines: null,
-                                                  onChanged: (value) {
-                                                    setState(() {
-                                                      reportComment = value;
-                                                    });
-                                                  },
-                                                ),
-                                              ),
-                                              ElevatedButton(
-                                                onPressed: () async {
-                                                  await reportController
-                                                      .doReportPost(
-                                                    reportComment.toString(),
-                                                    widget.postId.toString(),
-                                                    widget.username.toString(),
-                                                  );
-                                                  Navigator.push(context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) {
-                                                    return ViewPostScreen(
-                                                      postId: widget.postId
-                                                          .toString(),
-                                                      username: widget.username
-                                                          .toString(),
-                                                    );
-                                                  }));
-                                                },
-                                                child: Icon(
-                                                    Icons.report_problem,
-                                                    color: Color(0xFF1c174d)),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                  PostInfoWidget(
+                                    title: "คะแนน",
+                                    value: "${post?.postPoint?.toInt()}",
+                                  ),
+                                  PostInfoWidget(
+                                    title: "จำนวนต่ำสุด",
+                                    value: "${post?.qtyMin}",
+                                  ),
+                                  PostInfoWidget(
+                                    title: "จำนวนสูงสุด",
+                                    value: "${post?.qtyMax}",
+                                  ),
+                                  PostInfoWidget(
+                                    title: "จำนวนผู้โหวต",
+                                    value: "20",
                                   ),
                                 ],
                               ),
-                            ),
-                            SizedBox(height: 16.0),
-                          ],
+                              DividerBoxBlack(),
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: choices?.length ?? 0,
+                                itemBuilder: (context, index) {
+                                  return Card(
+                                    elevation: 2,
+                                    shape: Border.all(
+                                      color: selectedChoiceIndex == index
+                                          ? Colors.green
+                                          : Colors.transparent,
+                                      width: 2,
+                                    ),
+                                    child: RadioListTile<int>(
+                                      value: index,
+                                      groupValue: selectedChoiceIndex,
+                                      onChanged: (int? value) {
+                                        setState(() {
+                                          selectedChoiceIndex = value;
+                                        });
+                                      },
+                                      activeColor: Colors.green,
+                                      title: Row(
+                                        children: [
+                                          Image.network(
+                                            baseURL +
+                                                '/choices/downloadimg/${choices![index].choiceImage}',
+                                            fit: BoxFit.cover,
+                                            width: 50,
+                                            height: 50,
+                                          ),
+                                          Text(choices![index].choiceName ?? ""),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(16.0),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                          child: Form(
+                                            key: fromKey,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                CircleAvatar(
+                                                  child: Image.network(
+                                                    baseURL +
+                                                        '/members/downloadimg/${post?.member?.image}',
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                                SizedBox(width: 16.0),
+                                                Text(
+                                                  "${post!.member!.nickname}",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16.0,
+                                                  ),
+                                                ),
+                                                SizedBox(height: 8.0),
+                                                Container(
+                                                  width: 300,
+                                                  child: TextFormField(
+                                                    decoration: InputDecoration(
+                                                      labelText: 'รายงาน',
+                                                      labelStyle: TextStyle(
+                                                          color: Color(0xFF1c174d)),
+                                                    ),
+                                                    maxLines: null,
+                                                    onChanged: (value) {
+                                                      setState(() {
+                                                        reportComment = value;
+                                                      });
+                                                    },
+                                                  ),
+                                                ),
+                                                ElevatedButton(
+                                                  onPressed: () async {
+                                                    await reportController
+                                                        .doReportPost(
+                                                      reportComment.toString(),
+                                                      widget.postId.toString(),
+                                                      widget.username.toString(),
+                                                    );
+                                                    Navigator.push(context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) {
+                                                      return ViewPostScreen(
+                                                        postId: widget.postId
+                                                            .toString(),
+                                                        username: widget.username
+                                                            .toString(),
+                                                      );
+                                                    }));
+                                                  },
+                                                  child: Icon(
+                                                      Icons.report_problem,
+                                                      color: Color(0xFF1c174d)),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 16.0),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
+                  
                   ),
                 ),
-              )
+            )
             : CircularProgressIndicator(),
       ),
     );

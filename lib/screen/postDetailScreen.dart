@@ -164,7 +164,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                               child: Text("แก้ไข"),
                             ),
                             SizedBox(width: 20),
-                           ChackDeletePostScreen(),
+                           ChackDeletePostScreen(postId: widget.post!.postId.toString()),
                           ],
                         ),
                       ),

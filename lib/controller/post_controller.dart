@@ -144,6 +144,14 @@ class PostController {
     return list;
   }
 
+    Future doDeletePost(String postId) async {
+    var url = Uri.parse(baseURL + '/posts/delete/${postId}');
+
+    http.Response response = await http.post(url, headers: headers, body: null);
+    final utf8body = utf8.decode(response.bodyBytes);
+    print("-------------------------------${utf8body}-----------------");
+  }
+
   Future<Post?> getPostById(String postId) async {
     try {
       var url = Uri.parse(baseURL + '/posts/view/$postId');
