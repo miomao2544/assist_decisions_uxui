@@ -1,5 +1,6 @@
 import 'package:assist_decisions_app/screen/homeScreen.dart';
 import 'package:assist_decisions_app/screen/listCommentScreen.dart';
+import 'package:assist_decisions_app/screen/loginAdminScreen.dart';
 import 'package:assist_decisions_app/screen/previewPostScreen.dart';
 import 'package:flutter/material.dart';
 
@@ -13,9 +14,10 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  MaterialApp(
-      // home: PreviewPostScreen(),
-      home: HomeScreen(username: "post",),
+      home: LoginAdminScreen(),
+      // home: HomeScreen(username: "post",),
       debugShowCheckedModeBanner: false,
     );
+    
   }
 }

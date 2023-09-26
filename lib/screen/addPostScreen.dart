@@ -178,8 +178,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
                     builder: (BuildContext context) {
-                      return const HomeScreen(
-                        username: "maihom2001",
+                      return  HomeScreen(
+                        username: widget.username,
                       );
                     },
                   ),
@@ -199,6 +199,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                     child: Center(child: Text("เพิ่มโพสต์")),
                   ),
                   CustomTextFormField(
+       
                     controller: titleTextController,
                     hintText: "หัวข้อ",
                     maxLength: 50,
@@ -268,6 +269,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                     ],
                   ),
                   CustomTextFormField(
+         
                     controller: descriptionTextController,
                     hintText: "คำอธิบาย",
                     maxLength: 1000,

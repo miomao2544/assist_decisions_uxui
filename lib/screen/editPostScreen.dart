@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:assist_decisions_app/controller/choice_controller.dart';
 import 'package:assist_decisions_app/controller/post_controller.dart';
-import 'package:assist_decisions_app/screen/chackPointScreen.dart';
+import 'package:assist_decisions_app/screen/homeScreen.dart';
 // import 'package:assist_decisions_app/screen/postDetailScreen.dart';
 import 'package:assist_decisions_app/widgets/custom_text.dart';
 import 'package:file_picker/file_picker.dart';
@@ -13,11 +13,12 @@ import '../controller/interest_controller.dart';
 import '../model/choice.dart';
 import '../model/interest.dart';
 import '../model/post.dart';
-import 'package:intl/intl.dart';
+
 
 class EditPostScreen extends StatefulWidget {
-  final Post? post;
-  const EditPostScreen({required this.post});
+  final String username;
+  final String postId;
+  const EditPostScreen({required this.username,required this.postId});
 
   @override
   State<EditPostScreen> createState() => _EditPostScreenState();
@@ -28,16 +29,22 @@ class _EditPostScreenState extends State<EditPostScreen> {
   final ChoiceController choiceController = ChoiceController();
   InterestController interestController = InterestController();
 
+    Post? post;
   List<Interest> interests = [];
   String? selectedInterest;
   FilePickerResult? filePickerResult;
   String? fileName;
+  List<String>? fileImageName = [];
   String? dateStarts;
   String? dateStops;
   PlatformFile? pickedFile;
   File? fileToDisplay;
+  List<File>? fileImagesToDisplay = [];
   bool isLoadingPicture = true;
+  List<bool>? isLoadingImagePicture;
   List<Choice> choices = [];
+  List<String>? Images = [];
+  bool isDataLoaded = false;
   TextEditingController postImageTextController = TextEditingController();
   TextEditingController titleTextController = TextEditingController();
   TextEditingController descriptionTextController = TextEditingController();
@@ -63,7 +70,30 @@ class _EditPostScreenState extends State<EditPostScreen> {
         pickedFile = filePickerResult!.files.first;
         fileToDisplay = File(pickedFile!.path.toString());
         postImageTextController.text = fileName.toString();
+        print("File is ${fileName}");
       }
+      setState(() {
+        isLoadingPicture = false;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void _pickFileChoices() async {
+    try {
+      setState(() {
+        isLoadingPicture = true;
+      });
+
+      filePickerResult = await FilePicker.platform
+          .pickFiles(allowMultiple: false, type: FileType.image);
+      if (filePickerResult != null) {
+        fileImageName?.add(filePickerResult!.files.first.name);
+        pickedFile = filePickerResult!.files.first;
+        fileImagesToDisplay?.add(File(pickedFile!.path.toString()));
+      }
+      print("File is ${fileImageName![0]}");
       setState(() {
         isLoadingPicture = false;
       });
@@ -75,6 +105,8 @@ class _EditPostScreenState extends State<EditPostScreen> {
   void _removeChoice(int index) {
     setState(() {
       choices.removeAt(index);
+      fileImagesToDisplay?.removeAt(index);
+      fileImageName?.removeAt(index);
     });
   }
 
@@ -87,13 +119,13 @@ class _EditPostScreenState extends State<EditPostScreen> {
       lastDate: currentDate.add(Duration(days: 365)),
     );
     if (selectedDate != null && selectedDate != currentDate) {
-      // Format selectedDate to "yyyy-MM-dd HH:mm:ss"
-      dateStarts =
-          "${selectedDate.day.toString().padLeft(2, '0')}/${selectedDate.month.toString().padLeft(2, '0')}/${selectedDate.year.toString().padLeft(4, '0')}";
       String formattedDate =
-          "${selectedDate.year.toString().padLeft(4, '0')}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')} ${currentDate.hour.toString().padLeft(2, '0')}:${currentDate.minute.toString().padLeft(2, '0')}:${currentDate.second.toString().padLeft(2, '0')}";
+          "${selectedDate.day.toString().padLeft(2, '0')}/${selectedDate.month.toString().padLeft(2, '0')}/${selectedDate.year.toString().padLeft(4, '0')}";
 
       postDateStartController.text = formattedDate;
+      String formattedDate2 =
+          "${selectedDate.year.toString().padLeft(4, '0')}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')} ${selectedDate.hour.toString().padLeft(2, '0')}:${selectedDate.minute.toString().padLeft(2, '0')}:${selectedDate.second.toString().padLeft(2, '0')}";
+      dateStarts = formattedDate2;
     }
   }
 
@@ -107,42 +139,24 @@ class _EditPostScreenState extends State<EditPostScreen> {
     );
 
     if (selectedDate != null && selectedDate != currentDate) {
-      // Format selectedDate to "yyyy-MM-dd HH:mm:ss"
-      dateStops =
-          "${selectedDate.day.toString().padLeft(2, '0')}/${selectedDate.month.toString().padLeft(2, '0')}/${selectedDate.year.toString().padLeft(4, '0')}";
       String formattedDate =
-          "${selectedDate.year.toString().padLeft(4, '0')}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')} ${currentDate.hour.toString().padLeft(2, '0')}:${currentDate.minute.toString().padLeft(2, '0')}:${currentDate.second.toString().padLeft(2, '0')}";
+          "${selectedDate.day.toString().padLeft(2, '0')}/${selectedDate.month.toString().padLeft(2, '0')}/${selectedDate.year.toString().padLeft(4, '0')}";
       postDateStopController.text = formattedDate;
       print(postDateStopController.text);
+      String formattedDate2 =
+          "${selectedDate.year.toString().padLeft(4, '0')}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')} ${selectedDate.hour.toString().padLeft(2, '0')}:${selectedDate.minute.toString().padLeft(2, '0')}:${selectedDate.second.toString().padLeft(2, '0')}";
+      dateStops = formattedDate2;
     }
   }
 
   @override
   void initState() {
     super.initState();
-
-    loadInterests(); //โหลดความสนใจ
-    // สร้างตัวเลือก 2 ครั้งเมื่อเปิดหน้า
+    loadInterests();
     for (int i = 0; i < 2; i++) {
       choices.add(Choice(choiceName: ''));
     }
-    descriptionTextController =
-        new TextEditingController(text: widget.post?.description);
-    postImageTextController =
-        new TextEditingController(text: widget.post?.postImage);
-    postPointTextController = new TextEditingController(
-        text: (widget.post?.postPoint?.toInt()).toString());
-    postDateStartController.text = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(widget.post?.dateStart??""));
-    postDateStopController.text =
-DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(widget.post?.dateStop??""));
-    qtyMaxTextController =
-        new TextEditingController(text: widget.post?.qtyMax.toString());
-    qtyMinTextController =
-        new TextEditingController(text: widget.post?.qtyMin.toString());
-    usernameTextController =
-        new TextEditingController(text: widget.post?.member?.username);
-    selectedInterest = widget.post?.interest?.interestId;
-    titleTextController = new TextEditingController(text: widget.post?.title);
+    initializeData();
   }
 
   @override
@@ -158,21 +172,42 @@ DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(widget.post?.dateStop??"
     });
   }
 
+  Future<void> initializeData() async {
+
+    post = await postController.getPostById(widget.postId.toString());
+    if (post != null) {
+      //  = post!.dateStart.toString();
+      // interestSelect = member!.interests!
+      //     .map((interest) => interest.interestId.toString())
+      //     .toList();
+      // formattedInterestSelect =
+      //     interestSelect.where((item) => item != null).join(',');
+      // print("object>>>>> ${formattedInterestSelect}");
+    }
+    setState(() {
+      isDataLoaded = true;
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
             backgroundColor: Colors.teal,
-            title: Text("Edit post"),
+            title: Text("Add post"),
             centerTitle: true,
             leading: IconButton(
               onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //       builder: (context) =>
-                //           PostDetailScreen(post: widget.post)),
-                // );
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return  HomeScreen(
+                        username: widget.username.toString(),
+                      );
+                    },
+                  ),
+                );
               },
               icon: Icon(Icons.arrow_back),
               color: Colors.white,
@@ -187,22 +222,24 @@ DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(widget.post?.dateStop??"
                     padding: EdgeInsets.all(8.0),
                     child: Center(child: Text("แก้ไขโพสต์")),
                   ),
-                  TextFormField(
-                    controller: titleTextController, // กำหนดค่าเริ่มต้น
-                    decoration: InputDecoration(
-                      labelText: "หัวข้อ",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      prefixIcon: Icon(Icons.person),
-                      prefixIconColor: Colors.black,
-                    ),
-                    style: TextStyle(fontFamily: 'Itim', fontSize: 18),
+                  CustomTextFormField(
+         
+                    controller: titleTextController,
+                    hintText: "หัวข้อ",
+                    maxLength: 50,
+                    validator: (value) {
+                      if (value!.isNotEmpty) {
+                        return null;
+                      } else {
+                        return "หัวข้อ";
+                      }
+                    },
+                    icon: const Icon(Icons.account_circle),
                   ),
                   Center(
                     child: isLoadingPicture
                         ? Image.asset(
-                            "assets/images/logo.png",
+                            "assets/images/${post!.postImage.toString()}",
                             width: 250,
                           ) // Add a loading indicator while loading the picture
                         : fileToDisplay != null
@@ -268,6 +305,7 @@ DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(widget.post?.dateStop??"
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: TextFormField(
+                          
                             controller: postPointTextController,
                             maxLength: 5,
                             keyboardType: TextInputType.number,
@@ -357,7 +395,7 @@ DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(widget.post?.dateStop??"
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: SizedBox(
-                            width: 150,
+                            width: 160,
                             child: TextFormField(
                               controller: postDateStartController,
                               readOnly: true,
@@ -379,7 +417,7 @@ DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(widget.post?.dateStop??"
                           ),
                         ),
                         SizedBox(
-                          width: 150,
+                          width: 160,
                           child: TextFormField(
                             controller: postDateStopController,
                             readOnly: true,
@@ -401,22 +439,6 @@ DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(widget.post?.dateStop??"
                         ),
                       ],
                     ),
-                  ),
-                  // CustomTextFormField(
-                  //   controller: usernameTextController,
-                  //   hintText: "ผู้ใช้งาน",
-                  //   maxLength: 50,
-                  //   validator: (value) {
-                  //     if (value!.isNotEmpty) {
-                  //       return null;
-                  //     } else {
-                  //       return "กรุณากรอกผู้ใช้งาน";
-                  //     }
-                  //   },
-                  //   icon: const Icon(Icons.account_circle),
-                  // ),
-                  SizedBox(
-                    height: 20,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -454,6 +476,28 @@ DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(widget.post?.dateStop??"
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       child: Row(
                         children: [
+                          Center(
+                            child: fileImagesToDisplay != null &&
+                                    fileImagesToDisplay!.isNotEmpty &&
+                                    i < fileImagesToDisplay!.length
+                                ? GestureDetector(
+                                    child: Image.file(
+                                      fileImagesToDisplay![i],
+                                      width: 100,
+                                      height: 100,
+                                    ),
+                                    onTap: () {
+                                      _pickFileChoices();
+                                    },
+                                  )
+                                : GestureDetector(
+                                    onTap: () {
+                                      _pickFileChoices();
+                                    },
+                                    child: Icon(Icons.image,
+                                        size: 30, color: Colors.blue),
+                                  ),
+                          ),
                           Expanded(
                             child: TextFormField(
                               decoration: InputDecoration(
@@ -465,13 +509,13 @@ DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(widget.post?.dateStop??"
                                   choices[i].choiceName = value;
                                 });
                               },
-                              // validator: (value) {
-                              //   if (value!.isNotEmpty) {
-                              //     return null;
-                              //   } else {
-                              //     return "กรุณากรอกตัวเลือก";
-                              //   }
-                              // },
+                              validator: (value) {
+                                if (value!.isNotEmpty) {
+                                  return null;
+                                } else {
+                                  return "กรุณากรอกตัวเลือก";
+                                }
+                              },
                             ),
                           ),
                           SizedBox(width: 10),
@@ -504,38 +548,39 @@ DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(widget.post?.dateStop??"
                       elevation: 0,
                     ),
                     onPressed: () async {
+                      print(
+                          "------fileToDisplay-------${fileToDisplay!}-----------");
                       if (fromKey.currentState!.validate()) {
-                        var response = await postController.updatePost(
-                            widget.post?.postId ?? "",
+                        var response = await postController.doEditPost(
+                            widget.postId,
                             titleTextController.text,
-                            postImageTextController.text,
+                            fileToDisplay!,
                             descriptionTextController.text,
                             postPointTextController.text,
-                            postDateStartController.text,
-                            postDateStopController.text,
+                            dateStarts ?? "",
+                            dateStops ?? "",
                             qtyMaxTextController.text,
                             qtyMinTextController.text,
-                            widget.post?.member?.username ?? "",
-                            selectedInterest ?? "");
-                        // for (Choice choice in choices) {
-                        //   await choiceController.addChoice(
-                        //     choice.choiceName ?? '',
-                        //     "choice.choiceImage",
-                        //     response["postID"],
-                        //   );
-                        // }
-                        print("ผลลัพธ์คือ :" + response);
-                        // Navigator.of(context).pushReplacement(
-                        //   MaterialPageRoute(
-                        //     builder: (BuildContext context) {
-                        //       return const HomeScreen();
-                        //     },
-                        //   ),
-                        // );
+                            widget.username.toString(),
+                            selectedInterest ?? '');
+                        for (int i = 0; i < choices.length; i++) {
+                          Choice choice = choices[i];
+                          await choiceController.editChoice(
+                            choice.choiceId??"",
+                            choice.choiceName ??"",
+                            fileImagesToDisplay![i],
+                            response["postId"],
+                          );
+                        }
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  HomeScreen(username: widget.username)),
+                        );
                       }
                     },
                   ),
-                  ChackPointScreen(username: "vote",),
                   SizedBox(height: 30),
                 ],
               ),

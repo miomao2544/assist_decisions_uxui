@@ -27,6 +27,30 @@ class ChoiceController{
     // print(jsonResponse); 
     return  jsonResponse;
   }
+
+    Future editChoice(String choiceId,String choiceName,File choiceImages,String postId)async{
+    var choiceImage = await upload(choiceImages);
+    Map data = {
+      "choiceId": choiceId,
+      "choiceName" : choiceName,
+      "choiceImage" : choiceImage,
+      "postId" : postId,
+    };
+
+   var body = json.encode(data);
+    var url = Uri.parse(baseURL + '/choices/update');
+
+    http.Response response = await http.post(
+      url,
+      headers: headers,
+      body: body
+    );
+    // print(response.body);
+    var jsonResponse = jsonDecode(response.body);
+    // print(jsonResponse); 
+    return  jsonResponse;
+  }
+
     Future upload(File file) async {
     if (file == false) return;
 //null

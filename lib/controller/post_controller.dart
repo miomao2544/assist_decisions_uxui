@@ -43,10 +43,9 @@ class PostController {
     return jsonResponse;
   }
 
-  Future updatePost(
-      String postID,
+  Future doEditPost(String postId,
       String title,
-      String image,
+      File image,
       String description,
       String postPoint,
       String dateStart,
@@ -55,21 +54,11 @@ class PostController {
       String qtyMin,
       String username,
       String interestId) async {
-    // var imageName = await upload(image);
-    print(postID +
-        title +
-        image +
-        description +
-        postPoint +
-        dateStart +
-        dateStop +
-        qtyMax +
-        qtyMin +
-        username +
-        interestId);
+    var imageName = await upload(image);
+
     Map data = {
-      "postId": postID,
-      "postImage": image,
+      "postId":postId,
+      "postImage": imageName.toString(),
       "title": title,
       "description": description,
       "postPoint": postPoint,
@@ -81,12 +70,11 @@ class PostController {
       "username": username,
       "interestId": interestId,
     };
-
     var body = json.encode(data);
     var url = Uri.parse(baseURL + '/posts/update');
 
     http.Response response = await http.post(url, headers: headers, body: body);
-    print(response.body);
+    // print(response.body);
     var jsonResponse = jsonDecode(response.body);
     print(jsonResponse);
     return jsonResponse;
@@ -104,8 +92,10 @@ class PostController {
     return list;
   }
 
-    Future listSearchPostsAll(String title,String interests,String point,String daterequest)async {
-    var url = Uri.parse(baseURL + '/posts/search?title=$title&interests=$interests&point=$point&daterequest=$daterequest');
+  Future listSearchPostsAll(
+      String title, String interests, String point, String daterequest) async {
+    var url = Uri.parse(baseURL +
+        '/posts/search?title=$title&interests=$interests&point=$point&daterequest=$daterequest');
 
     http.Response response = await http.post(url, headers: headers, body: null);
     List<Post>? list;
@@ -144,7 +134,7 @@ class PostController {
     return list;
   }
 
-    Future doDeletePost(String postId) async {
+  Future doDeletePost(String postId) async {
     var url = Uri.parse(baseURL + '/posts/delete/${postId}');
 
     http.Response response = await http.post(url, headers: headers, body: null);
@@ -171,6 +161,7 @@ class PostController {
       return null;
     }
   }
+
   Future listPostsMember(String username) async {
     var url = Uri.parse(baseURL + '/posts/listpost/${username}');
 
@@ -184,22 +175,22 @@ class PostController {
     return list;
   }
 
-Future getListCountMember(String? postId) async {
-  var url = Uri.parse(baseURL + '/posts/count/$postId');
+  Future getListCountMember(String? postId) async {
+    var url = Uri.parse(baseURL + '/posts/count/$postId');
 
-  http.Response response = await http.post(
-    url,
-    headers: headers,
-    body: null,
-  );
+    http.Response response = await http.post(
+      url,
+      headers: headers,
+      body: null,
+    );
 
-  final utf8body = utf8.decode(response.bodyBytes);
+    final utf8body = utf8.decode(response.bodyBytes);
 
-  // ทำการแปลงค่าจาก String เป็น Int
-  int countInt = int.tryParse(utf8body) ?? 0;
-  print("----------count $countInt -----------");
-  return countInt;
-}
+    // ทำการแปลงค่าจาก String เป็น Int
+    int countInt = int.tryParse(utf8body) ?? 0;
+    print("----------count $countInt -----------");
+    return countInt;
+  }
 
   Future upload(File file) async {
     if (file == false) return;

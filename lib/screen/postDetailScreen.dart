@@ -198,7 +198,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                EditPostScreen(post: post)),
+                                                EditPostScreen(username: widget.username,postId: post!.postId.toString(),)),
                                       );
                                     },
                                     child: Text("แก้ไข"),
