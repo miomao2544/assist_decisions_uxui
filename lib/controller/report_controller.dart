@@ -21,19 +21,33 @@ class ReportController{
     return jsonResponse;
   }
 
-  // Future findCommentById(String postId) async{
-  //   var url = Uri.parse(baseURL + '/comments/getCommentById/${postId}');
+  Future getListReport() async {
+    var url = Uri.parse(baseURL + '/reports/list');
 
-  //   http.Response response = await http.post(
-  //     url,
-  //     headers: headers,
-  //     body: null
-  //   );  
-  //   List<Comment>? list;
+    http.Response response = await http.post(url, headers: headers, body: null);
+    List<Report>? list;
+    print(response.body);
+    final utf8body = utf8.decode(response.bodyBytes);
+    List<dynamic> jsonList = json.decode(utf8body);
+    list = jsonList.map((e) => Report.fromJsonToReport(e)).toList();
+    print("--------------------------${list[0].reportId}----------------------------------");
+    return list;
+  }
 
-  //   final utf8body = utf8.decode(response.bodyBytes);
-  //   List<dynamic> jsonList = json.decode(utf8body);
-  //   list = jsonList.map((e) => Comment.fromJsonToComment(e)).toList();    
-  //   return list;
-  //   }
+    Future<Report?> doViewReportDetail(String reportId) async {
+    try {
+      var url = Uri.parse(baseURL + '/reports/getReportById/$reportId');
+      http.Response response =
+          await http.post(url, headers: headers, body: null);
+      if (response.statusCode == 200) {
+        final utf8Body = utf8.decode(response.bodyBytes);
+        Map<String, dynamic> jsonMap = json.decode(utf8Body);
+        Report? report = Report.fromJsonToReport(jsonMap);
+        return report;
+      }
+    } catch (error) {
+      print("เกิดข้อผิดพลาดในการเชื่อมต่อ: $error");
+      return null;
+    }
+  }
 }

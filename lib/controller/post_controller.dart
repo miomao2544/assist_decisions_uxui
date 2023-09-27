@@ -85,10 +85,11 @@ class PostController {
 
     http.Response response = await http.post(url, headers: headers, body: null);
     List<Post>? list;
-
+    print(response.body);
     final utf8body = utf8.decode(response.bodyBytes);
     List<dynamic> jsonList = json.decode(utf8body);
     list = jsonList.map((e) => Post.fromJsonToPost(e)).toList();
+    print("--------------------------${list[0].postId}----------------------------------");
     return list;
   }
 
