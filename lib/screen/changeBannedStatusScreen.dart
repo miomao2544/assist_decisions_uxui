@@ -1,6 +1,6 @@
 import 'package:assist_decisions_app/constant/constant_value.dart';
-import 'package:assist_decisions_app/controller/banType.dart';
-import 'package:assist_decisions_app/controller/report_controller.dart';
+import 'package:assist_decisions_app/controller/banTypeController.dart';
+import 'package:assist_decisions_app/controller/reportController.dart';
 import 'package:assist_decisions_app/model/banType.dart';
 import 'package:assist_decisions_app/model/report.dart';
 import 'package:flutter/material.dart';

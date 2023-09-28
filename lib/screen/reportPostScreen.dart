@@ -1,11 +1,11 @@
-import 'package:assist_decisions_app/controller/report_controller.dart';
+import 'package:assist_decisions_app/controller/reportController.dart';
 import 'package:assist_decisions_app/screen/viewPostScreen.dart';
 import 'package:assist_decisions_app/widgets/PostInfoWidget.dart';
 import 'package:assist_decisions_app/widgets/divider_box.dart';
 import 'package:flutter/material.dart';
-import 'package:assist_decisions_app/controller/choice_controller.dart';
-import 'package:assist_decisions_app/controller/member_controller.dart';
-import 'package:assist_decisions_app/controller/post_controller.dart';
+import 'package:assist_decisions_app/controller/choiceController.dart';
+import 'package:assist_decisions_app/controller/memberController.dart';
+import 'package:assist_decisions_app/controller/postController.dart';
 import 'package:assist_decisions_app/model/choice.dart';
 import 'package:assist_decisions_app/model/member.dart';
 import 'package:intl/intl.dart';

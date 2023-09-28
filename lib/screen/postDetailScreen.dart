@@ -1,6 +1,6 @@
-import 'package:assist_decisions_app/controller/member_controller.dart';
-import 'package:assist_decisions_app/controller/post_controller.dart';
-import 'package:assist_decisions_app/controller/vote_controller.dart';
+import 'package:assist_decisions_app/controller/memberController.dart';
+import 'package:assist_decisions_app/controller/postController.dart';
+import 'package:assist_decisions_app/controller/voteController.dart';
 import 'package:assist_decisions_app/screen/chackDeletePostScreen.dart';
 import 'package:assist_decisions_app/screen/editPostScreen.dart';
 import 'package:assist_decisions_app/screen/homeScreen.dart';
@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:assist_decisions_app/model/choice.dart';
 import 'package:assist_decisions_app/model/member.dart';
 import '../constant/constant_value.dart';
-import '../controller/choice_controller.dart';
+import '../controller/choiceController.dart';
 import '../model/post.dart';
 import 'package:intl/intl.dart';
 

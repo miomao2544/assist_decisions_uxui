@@ -1,14 +1,14 @@
 import 'dart:io';
 
-import 'package:assist_decisions_app/controller/choice_controller.dart';
-import 'package:assist_decisions_app/controller/post_controller.dart';
+import 'package:assist_decisions_app/controller/choiceController.dart';
+import 'package:assist_decisions_app/controller/postController.dart';
 import 'package:assist_decisions_app/screen/homeScreen.dart';
 import 'package:assist_decisions_app/widgets/custom_text.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../controller/interest_controller.dart';
+import '../controller/interestController.dart';
 import '../model/choice.dart';
 import '../model/interest.dart';
 

@@ -1,5 +1,5 @@
-import 'package:assist_decisions_app/controller/interest_controller.dart';
-import 'package:assist_decisions_app/controller/post_controller.dart';
+import 'package:assist_decisions_app/controller/interestController.dart';
+import 'package:assist_decisions_app/controller/postController.dart';
 import 'package:assist_decisions_app/model/interest.dart';
 import 'package:assist_decisions_app/model/post.dart';
 import 'package:assist_decisions_app/screen/postDetailScreen.dart';

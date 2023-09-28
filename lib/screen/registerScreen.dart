@@ -1,9 +1,9 @@
-import 'package:assist_decisions_app/controller/member_controller.dart';
+import 'package:assist_decisions_app/controller/memberController.dart';
 import 'package:assist_decisions_app/screen/loginMemberScreen.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
-import '../controller/interest_controller.dart';
+import '../controller/interestController.dart';
 import '../model/interest.dart';
 
 class RegisterScreen extends StatefulWidget {

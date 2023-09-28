@@ -1,7 +1,5 @@
 import 'package:assist_decisions_app/model/banType.dart';
 
-import '../model/interest.dart';
-
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../constant/constant_value.dart';

@@ -1,10 +1,10 @@
-import 'package:assist_decisions_app/controller/member_controller.dart';
+import 'package:assist_decisions_app/controller/memberController.dart';
 import 'package:assist_decisions_app/screen/editProfileScreen.dart';
 import 'package:assist_decisions_app/widgets/divider_box.dart';
 import 'package:flutter/material.dart';
 
 import '../constant/constant_value.dart';
-import '../controller/interest_controller.dart';
+import '../controller/interestController.dart';
 import '../model/interest.dart';
 import '../model/member.dart';
 import '../widgets/InfoRow.dart';

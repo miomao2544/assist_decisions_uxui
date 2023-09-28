@@ -34,7 +34,7 @@ class ReportController{
     return list;
   }
 
-    Future<Report?> doViewReportDetail(String reportId) async {
+    Future doViewReportDetail(String reportId) async {
     try {
       var url = Uri.parse(baseURL + '/reports/getReportById/$reportId');
       http.Response response =

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../controller/member_controller.dart';
+import '../controller/memberController.dart';
 import '../model/member.dart';
 
 class ChackPointScreen extends StatefulWidget {
