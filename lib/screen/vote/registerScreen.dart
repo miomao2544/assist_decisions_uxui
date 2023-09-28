@@ -1,10 +1,12 @@
-import 'package:assist_decisions_app/controller/memberController.dart';
-import 'package:assist_decisions_app/screen/vote/loginMemberScreen.dart';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import '../../controller/interestController.dart';
+import '../../controller/memberController.dart';
 import '../../model/interest.dart';
+import '../validators/validatorRegister.dart';
+import 'loginMemberScreen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -14,7 +16,8 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final MemberController memberController = MemberController();
+
+  MemberController memberController = MemberController();
   InterestController interestController = InterestController();
 
   List<Interest> interests = [];
@@ -41,7 +44,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   PlatformFile? pickedFile;
   File? fileToDisplay;
   bool isLoadingPicture = true;
-  bool isUsernameTaken = true;
+
   void _pickFile() async {
     try {
       setState(() {
@@ -64,29 +67,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
+  bool isDataLoaded= false;
   Future loadInterests() async {
     List<Interest> interestList = await interestController.listAllInterests();
     setState(() {
       print(interests);
       interests = interestList;
+      isDataLoaded = true;
     });
   }
 
-  bool isThaiOrEnglish(String input) {
-    final thaiPattern = RegExp(r'^[ก-๏\s]+$');
-    final englishPattern = RegExp(r'^[a-zA-Z\s]+$');
-
-    return thaiPattern.hasMatch(input) || englishPattern.hasMatch(input);
-  }
-
-  bool isValidEmail(String email) {
-    final emailRegex = RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$');
-    return emailRegex.hasMatch(email);
-  }
-
-  Future checkUsernameExists(String username) async{
-     isUsernameTaken = await memberController.checkUsernameExists(username);
-  }
 
   @override
   void initState() {
@@ -103,7 +93,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       appBar: AppBar(
         title: Text('Register'),
       ),
-      body: Padding(
+      body:isDataLoaded? Padding(
           padding: EdgeInsets.all(16.0),
           child: SingleChildScrollView(
             child: Column(
@@ -178,16 +168,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             firstname = value;
                           });
                         },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'กรุณากรอกชื่อ';
-                          } else if (!isThaiOrEnglish(value)) {
-                            return 'กรุณาเขียนเป็นภาษาไทย หรือ อังกฤษเท่านั้น';
-                          } else if (value.length < 2 || value.length > 100) {
-                            return 'อักษรของคุณควรอยู่ระหว่าง 2 และ 100 ตัวอักษร';
-                          }
-                          return null;
-                        },
+                        validator: validateFirstname,
                       ),
                       TextFormField(
                         decoration: InputDecoration(
@@ -201,16 +182,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             lastname = value;
                           });
                         },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'กรุณากรอกนามสกุล';
-                          } else if (!isThaiOrEnglish(value)) {
-                            return 'กรุณาเขียนเป็นภาษาไทย หรือ อังกฤษเท่านั้น';
-                          } else if (value.length < 2 || value.length > 100) {
-                            return 'อักษรของคุณควรอยู่ระหว่าง 2 และ 100 ตัวอักษร';
-                          }
-                          return null;
-                        },
+                        validator: validateLastname,
                       ),
                       SizedBox(height: 16.0),
                       TextFormField(
@@ -225,18 +197,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             email = value;
                           });
                         },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'กรุณากรอกอีเมล์';
-                          } else if (!isValidEmail(value)) {
-                            return 'รูปแบบของคุณอีเมล์ไม่ถูกต้อง';
-                          } else if (value.length < 5 || value.length > 60) {
-                            return 'อักษรของคุณควรอยู่ระหว่าง 5 และ 60 ตัวอักษร';
-                          } else if (value.contains(' ')) {
-                            return 'ไม่อนุญาตให้มีช่องว่างในข้อมูล';
-                          }
-                          return null;
-                        },
+                        validator: validateEmail,
                       ),
                       SizedBox(height: 16.0),
                       TextFormField(
@@ -251,23 +212,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             tel = value;
                           });
                         },
-                        validator: (value) {
-                          final validDigits = RegExp(r'^[0-9]{10}$');
-
-                          if (value == null || value.isEmpty) {
-                            return 'กรุณากรอกหมายเลขโทรศัพท์';
-                          } else if (!value.startsWith('06') &&
-                              !value.startsWith('08') &&
-                              !value.startsWith('09')) {
-                            return 'หมายเลขโทรศัพท์ต้องขึ้นต้นด้วย 06, 08, หรือ 09';
-                          }
-                          if (!validDigits.hasMatch(value.toString())) {
-                            return 'หมายเลขโทรศัพท์ต้องประกอบด้วยตัวเลข 0-9';
-                          } else if (value.length != 10) {
-                            return 'หมายเลขโทรศัพท์ต้องมี 10 ตัวเท่านั้น';
-                          }
-                          return null;
-                        },
+                        validator: validateTel,
                       ),
                       SizedBox(height: 16.0),
                       Text('ความสนใจ'),
@@ -280,7 +225,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             final interest = interests[index];
                             final isSelected =
                                 interestSelect.contains(interest.interestId);
-
                             return Padding(
                               padding: EdgeInsets.symmetric(horizontal: 8.0),
                               child: ElevatedButton(
@@ -333,13 +277,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ? Image.asset(
                                 "assets/images/logo.png",
                                 width: 250,
-                              ) // Add a loading indicator while loading the picture
+                              ) 
                             : fileToDisplay != null
                                 ? Image.file(
                                     fileToDisplay!,
-                                    height: 200, // Set the desired image height
+                                    height: 200, 
                                   )
-                                : Container(), // Display an empty container if no image is selected
+                                : Container(), 
                       ),
                       Align(
                         alignment: Alignment.center,
@@ -368,16 +312,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             nickname = value;
                           });
                         },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'กรุณากรอกชื่อ';
-                          } else if (!isThaiOrEnglish(value)) {
-                            return 'กรุณาเขียนเป็นภาษาไทย หรือ อังกฤษเท่านั้น';
-                          } else if (value.length < 2 || value.length > 100) {
-                            return 'อักษรของคุณควรอยู่ระหว่าง 2 และ 100 ตัวอักษร';
-                          }
-                          return null;
-                        },
+                        validator: validateNickname,
                       ),
                       SizedBox(height: 16.0),
                       TextFormField(
@@ -386,25 +321,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         onChanged: (value) {
                           setState(() {
+                            checkUsernameExists(value);
                             username = value;
                           });
                         },
-                        validator: (value){
-                          if (value == null || value.isEmpty) {
-                            return 'กรุณากรอกชื่อผู้ใช้งาน';
-                          } else if (!RegExp(r'^[a-zA-Z0-9]+$')
-                              .hasMatch(value)) {
-                            return 'กรุณากรอกตัวอักษรภาษาอังกฤษหรือตัวเลขเท่านั้น';
-                          } else if (value.length < 6 || value.length > 12) {
-                            return 'อักษรของคุณควรอยู่ระหว่าง 6 และ 12 ตัวอักษร';
-                          }
-                          checkUsernameExists(value);
-                          if (isUsernameTaken) {
-                            return 'ชื่อผู้ใช้งานนี้มีอยู่ในระบบแล้ว';
-                          }else{
-                            return null;
-                          }
-                        },
+                        validator: validateUsername,
                       ),
                       SizedBox(height: 16.0),
                       TextFormField(
@@ -417,17 +338,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             password = value;
                           });
                         },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'กรุณากรอกรหัสผ่าน';
-                          } else if (value.length < 8 || value.length > 16) {
-                            return 'รหัสผ่านควรมีความยาวระหว่าง 8 และ 16 ตัวอักษร';
-                          } else if (!RegExp(r'^[a-zA-Z0-9@_\-\.]+$')
-                              .hasMatch(value)) {
-                            return 'รหัสผ่านควรประกอบด้วยตัวอักษรภาษาอังกฤษ, ตัวเลข, @, _, -, หรือ . เท่านั้น';
-                          }
-                          return null;
-                        },
+                        validator: validatePassword,
                       ),
                       SizedBox(height: 16.0),
                       TextFormField(
@@ -440,14 +351,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             confirmPassword = value;
                           });
                         },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'กรุณารหัสผ่านอีกครั้งเพื่อยืนยัน';
-                          } else if (value.toString() != password) {
-                            return 'รหัสผ่านของคุณไม่เหมือนเดิม กรุณากรอกใหม่อีกครั้ง';
-                          }
-                          return null;
-                        },
+                        validator: (value) => validateConfirmPassword(value, password),
                       ),
                       SizedBox(height: 16.0),
                       Padding(
@@ -491,20 +395,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       },
                                     );
                                   } else {
-                                    String? fileToSend =
-                                        "I00001.png"; // เริ่มต้นให้ใช้ fileToDisplay
-
+                                    String? fileToSend ="I00001.png";
                                     if (fileToDisplay != null) {
-                                      // รอผลลัพธ์จากการอัปโหลด
                                       var uploadedFile = await memberController
                                           .upload(fileToDisplay!);
-
-                                      // ตรวจสอบว่า uploadedFile ไม่เป็น null
                                       if (uploadedFile != null) {
                                         fileToSend = uploadedFile;
                                       }
                                     }
-                                    checkUsernameExists(username??"");
                                     if(isUsernameTaken == false){
                                     var result =
                                         await memberController.addMember(
@@ -519,7 +417,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                             fileToSend ?? "",
                                             formattedInterestSelect ?? "");
                                     if (result != null) {
-                                      // แสดงอนิเมชันแจ้งเตือนเมื่อสมัครสมาชิกสำเร็จ
                                       showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
@@ -551,7 +448,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         builder: (BuildContext context) {
                                           return AlertDialog(
                                             title: Text('ข้อผิดพลาด'),
-                                            content: Text('ข้อมูลไม่ถูกต้อง'),
+                                            content: Text('บันทึกข้อมูลไม่สำเร็จ'),
                                             actions: [
                                               ElevatedButton(
                                                 onPressed: () {
@@ -593,7 +490,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
               ],
             ),
-          )),
+          )):CircularProgressIndicator(),
     );
   }
 }

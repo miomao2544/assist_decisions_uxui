@@ -1,9 +1,4 @@
-import 'package:assist_decisions_app/screen/vote/homeScreen.dart';
-import 'package:assist_decisions_app/screen/post/listCommentScreen.dart';
-import 'package:assist_decisions_app/screen/admin/listReportScreen.dart';
-import 'package:assist_decisions_app/screen/admin/loginAdminScreen.dart';
-import 'package:assist_decisions_app/screen/user/previewPostScreen.dart';
-import 'package:assist_decisions_app/screen/admin/viewReportPostDetailScreen.dart';
+import 'package:assist_decisions_app/screen/vote/loginMemberScreen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -16,8 +11,9 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  MaterialApp(
-      home: ViewReportPostDetail(reportId: "R00000000001",username:"post",),
-      // home: HomeScreen(username: "post",),
+
+      // // home: HomeScreen(username: "post",),
+      home: LoginMemberScreen(),
       debugShowCheckedModeBanner: false,
     );
     

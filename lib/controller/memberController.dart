@@ -93,7 +93,6 @@ Future updateMember(
 
   Future upload(File file) async {
     if (file == false) return;
-//null
     var uri = Uri.parse(baseURL + "/members/uploadimg");
     var length = await file.length();
     print(length);
@@ -120,7 +119,6 @@ Future updateMember(
         Member? member = Member.fromJsonToMember(jsonMap);
 
         if (member.interests != null) {
-          // เข้าถึงสมาชิก interests ได้เมื่อมีข้อมูล
           print("Interests:");
           for (Interest interest in member.interests!) {
             print(interest.interestName);
@@ -131,12 +129,10 @@ Future updateMember(
 
         return member;
       } else {
-        // จัดการเมื่อรหัสสถานะไม่ใช่ 200 (ไม่พบข้อมูลหรือข้อผิดพลาดอื่น ๆ)
         print("ไม่สามารถดึงข้อมูลสมาชิกได้: ${response.statusCode}");
         return null;
       }
     } catch (error) {
-      // จัดการเมื่อเกิดข้อผิดพลาดในการเชื่อมต่อ
       print("เกิดข้อผิดพลาดในการเชื่อมต่อ: $error");
       return null;
     }

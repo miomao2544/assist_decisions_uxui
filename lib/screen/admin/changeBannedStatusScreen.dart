@@ -1,8 +1,10 @@
 import 'package:assist_decisions_app/constant/constant_value.dart';
 import 'package:assist_decisions_app/controller/banTypeController.dart';
+import 'package:assist_decisions_app/controller/historyController.dart';
 import 'package:assist_decisions_app/controller/reportController.dart';
 import 'package:assist_decisions_app/model/banType.dart';
 import 'package:assist_decisions_app/model/report.dart';
+import 'package:assist_decisions_app/screen/admin/listReportScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -23,8 +25,9 @@ class _ChangeBannedStatusScreenState extends State<ChangeBannedStatusScreen> {
   String? banComment;
   ReportController reportController = ReportController();
   BanTypeController banTypeController = BanTypeController();
+  HistoryBanController historyBanController = HistoryBanController();
   String? banTypeId = "";
-  String? banTypesId = "";
+  String? banTypesId = "BT0000000001";
   List<String?> banTypes = [];
 
   TextEditingController banCommentController = TextEditingController();
@@ -40,6 +43,7 @@ class _ChangeBannedStatusScreenState extends State<ChangeBannedStatusScreen> {
   void updatePoint(String newValue) {
     setState(() {
       banTypeId = newValue;
+      updateBanTypeId();
     });
   }
 
@@ -68,7 +72,7 @@ class _ChangeBannedStatusScreenState extends State<ChangeBannedStatusScreen> {
         "object-----------------${report!.reportDate.toString()}---------------------");
     setState(() {
       reports = report;
-      banComment  = reports!.reportComment;
+      banCommentController.text  = reports!.reportComment??"";
       isDataLoaded = true;
     });
   }
@@ -77,7 +81,6 @@ class _ChangeBannedStatusScreenState extends State<ChangeBannedStatusScreen> {
   void initState() {
     super.initState();
     fetchReport();
-    banCommentController.text = banComment?? "";
   }
 
   @override
@@ -207,7 +210,7 @@ class _ChangeBannedStatusScreenState extends State<ChangeBannedStatusScreen> {
                                            controller: banCommentController,
                                           onChanged: (value) {
                                             setState(() {
-                                              banComment = value;
+                                              banCommentController.text = value;
                                             });
                                           },
                                           decoration: InputDecoration(
@@ -244,12 +247,16 @@ class _ChangeBannedStatusScreenState extends State<ChangeBannedStatusScreen> {
                                               Color(0xFF479f76),
                                             ),
                                           ),
-                                          onPressed: () {
+                                          onPressed: () async{
                                             updateBanTypeId();
-                                            //              Navigator.push(context,
-                                            //     MaterialPageRoute(builder: (context) {
-                                            //   return ChangeBannedStatusScreen(reportId:  reports!.reportId.toString(),username: widget.username,);
-                                            // }));
+                                            print("----------${banCommentController.text}------------");
+                                            print("----------${banTypesId}------------");
+                                            print("----------${reports!.member!.username}------------");
+                                            await historyBanController.doBanStatus(banCommentController.text,banTypesId??"",reports!.member!.username??"");
+                                                         Navigator.push(context,
+                                                MaterialPageRoute(builder: (context) {
+                                              return ListReportScreen(username: widget.username,);
+                                            }));
                                           },
                                         ),
                                       ),
