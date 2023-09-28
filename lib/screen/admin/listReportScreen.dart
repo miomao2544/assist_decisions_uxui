@@ -3,7 +3,7 @@ import 'package:assist_decisions_app/controller/memberController.dart';
 import 'package:assist_decisions_app/controller/reportController.dart';
 import 'package:assist_decisions_app/model/member.dart';
 import 'package:assist_decisions_app/model/report.dart';
-import 'package:assist_decisions_app/screen/viewReportPostDetailScreen.dart';
+import 'package:assist_decisions_app/screen/admin/viewReportPostDetailScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

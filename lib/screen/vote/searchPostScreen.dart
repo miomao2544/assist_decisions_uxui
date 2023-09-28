@@ -2,10 +2,10 @@ import 'package:assist_decisions_app/controller/interestController.dart';
 import 'package:assist_decisions_app/controller/postController.dart';
 import 'package:assist_decisions_app/model/interest.dart';
 import 'package:assist_decisions_app/model/post.dart';
-import 'package:assist_decisions_app/screen/postDetailScreen.dart';
-import 'package:assist_decisions_app/screen/viewPostScreen.dart';
+import 'package:assist_decisions_app/screen/post/postDetailScreen.dart';
+import 'package:assist_decisions_app/screen/vote/viewPostScreen.dart';
 import 'package:flutter/material.dart';
-import '../constant/constant_value.dart';
+import '../../constant/constant_value.dart';
 import 'package:intl/intl.dart';
 
 class SearchPostScreen extends StatefulWidget {

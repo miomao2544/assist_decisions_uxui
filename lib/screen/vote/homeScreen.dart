@@ -2,18 +2,18 @@ import 'package:assist_decisions_app/controller/memberController.dart';
 import 'package:assist_decisions_app/controller/postController.dart';
 import 'package:assist_decisions_app/model/member.dart';
 import 'package:assist_decisions_app/model/post.dart';
-import 'package:assist_decisions_app/screen/addPostScreen.dart';
-import 'package:assist_decisions_app/screen/chackPointScreen.dart';
-import 'package:assist_decisions_app/screen/listPostScreen.dart';
-import 'package:assist_decisions_app/screen/loginMemberScreen.dart';
-import 'package:assist_decisions_app/screen/memberScreen.dart';
-import 'package:assist_decisions_app/screen/notifyPostScreen.dart';
-import 'package:assist_decisions_app/screen/searchPostScreen.dart';
-import 'package:assist_decisions_app/screen/viewProfileScreen.dart';
+import 'package:assist_decisions_app/screen/post/addPostScreen.dart';
+import 'package:assist_decisions_app/screen/post/chackPointScreen.dart';
+import 'package:assist_decisions_app/screen/vote/listPostScreen.dart';
+import 'package:assist_decisions_app/screen/vote/loginMemberScreen.dart';
+import 'package:assist_decisions_app/screen/vote/memberScreen.dart';
+import 'package:assist_decisions_app/screen/vote/notifyPostScreen.dart';
+import 'package:assist_decisions_app/screen/vote/searchPostScreen.dart';
+import 'package:assist_decisions_app/screen/vote/viewProfileScreen.dart';
 import 'package:assist_decisions_app/widgets/myNotificationWidget%20.dart';
 import 'package:flutter/material.dart';
 
-import '../constant/constant_value.dart';
+import '../../constant/constant_value.dart';
 
 class HomeScreen extends StatefulWidget {
   final String username;

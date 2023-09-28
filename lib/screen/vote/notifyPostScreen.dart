@@ -1,8 +1,8 @@
 import 'package:assist_decisions_app/controller/postController.dart';
 import 'package:assist_decisions_app/model/post.dart';
-import 'package:assist_decisions_app/screen/viewPostScreen.dart';
+import 'package:assist_decisions_app/screen/vote/viewPostScreen.dart';
 import 'package:flutter/material.dart';
-import '../constant/constant_value.dart';
+import '../../constant/constant_value.dart';
 import 'package:intl/intl.dart';
 
 class NotifyPostScreen extends StatefulWidget {

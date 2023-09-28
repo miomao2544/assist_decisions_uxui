@@ -1,20 +1,20 @@
 import 'package:assist_decisions_app/controller/memberController.dart';
 import 'package:assist_decisions_app/controller/postController.dart';
 import 'package:assist_decisions_app/controller/voteController.dart';
-import 'package:assist_decisions_app/screen/chackDeletePostScreen.dart';
-import 'package:assist_decisions_app/screen/editPostScreen.dart';
-import 'package:assist_decisions_app/screen/homeScreen.dart';
-import 'package:assist_decisions_app/screen/listCommentScreen.dart';
+import 'package:assist_decisions_app/screen/post/chackDeletePostScreen.dart';
+import 'package:assist_decisions_app/screen/post/editPostScreen.dart';
+import 'package:assist_decisions_app/screen/vote/homeScreen.dart';
+import 'package:assist_decisions_app/screen/post/listCommentScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:assist_decisions_app/model/choice.dart';
 import 'package:assist_decisions_app/model/member.dart';
-import '../constant/constant_value.dart';
-import '../controller/choiceController.dart';
-import '../model/post.dart';
+import '../../constant/constant_value.dart';
+import '../../controller/choiceController.dart';
+import '../../model/post.dart';
 import 'package:intl/intl.dart';
 
-import '../widgets/PostInfoWidget.dart';
-import '../widgets/divider_box.dart';
+import '../../widgets/PostInfoWidget.dart';
+import '../../widgets/divider_box.dart';
 
 class PostDetailScreen extends StatefulWidget {
   final String postId;

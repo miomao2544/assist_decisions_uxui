@@ -4,15 +4,15 @@ import 'package:assist_decisions_app/controller/postController.dart';
 import 'package:assist_decisions_app/controller/voteController.dart';
 import 'package:assist_decisions_app/model/choice.dart';
 import 'package:assist_decisions_app/model/member.dart';
-import 'package:assist_decisions_app/screen/commentScreen.dart';
-import 'package:assist_decisions_app/screen/homeScreen.dart';
-import 'package:assist_decisions_app/screen/reportPostScreen.dart';
+import 'package:assist_decisions_app/screen/vote/commentScreen.dart';
+import 'package:assist_decisions_app/screen/vote/homeScreen.dart';
+import 'package:assist_decisions_app/screen/admin/reportPostScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../constant/constant_value.dart';
-import '../model/post.dart';
-import '../widgets/PostInfoWidget.dart';
-import '../widgets/divider_box.dart';
+import '../../constant/constant_value.dart';
+import '../../model/post.dart';
+import '../../widgets/PostInfoWidget.dart';
+import '../../widgets/divider_box.dart';
 
 class ViewPostScreen extends StatefulWidget {
   final String postId;

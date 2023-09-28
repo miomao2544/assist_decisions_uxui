@@ -2,29 +2,34 @@ import 'dart:io';
 
 import 'package:assist_decisions_app/controller/choiceController.dart';
 import 'package:assist_decisions_app/controller/postController.dart';
-import 'package:assist_decisions_app/screen/homeScreen.dart';
+import 'package:assist_decisions_app/screen/vote/homeScreen.dart';
+// import 'package:assist_decisions_app/screen/postDetailScreen.dart';
 import 'package:assist_decisions_app/widgets/custom_text.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../controller/interestController.dart';
-import '../model/choice.dart';
-import '../model/interest.dart';
+import '../../controller/interestController.dart';
+import '../../model/choice.dart';
+import '../../model/interest.dart';
+import '../../model/post.dart';
 
-class AddPostScreen extends StatefulWidget {
+
+class EditPostScreen extends StatefulWidget {
   final String username;
-  const AddPostScreen({required this.username});
+  final String postId;
+  const EditPostScreen({required this.username,required this.postId});
 
   @override
-  State<AddPostScreen> createState() => _AddPostScreenState();
+  State<EditPostScreen> createState() => _EditPostScreenState();
 }
 
-class _AddPostScreenState extends State<AddPostScreen> {
+class _EditPostScreenState extends State<EditPostScreen> {
   final PostController postController = PostController();
   final ChoiceController choiceController = ChoiceController();
   InterestController interestController = InterestController();
 
+    Post? post;
   List<Interest> interests = [];
   String? selectedInterest;
   FilePickerResult? filePickerResult;
@@ -39,6 +44,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
   List<bool>? isLoadingImagePicture;
   List<Choice> choices = [];
   List<String>? Images = [];
+  bool isDataLoaded = false;
   TextEditingController postImageTextController = TextEditingController();
   TextEditingController titleTextController = TextEditingController();
   TextEditingController descriptionTextController = TextEditingController();
@@ -146,11 +152,11 @@ class _AddPostScreenState extends State<AddPostScreen> {
   @override
   void initState() {
     super.initState();
-
     loadInterests();
     for (int i = 0; i < 2; i++) {
       choices.add(Choice(choiceName: ''));
     }
+    initializeData();
   }
 
   @override
@@ -166,6 +172,24 @@ class _AddPostScreenState extends State<AddPostScreen> {
     });
   }
 
+  Future<void> initializeData() async {
+
+    post = await postController.getPostById(widget.postId.toString());
+    if (post != null) {
+      //  = post!.dateStart.toString();
+      // interestSelect = member!.interests!
+      //     .map((interest) => interest.interestId.toString())
+      //     .toList();
+      // formattedInterestSelect =
+      //     interestSelect.where((item) => item != null).join(',');
+      // print("object>>>>> ${formattedInterestSelect}");
+    }
+    setState(() {
+      isDataLoaded = true;
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -179,7 +203,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   MaterialPageRoute(
                     builder: (BuildContext context) {
                       return  HomeScreen(
-                        username: widget.username,
+                        username: widget.username.toString(),
                       );
                     },
                   ),
@@ -196,10 +220,10 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 children: [
                   const Padding(
                     padding: EdgeInsets.all(8.0),
-                    child: Center(child: Text("เพิ่มโพสต์")),
+                    child: Center(child: Text("แก้ไขโพสต์")),
                   ),
                   CustomTextFormField(
-       
+         
                     controller: titleTextController,
                     hintText: "หัวข้อ",
                     maxLength: 50,
@@ -215,7 +239,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   Center(
                     child: isLoadingPicture
                         ? Image.asset(
-                            "assets/images/logo.png",
+                            "assets/images/${post!.postImage.toString()}",
                             width: 250,
                           ) // Add a loading indicator while loading the picture
                         : fileToDisplay != null
@@ -269,7 +293,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
                     ],
                   ),
                   CustomTextFormField(
-         
                     controller: descriptionTextController,
                     hintText: "คำอธิบาย",
                     maxLength: 1000,
@@ -282,6 +305,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: TextFormField(
+                          
                             controller: postPointTextController,
                             maxLength: 5,
                             keyboardType: TextInputType.number,
@@ -527,7 +551,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       print(
                           "------fileToDisplay-------${fileToDisplay!}-----------");
                       if (fromKey.currentState!.validate()) {
-                        var response = await postController.addPost(
+                        var response = await postController.doEditPost(
+                            widget.postId,
                             titleTextController.text,
                             fileToDisplay!,
                             descriptionTextController.text,
@@ -540,8 +565,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
                             selectedInterest ?? '');
                         for (int i = 0; i < choices.length; i++) {
                           Choice choice = choices[i];
-                          await choiceController.addChoice(
-                            choice.choiceName ?? '',
+                          await choiceController.editChoice(
+                            choice.choiceId??"",
+                            choice.choiceName ??"",
                             fileImagesToDisplay![i],
                             response["postId"],
                           );

@@ -2,8 +2,8 @@ import 'package:assist_decisions_app/constant/constant_value.dart';
 import 'package:assist_decisions_app/controller/commentController.dart';
 
 import 'package:assist_decisions_app/model/member.dart';
-import 'package:assist_decisions_app/screen/listCommentScreen.dart';
-import 'package:assist_decisions_app/screen/viewPostScreen.dart';
+import 'package:assist_decisions_app/screen/post/listCommentScreen.dart';
+import 'package:assist_decisions_app/screen/vote/viewPostScreen.dart';
 import 'package:flutter/material.dart';
 
 class CommentScreen extends StatefulWidget {

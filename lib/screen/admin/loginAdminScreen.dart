@@ -1,4 +1,4 @@
-import 'package:assist_decisions_app/screen/listReportScreen.dart';
+import 'package:assist_decisions_app/screen/admin/listReportScreen.dart';
 import 'package:flutter/material.dart';
 
 class LoginAdminScreen extends StatefulWidget {

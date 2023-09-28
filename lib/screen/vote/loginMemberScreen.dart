@@ -1,5 +1,5 @@
-import 'package:assist_decisions_app/screen/homeScreen.dart';
-import 'package:assist_decisions_app/screen/registerScreen.dart';
+import 'package:assist_decisions_app/screen/vote/homeScreen.dart';
+import 'package:assist_decisions_app/screen/vote/registerScreen.dart';
 import 'package:flutter/material.dart';
 
 class LoginMemberScreen extends StatefulWidget {

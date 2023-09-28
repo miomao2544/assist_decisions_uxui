@@ -1,11 +1,11 @@
 import 'package:assist_decisions_app/controller/memberController.dart';
 import 'package:assist_decisions_app/model/member.dart';
-import 'package:assist_decisions_app/screen/viewProfileScreen.dart';
+import 'package:assist_decisions_app/screen/vote/viewProfileScreen.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
-import '../controller/interestController.dart';
-import '../model/interest.dart';
+import '../../controller/interestController.dart';
+import '../../model/interest.dart';
 
 class EditProfileScreen extends StatefulWidget {
   final String? username;

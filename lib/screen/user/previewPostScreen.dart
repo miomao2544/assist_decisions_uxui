@@ -1,10 +1,10 @@
 import 'package:assist_decisions_app/controller/postController.dart';
 import 'package:assist_decisions_app/model/post.dart';
-import 'package:assist_decisions_app/screen/loginMemberScreen.dart';
+import 'package:assist_decisions_app/screen/vote/loginMemberScreen.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../widgets/customPostCard.dart';
+import '../../widgets/customPostCard.dart';
 
 class PreviewPostScreen extends StatefulWidget {
   const PreviewPostScreen({super.key});

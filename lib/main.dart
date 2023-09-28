@@ -1,9 +1,9 @@
-import 'package:assist_decisions_app/screen/homeScreen.dart';
-import 'package:assist_decisions_app/screen/listCommentScreen.dart';
-import 'package:assist_decisions_app/screen/listReportScreen.dart';
-import 'package:assist_decisions_app/screen/loginAdminScreen.dart';
-import 'package:assist_decisions_app/screen/previewPostScreen.dart';
-import 'package:assist_decisions_app/screen/viewReportPostDetailScreen.dart';
+import 'package:assist_decisions_app/screen/vote/homeScreen.dart';
+import 'package:assist_decisions_app/screen/post/listCommentScreen.dart';
+import 'package:assist_decisions_app/screen/admin/listReportScreen.dart';
+import 'package:assist_decisions_app/screen/admin/loginAdminScreen.dart';
+import 'package:assist_decisions_app/screen/user/previewPostScreen.dart';
+import 'package:assist_decisions_app/screen/admin/viewReportPostDetailScreen.dart';
 import 'package:flutter/material.dart';
 
 void main() {

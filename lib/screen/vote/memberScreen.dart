@@ -1,11 +1,11 @@
 import 'package:assist_decisions_app/controller/postController.dart';
 import 'package:assist_decisions_app/model/post.dart';
-import 'package:assist_decisions_app/screen/postDetailScreen.dart';
-import 'package:assist_decisions_app/screen/viewPostScreen.dart';
+import 'package:assist_decisions_app/screen/post/postDetailScreen.dart';
+import 'package:assist_decisions_app/screen/vote/viewPostScreen.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../widgets/customPostCard.dart';
+import '../../widgets/customPostCard.dart';
 
 class MemberScreen extends StatefulWidget {
   final String username;

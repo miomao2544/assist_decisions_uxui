@@ -1,8 +1,8 @@
 import 'package:assist_decisions_app/controller/postController.dart';
 import 'package:assist_decisions_app/model/post.dart';
-import 'package:assist_decisions_app/screen/postDetailScreen.dart';
+import 'package:assist_decisions_app/screen/post/postDetailScreen.dart';
 import 'package:flutter/material.dart';
-import '../constant/constant_value.dart';
+import '../../constant/constant_value.dart';
 import 'package:intl/intl.dart';
 
 class ListPostScreen extends StatefulWidget {
