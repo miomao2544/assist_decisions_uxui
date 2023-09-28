@@ -1,7 +1,7 @@
 class BanType{
   String? banTypeId;
   String? typeName;
-  String? numberOfDay;
+  int? numberOfDay;
 
   BanType({
     this.banTypeId,

@@ -1,9 +1,7 @@
 import 'package:assist_decisions_app/constant/constant_value.dart';
 import 'package:assist_decisions_app/controller/member_controller.dart';
-import 'package:assist_decisions_app/controller/post_controller.dart';
 import 'package:assist_decisions_app/controller/report_controller.dart';
 import 'package:assist_decisions_app/model/member.dart';
-import 'package:assist_decisions_app/model/post.dart';
 import 'package:assist_decisions_app/model/report.dart';
 import 'package:assist_decisions_app/screen/viewReportPostDetailScreen.dart';
 import 'package:flutter/material.dart';

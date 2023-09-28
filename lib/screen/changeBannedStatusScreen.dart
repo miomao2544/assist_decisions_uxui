@@ -1,5 +1,7 @@
 import 'package:assist_decisions_app/constant/constant_value.dart';
+import 'package:assist_decisions_app/controller/banType.dart';
 import 'package:assist_decisions_app/controller/report_controller.dart';
+import 'package:assist_decisions_app/model/banType.dart';
 import 'package:assist_decisions_app/model/report.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -20,8 +22,10 @@ class _ChangeBannedStatusScreenState extends State<ChangeBannedStatusScreen> {
   Report? reports;
   String? banComment;
   ReportController reportController = ReportController();
-  String? point = "1";
-  List<String> numbers = ["1", "2", "3", "4"];
+  BanTypeController banTypeController = BanTypeController();
+  String? banTypeId = "";
+  String? banTypesId = "";
+  List<String?> banTypes = [];
 
   TextEditingController banCommentController = TextEditingController();
   String formatDate(String? inputDate) {
@@ -35,14 +39,31 @@ class _ChangeBannedStatusScreenState extends State<ChangeBannedStatusScreen> {
 
   void updatePoint(String newValue) {
     setState(() {
-      point = newValue;
+      banTypeId = newValue;
     });
+  }
+
+    void updateBanTypeId()async {
+          List<BanType?> banType;
+    banType = await banTypeController.listAllBanTypes();
+      for(int i=0;i < banTypes.length;i++){
+      if(banTypeId == banTypes[i]){
+        banTypesId = banType[i]!.banTypeId.toString();
+      }
+      }
+      print("----------banTypesId--- ${banTypesId} --------------");
   }
 
   Future fetchReport() async {
     Report? report;
     report =
         await reportController.doViewReportDetail(widget.reportId.toString());
+    List<BanType?> banType;
+    banType = await banTypeController.listAllBanTypes();
+    for(int i=0;i < banType.length;i++){
+      banTypes.add(banType[i]!.typeName.toString());
+    }
+    banTypeId = banType[0]!.typeName.toString();
     print(
         "object-----------------${report!.reportDate.toString()}---------------------");
     setState(() {
@@ -163,16 +184,16 @@ class _ChangeBannedStatusScreenState extends State<ChangeBannedStatusScreen> {
                                         children: [
                                           Text("ระดับการสั่งห้าม"),
                                           DropdownButton<String>(
-                                            value: point, // ค่าที่ถูกเลือก
+                                            value: banTypeId, // ค่าที่ถูกเลือก
                                             onChanged: (String? newValue) {
                                               updatePoint(newValue!);
                                             },
-                                            items: numbers
+                                            items: banTypes
                                                 .map<DropdownMenuItem<String>>(
-                                                    (String numbers) {
+                                                    (String? numbers) {
                                               return DropdownMenuItem<String>(
                                                 value: numbers,
-                                                child: Text(numbers),
+                                                child: Text(numbers.toString()),
                                               );
                                             }).toList(),
                                           ),
@@ -224,6 +245,7 @@ class _ChangeBannedStatusScreenState extends State<ChangeBannedStatusScreen> {
                                             ),
                                           ),
                                           onPressed: () {
+                                            updateBanTypeId();
                                             //              Navigator.push(context,
                                             //     MaterialPageRoute(builder: (context) {
                                             //   return ChangeBannedStatusScreen(reportId:  reports!.reportId.toString(),username: widget.username,);
