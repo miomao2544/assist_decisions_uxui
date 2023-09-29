@@ -41,7 +41,7 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
     }
     return '';
   }
-
+  int counts = 0;
   Future<void> fetchPost() async {
     Post? postRequired;
     List<Choice> choiceRequired;
@@ -49,6 +49,9 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
     postRequired = await postController.getPostById(widget.postId);
     choiceRequired = await choiceController.listAllChoicesById(widget.postId);
     memberRequired = await memberController.getMemberById(widget.username);
+      counts = await postController.getListCountMember(widget.postId);
+      print("---------------${widget.postId.toString()}--------------${counts}----------------");
+  
     setState(() {
       post = postRequired;
       choices = choiceRequired;
@@ -138,7 +141,7 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
                                 ),
                                 PostInfoWidget(
                                   title: "จำนวนผู้โหวต",
-                                  value: "20",
+                                  value: counts.toString(),
                                 ),
                               ],
                             ),

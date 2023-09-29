@@ -106,6 +106,12 @@ Future updateMember(
     return response.body;
   }
 
+Future doLoginMember(String username,String password) async {
+    var url = Uri.parse(baseURL + "/members/loginmember/${username}/${password}");
+     http.Response response = await http.post(url, headers: headers, body: null);
+    return response.body;
+  }
+
   Future<Member?> getMemberById(String username) async {
     try {
       var url = Uri.parse(baseURL + '/members/getProfile/$username');

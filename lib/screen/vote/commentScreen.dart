@@ -16,7 +16,7 @@ class CommentScreen extends StatefulWidget {
 }
 
 class _CommentScreenState extends State<CommentScreen> {
-  String? comment;
+  String comment ="";
   final GlobalKey<FormState> fromKey = GlobalKey<FormState>();
   CommentController commentController = CommentController();
 
@@ -88,7 +88,7 @@ class _CommentScreenState extends State<CommentScreen> {
                                         comment.toString(),
                                         widget.member!.username.toString(),
                                         widget.postId.toString());
-                                  }
+                                  
                                   
                                   fromKey.currentState!.reset();
                                   Navigator.push(context,
@@ -97,6 +97,7 @@ class _CommentScreenState extends State<CommentScreen> {
                                           return ViewPostScreen(postId: widget.postId.toString(),username:widget.member!.username.toString() ,);
                                         }));
                                     
+                                }
                                 },
                                 child: Icon(Icons.add_comment_sharp,
                                     color: Color(0xFF1c174d)),

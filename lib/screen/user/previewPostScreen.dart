@@ -3,7 +3,6 @@ import 'package:assist_decisions_app/model/post.dart';
 import 'package:assist_decisions_app/screen/vote/loginMemberScreen.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import '../../widgets/customPostCard.dart';
 
 class PreviewPostScreen extends StatefulWidget {
@@ -20,28 +19,21 @@ class _PreviewPostScreenState extends State<PreviewPostScreen> {
     "assets/images/page3.png",
   ];
 
-  List<Post> posts = [];
+  List<Post>? posts = [];
   bool? isDataLoaded = false;
   
-  List<Post>? openPosts;
-  List<Post>? closedPosts;
+  List<Post>? openPosts = [];
+  List<Post>? closedPosts = [];
   final PostController postController = PostController();
   void fetchPost() async {
     posts = await postController.listAllPosts();
-    final now = DateTime.now();
-    final dateFormatter = DateFormat('yyyy-MM-ddTHH:mm:ss.SSSZZZZZ');
-
-    try {
-      openPosts = posts
-          .where((post) => dateFormatter.parse(post.dateStop!).isAfter(now))
-          .toList();
-      closedPosts = posts
-          .where((post) => dateFormatter.parse(post.dateStop!).isBefore(now))
-          .toList();
-    } catch (e) {
-      print("Error parsing date: $e");
-    }
-
+      for(int i=0;i< posts!.length;i++){
+        if(posts![i].result.toString() == "r"){
+          openPosts!.add(posts![i]);
+        }else{
+          closedPosts!.add(posts![i]);
+        }
+      }    
     setState(() {
       isDataLoaded = true;
     });

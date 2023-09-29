@@ -559,6 +559,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                             postPointTextController.text,
                             dateStarts ?? "",
                             dateStops ?? "",
+                            post!.result ?? "",
                             qtyMaxTextController.text,
                             qtyMinTextController.text,
                             widget.username.toString(),
