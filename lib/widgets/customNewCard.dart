@@ -1,3 +1,4 @@
+import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:flutter/material.dart';
 
 import '../constant/constant_value.dart';
@@ -22,78 +23,97 @@ class CustomNewCard extends StatefulWidget {
 class _CustomNewCardState extends State<CustomNewCard> {
   @override
   Widget build(BuildContext context) {
-    return Card(
-  shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(8),
-  ),
-  clipBehavior: Clip.antiAliasWithSaveLayer,
-  child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: <Widget>[
-      Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "หมวดหมู่", // เพิ่มคำว่า "หมวดหมู่" ที่นี่
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey[800],
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
+    return Container(
+      decoration: BoxDecoration(),
+      width: 230,
+      height: 180,
+      margin: EdgeInsets.symmetric(horizontal: 8),
+      child: Card(
+      shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8),
       ),
-      Image(
-        image: NetworkImage('$baseURL/posts/downloadimg/1695739819474.png'),
-        height: 160,
-        width: double.infinity,
-        fit: BoxFit.cover,
-      ),
-      Container(
-        padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Container(child: 
+        Stack(
           children: <Widget>[
-            Text(
-              "title",
-              style: TextStyle(
-                fontSize: 24,
-                color: Colors.grey[800],
-              ),
+            Image(
+              image: NetworkImage('$baseURL/posts/downloadimg/${widget.postImage}'),
+              height: 100,
+              width: double.infinity,
+              fit: BoxFit.cover,
             ),
-            Container(height: 10),
-            Text(
-              "title",
-              style: TextStyle(
-                fontSize: 15,
-                color: Colors.grey[700],
-              ),
-            ),
-            Row(
-              children: <Widget>[
-                const Spacer(),
-                ElevatedButton(
-                  onPressed: () {},
-                  child: Text(
-                    "เพิ่มเติม",
-                    style: TextStyle(color: Colors.black),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.green,
-                  ),
-                ),
-              ],
-            ),
-          ],
+            Positioned(
+  top: 8,
+  right: 8,
+  child: ClipRRect(
+    borderRadius: BorderRadius.circular(20), // ปรับขนาดของมุมโค้งตามที่คุณต้องการ
+    child: Container(
+      color: MainColor, // สีพื้นหลังของข้อความ
+      padding: EdgeInsets.all(8),
+      child: Text(
+        '${widget.interestName}', // เพิ่มคำว่า "หมวดหมู่" ที่นี่
+        style: TextStyle(
+          fontSize: 13,
+          color: Colors.white, // สีข้อความ
+          fontWeight: FontWeight.bold,
         ),
       ),
-      Container(height: 5),
-    ],
+    ),
   ),
-);
+),
+          ],
+        ),),
+        Container(
+          padding: const EdgeInsets.fromLTRB(10, 8, 10, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                "${widget.title}",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: MainColor,
+                  fontWeight: FontWeight.bold,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              Row(
+                children: <Widget>[
+                  Container(
+                    width: 120,
+                    height: 20,
+                    child: Text(
+                                  widget.description,
+                                  style: TextStyle(
+                     overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                  ),
+                  SizedBox(width: 3,),
+                  ElevatedButton(
+                    onPressed: () {},
+                    child: Text(
+                      "เพิ่มเติม",
+                      style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,),
+                      
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      primary: MainColor,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        Container(height: 5),
+      ],
+      ),
+    ),
+    );
 
   }
 }

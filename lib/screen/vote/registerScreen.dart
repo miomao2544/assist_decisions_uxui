@@ -1,4 +1,5 @@
 
+import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
@@ -91,7 +92,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Register'),
+        backgroundColor: MainColor,
+        title: Text('สมัครสมาชิก'),
       ),
       body:isDataLoaded? Padding(
           padding: EdgeInsets.all(16.0),
@@ -114,7 +116,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         alignment: Alignment.center,
                         child: Text(
                           'แพลตฟอร์มสนับสนุนการตัดสินใจ',
-                          style: TextStyle(fontSize: 18.0),
+                          style: TextStyle(fontSize: 22.0,fontWeight: FontWeight.bold ,color: MainColor),
                         ),
                       ),
                       SizedBox(height: 12.0),
@@ -122,9 +124,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         alignment: Alignment.center,
                         child: Text(
                           'ส่วนของข้อมูลส่วนตัว',
+                          style: TextStyle(fontSize: 18.0,fontWeight: FontWeight.bold),
                         ),
                       ),
-                      Text('เพศ'),
+                      Text('เพศ',style: TextStyle(color: MainColor,fontWeight: FontWeight.bold,fontSize: 16),),
                       Row(
                         children: [
                           ElevatedButton(
@@ -135,10 +138,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             },
                             style: ElevatedButton.styleFrom(
                               primary: gender == 'M'
-                                  ? Color(0xFF479f76)
-                                  : Color(0xFF1c174d),
+                                  ? SecondColor
+                                  : MainColor,
                             ),
-                            child: Text('ชาย'),
+                            child: Text('ชาย',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 14),),
                           ),
                           SizedBox(width: 16.0),
                           ElevatedButton(
@@ -149,19 +152,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             },
                             style: ElevatedButton.styleFrom(
                               primary: gender == 'F'
-                                  ? Color(0xFF479f76)
-                                  : Color(0xFF1c174d),
+                                  ? SecondColor
+                                  : MainColor,
                             ),
-                            child: Text('หญิง'),
+                            child: Text('หญิง',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 14)),
                           ),
                         ],
                       ),
+                      SizedBox(height: 4,),
                       TextFormField(
                         decoration: InputDecoration(
                           labelText: 'ชื่อ',
                           prefixIcon:
-                              Icon(Icons.person, color: Color(0xFF1c174d)),
-                          labelStyle: TextStyle(color: Color(0xFF1c174d)),
+                              Icon(Icons.person, color: MainColor),
+                          labelStyle: TextStyle(color: MainColor),
                         ),
                         onChanged: (value) {
                           setState(() {
@@ -170,12 +174,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         },
                         validator: validateFirstname,
                       ),
+                      SizedBox(height: 16,),
                       TextFormField(
                         decoration: InputDecoration(
                           labelText: 'นามสกุล',
-                          prefixIcon:
-                              Icon(Icons.person, color: Color(0xFF1c174d)),
-                          labelStyle: TextStyle(color: Color(0xFF1c174d)),
+                      prefixIcon:
+                              Icon(Icons.person, color: MainColor),
+                          labelStyle: TextStyle(color: MainColor),
                         ),
                         onChanged: (value) {
                           setState(() {
@@ -189,8 +194,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         decoration: InputDecoration(
                           labelText: 'อีเมล์',
                           prefixIcon:
-                              Icon(Icons.email, color: Color(0xFF1c174d)),
-                          labelStyle: TextStyle(color: Color(0xFF1c174d)),
+                              Icon(Icons.email, color: MainColor),
+                          labelStyle: TextStyle(color: MainColor),
                         ),
                         onChanged: (value) {
                           setState(() {
@@ -204,8 +209,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         decoration: InputDecoration(
                           labelText: 'หมายเลขโทรศัพท์',
                           prefixIcon:
-                              Icon(Icons.phone, color: Color(0xFF1c174d)),
-                          labelStyle: TextStyle(color: Color(0xFF1c174d)),
+                              Icon(Icons.phone, color: MainColor),
+                          labelStyle: TextStyle(color: MainColor),
                         ),
                         onChanged: (value) {
                           setState(() {
@@ -215,9 +220,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         validator: validateTel,
                       ),
                       SizedBox(height: 16.0),
-                      Text('ความสนใจ'),
+                      Text('ความสนใจ',style: TextStyle(color: MainColor,fontWeight: FontWeight.bold,fontSize: 16),),
+                      SizedBox(height: 4.0),
                       Container(
-                        height: 30.0,
+                        height: 38.0,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: interests.length,
@@ -246,10 +252,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 },
                                 style: ElevatedButton.styleFrom(
                                   primary: isSelected
-                                      ? Color(0xFF479f76)
-                                      : Color(0xFF1c174d),
+                                      ? SecondColor
+                                      : MainColor,
                                 ),
-                                child: Text(interest.interestName ?? ""),
+                                child: Text(interest.interestName ?? "",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 14),),
                               ),
                             );
                           },
@@ -259,7 +265,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       Text(
                         'สามารถเลือกได้มากกว่า 1 ตัวเลือก',
                         style:
-                            TextStyle(fontSize: 16.0, color: Color(0xFF1c174d)),
+                            TextStyle(fontSize: 16.0, color: MainColor),
                       ),
                       SizedBox(height: 20.0),
                       Align(
@@ -268,7 +274,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           'ส่วนของข้อมูลทั่วไป',
                           style: TextStyle(
                               fontSize: 22.0,
-                              color: Color(0xFF1c174d),
+                              color: MainColor,
                               fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -296,8 +302,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all<Color>(
                               isLoadingPicture
-                                  ? Color(0xFF1c174d)
-                                  : Colors.teal,
+                                  ? MainColor
+                                  : SecondColor,
                             ),
                           ),
                         ),
@@ -306,7 +312,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       TextFormField(
                         decoration: InputDecoration(
                             labelText: 'ชื่อบัญชี',
-                            prefixIcon: Icon(Icons.account_circle)),
+                             prefixIcon:
+                              Icon(Icons.account_circle, color: MainColor),
+                          labelStyle: TextStyle(color: MainColor),
+                            ),
                         onChanged: (value) {
                           setState(() {
                             nickname = value;
@@ -318,6 +327,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       TextFormField(
                         decoration: InputDecoration(
                           labelText: 'ชื่อผู้ใช้งาน (ห้ามซ้ำ)',
+                           prefixIcon:
+                              Icon(Icons.account_box, color: MainColor),
+                          labelStyle: TextStyle(color: MainColor),
                         ),
                         onChanged: (value) {
                           setState(() {
@@ -331,6 +343,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       TextFormField(
                         decoration: InputDecoration(
                           labelText: 'รหัสผ่าน',
+                           prefixIcon:
+                              Icon(Icons.key, color: MainColor),
+                          labelStyle: TextStyle(color: MainColor),
                         ),
                         obscureText: true,
                         onChanged: (value) {
@@ -344,6 +359,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       TextFormField(
                         decoration: InputDecoration(
                           labelText: 'ยืนยันรหัสผ่าน',
+                           prefixIcon:
+                              Icon(Icons.key_outlined, color: MainColor),
+                          labelStyle: TextStyle(color: MainColor),
                         ),
                         obscureText: true,
                         onChanged: (value) {
@@ -365,8 +383,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   Text("สมัคร", style: TextStyle(fontSize: 20)),
                               style: ButtonStyle(
                                 backgroundColor:
-                                    MaterialStateProperty.all<Color>(Color(
-                                        0xFF479f76)), // กำหนดสีพื้นหลังของปุ่ม
+                                    MaterialStateProperty.all<Color>(MainColor), // กำหนดสีพื้นหลังของปุ่ม
                               ),
                               onPressed: () async {
                                 if (fromKey.currentState!.validate()) {

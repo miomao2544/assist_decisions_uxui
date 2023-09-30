@@ -1,6 +1,8 @@
 import 'package:assist_decisions_app/controller/postController.dart';
 import 'package:assist_decisions_app/model/post.dart';
 import 'package:assist_decisions_app/screen/vote/loginMemberScreen.dart';
+import 'package:assist_decisions_app/widgets/colors.dart';
+import 'package:assist_decisions_app/widgets/customNewCard.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import '../../widgets/customPostCard.dart';
@@ -51,11 +53,12 @@ class _PreviewPostScreenState extends State<PreviewPostScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        toolbarHeight: 100,
+        backgroundColor: MainColor,
+        toolbarHeight: 80,
         title: Center(
           child: Image.asset(
             "assets/images/logo.png",
-            width: 100,
+            width: 80,
           ),
         ),
       ),
@@ -87,12 +90,12 @@ class _PreviewPostScreenState extends State<PreviewPostScreen> {
             ),
             Container(
               padding: EdgeInsets.all(10.0),
-              height: MediaQuery.of(context).size.height / 4,
+              height: MediaQuery.of(context).size.height / 3.8,
               child: ListView.builder(
                 itemCount: openPosts?.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
-                  return CustomPostCard(
+                  return CustomNewCard(
                     postImage: openPosts?[index].postImage ?? '',
                     interestName:
                         openPosts?[index].interest?.interestName ?? '',
@@ -110,12 +113,12 @@ class _PreviewPostScreenState extends State<PreviewPostScreen> {
             ),
             Container(
               padding: EdgeInsets.all(10.0),
-              height: MediaQuery.of(context).size.height / 4,
+              height: MediaQuery.of(context).size.height / 3.8,
               child: ListView.builder(
                 itemCount: closedPosts?.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
-                  return CustomPostCard(
+                  return CustomNewCard(
                     postImage: closedPosts?[index].postImage ?? '',
                     interestName:
                         closedPosts?[index].interest?.interestName ?? '',
@@ -132,19 +135,35 @@ class _PreviewPostScreenState extends State<PreviewPostScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.push(context, MaterialPageRoute(
-              builder: (context) {
-                return LoginMemberScreen();
-              },
-            ));
-          },
-          child: Text('Login'),
-        ),
-      ),
+bottomNavigationBar: BottomAppBar(
+  height: 70,
+  color: MainColor, // สีพื้นหลังของ BottomAppBar
+  child: IconButton(
+    onPressed: () {
+      Navigator.push(context, MaterialPageRoute(
+        builder: (context) {
+          return LoginMemberScreen();
+        },
+      ));
+    },
+    icon: Container(
+  width: 100,
+  height: 100,
+  decoration: BoxDecoration(
+    shape: BoxShape.circle, // กำหนดให้รูปร่างเป็นวงกลม
+    color: MainColor2, // สีพื้นหลังของวงกลม
+  ),
+  child: Icon(
+    Icons.login, // ใส่ไอคอนที่คุณต้องการแสดง
+    color: Colors.white, // สีไอคอน
+    size: 30, // กำหนดขนาดไอคอน
+  ),
+),
+  ),
+),
+
+
+
     );
   }
 }

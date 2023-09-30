@@ -1,3 +1,4 @@
+import 'package:assist_decisions_app/constant/constant_value.dart';
 import 'package:assist_decisions_app/controller/memberController.dart';
 import 'package:assist_decisions_app/model/member.dart';
 import 'package:assist_decisions_app/screen/vote/viewProfileScreen.dart';
@@ -146,7 +147,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         children: [
                           Align(
                             alignment: Alignment.center,
-                            child: Image.asset(
+                            child: 
+                            Image.asset(
                               "assets/images/logo.png",
                               width: 100,
                             ),
@@ -371,17 +373,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                           Center(
                             child: isLoadingPicture
-                                ? Image.asset(
-                                    "assets/images/logo.png",
-                                    width: 250,
-                                  ) // Add a loading indicator while loading the picture
+                                ? 
+                                Image.network(
+                                      baseURL + '/members/downloadimg/${member!.image}',
+                                      width: 250,
+                                      height: 250,
+                                      fit: BoxFit.cover,
+                                    )
+                             
                                 : fileToDisplay != null
                                     ? Image.file(
                                         fileToDisplay!,
                                         height:
-                                            200, // Set the desired image height
+                                            200, 
                                       )
-                                    : Container(), // Display an empty container if no image is selected
+                                    : Container(),
                           ),
                           Align(
                             alignment: Alignment.center,

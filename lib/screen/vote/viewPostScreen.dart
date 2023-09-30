@@ -42,6 +42,7 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
     return '';
   }
   int counts = 0;
+  String ifvote = "";
   Future<void> fetchPost() async {
     Post? postRequired;
     List<Choice> choiceRequired;
@@ -50,8 +51,8 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
     choiceRequired = await choiceController.listAllChoicesById(widget.postId);
     memberRequired = await memberController.getMemberById(widget.username);
       counts = await postController.getListCountMember(widget.postId);
-      print("---------------${widget.postId.toString()}--------------${counts}----------------");
-  
+      ifvote = await voteController.getIFVoteChoice(widget.username,widget.postId);
+      print("---------------${widget.postId.toString()}--------------${ifvote}----------------");
     setState(() {
       post = postRequired;
       choices = choiceRequired;
@@ -152,6 +153,7 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
                               itemCount: choices?.length ?? 0,
                               itemBuilder: (context, index) {
                                 return Card(
+                                 
                                   elevation: 2,
                                   shape: Border.all(
                                     color: selectedChoiceIndex == index
@@ -184,7 +186,7 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
                                 );
                               },
                             ),
-                            ElevatedButton(
+                           ifvote == "0"? ElevatedButton(
                               onPressed: () {
                                 showDialog(
                                   context: context,
@@ -195,7 +197,8 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
                                           "คุณแน่ใจหรือไม่ที่ต้องการยืนยันคำตอบนี้?"),
                                       actions: [
                                         TextButton(
-                                          onPressed: () {
+                                          onPressed: ()async {
+                                            
                                             Navigator.of(context)
                                                 .pop(); // ปิด Alert Dialog
                                           },
@@ -208,6 +211,7 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
                                                 choices![selectedChoiceIndex!]
                                                     .choiceId
                                                     .toString());
+                                            await voteController.getIFVoteChoice(widget.username,widget.postId);
                                             Navigator.of(context).pop();
                                           },
                                           child: Text("ยืนยัน"),
@@ -218,7 +222,7 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
                                 );
                               },
                               child: Text("ยืนยันคำตอบ"),
-                            ),
+                            ):SizedBox(height: 10,),
                             SizedBox(height: 16.0),
                             CommentScreen(
                               member: member,

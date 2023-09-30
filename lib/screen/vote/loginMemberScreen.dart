@@ -1,6 +1,7 @@
 import 'package:assist_decisions_app/controller/memberController.dart';
 import 'package:assist_decisions_app/screen/vote/homeScreen.dart';
 import 'package:assist_decisions_app/screen/vote/registerScreen.dart';
+import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:flutter/material.dart';
 import '../validators/validatorLogin.dart';
 class LoginMemberScreen extends StatefulWidget {
@@ -42,54 +43,61 @@ class _LoginMemberScreenState extends State<LoginMemberScreen> {
                     style: TextStyle(fontSize: 22.0),
                   ),
                 ),
-                SizedBox(height: 60.0),
+                SizedBox(height: 30.0),
                 Align(
                   alignment: Alignment.center,
                   child: Text(
                     'เข้าสู่ระบบ',
                     style: TextStyle(
                         fontSize: 30.0,
-                        color: Color.fromARGB(255, 30, 97, 66),
+                        color: MainColor,
                         fontWeight: FontWeight.bold),
                   ),
                 ),
-                TextFormField(
-                  style: TextStyle(color: Color(0xFF1c174d), fontSize: 20.0),
-                  decoration: InputDecoration(
-                    labelText: 'ชื่อผู้ใช้งาน',
-                    labelStyle: TextStyle(color: Color(0xFF1c174d)),
-                    prefixIcon: Icon(Icons.person, color: Color(0xFF1c174d)),
+                SizedBox(height: 16.0),
+                Container(
+                  width: 300,
+                  child: TextFormField(
+                    style: TextStyle(color: MainColor, fontSize: 20.0),
+                    decoration: InputDecoration(
+                      labelText: 'ชื่อผู้ใช้งาน',
+                      labelStyle: TextStyle(color: MainColor),
+                      prefixIcon: Icon(Icons.person, color: MainColor),
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        username = value;
+                        doLoginMember();
+                      });
+                    },
+                    validator:(value) => validateUsername(value,result),
                   ),
-                  onChanged: (value) {
-                    setState(() {
-                      username = value;
-                      doLoginMember();
-                    });
-                  },
-                  validator:(value) => validateUsername(value,result),
                 ),
                 SizedBox(height: 16.0),
-                TextFormField(
-                  obscureText: true,
-                  style: TextStyle(color: Color(0xFF1c174d), fontSize: 20.0),
-                  decoration: InputDecoration(
-                    labelText: 'รหัสผ่าน',
-                    labelStyle: TextStyle(color: Color(0xFF1c174d)),
-                    prefixIcon: Icon(Icons.key, color: Color(0xFF1c174d)),
+                Container(
+                  width: 300,
+                  child: TextFormField(
+                    obscureText: true,
+                    style: TextStyle(color: MainColor, fontSize: 20.0),
+                    decoration: InputDecoration(
+                      labelText: 'รหัสผ่าน',
+                      labelStyle: TextStyle(color: MainColor),
+                      prefixIcon: Icon(Icons.key, color: MainColor),
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        password = value;
+                        doLoginMember();
+                      });
+                    },
+                    validator:(value) => validatePassword(value ,result),
                   ),
-                  onChanged: (value) {
-                    setState(() {
-                      password = value;
-                      doLoginMember();
-                    });
-                  },
-                  validator:(value) => validatePassword(value ,result),
                 ),
                 SizedBox(height: 16.0),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: SizedBox(
-                    width: double.infinity,
+                    width: 250,
                     height: 60,
                     child: ElevatedButton.icon(
                       icon: Icon(Icons.login),
@@ -97,7 +105,7 @@ class _LoginMemberScreenState extends State<LoginMemberScreen> {
                           Text("เข้าสู่ระบบ", style: TextStyle(fontSize: 20)),
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
-                            Color(0xFF479f76)), // กำหนดสีพื้นหลังของปุ่ม
+                            MainColor), // กำหนดสีพื้นหลังของปุ่ม
                       ),
                       onPressed: () async {
                         if (fromKey.currentState!.validate()) {
@@ -135,7 +143,7 @@ class _LoginMemberScreenState extends State<LoginMemberScreen> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: SizedBox(
-                    width: double.infinity,
+                    width: 250,
                     height: 60,
                     child: ElevatedButton.icon(
                       icon: Icon(Icons.add),
@@ -143,7 +151,7 @@ class _LoginMemberScreenState extends State<LoginMemberScreen> {
                           Text("สมัครสมาชิก", style: TextStyle(fontSize: 20)),
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
-                            Color(0xFFe6a53b)), // กำหนดสีพื้นหลังของปุ่ม
+                            SecondColor), // กำหนดสีพื้นหลังของปุ่ม
                       ),
                       onPressed: () {
                         Navigator.push(context,

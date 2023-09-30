@@ -167,15 +167,18 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                                           MainAxisAlignment.spaceAround,
                                       children: [
                                         Text("${index + 1}"),
-                                        Image.network(
-                                          baseURL +
-                                              '/choices/downloadimg/${choices![index].choiceImage}',
-                                          fit: BoxFit.cover,
-                                          width: 50,
-                                          height: 50,
-                                        ),
+                                        choices![index].choiceImage !=""
+                                            ? Image.network(
+                                                baseURL +
+                                                    '/choices/downloadimg/${choices![index].choiceImage}',
+                                                fit: BoxFit.cover,
+                                                width: 50,
+                                                height: 50,
+                                              )
+                                            : SizedBox(width: 2, height: 50),
                                         Text(choices![index].choiceName ?? ""),
-                                        Text("${votes[index]}",style: TextStyle(fontSize: 16)),
+                                        Text("${votes[index]}",
+                                            style: TextStyle(fontSize: 16)),
                                       ],
                                     ),
                                   ),
@@ -198,14 +201,20 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                EditPostScreen(username: widget.username,postId: post!.postId.toString(),)),
+                                                EditPostScreen(
+                                                  username: widget.username,
+                                                  postId:
+                                                      post!.postId.toString(),
+                                                )),
                                       );
                                     },
                                     child: Text("แก้ไข"),
                                   ),
                                   SizedBox(width: 20),
                                   ChackDeletePostScreen(
-                                      postId: post!.postId.toString(),username: widget.username,),
+                                    postId: post!.postId.toString(),
+                                    username: widget.username,
+                                  ),
                                 ],
                               ),
                             ),

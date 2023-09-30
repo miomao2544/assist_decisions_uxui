@@ -27,7 +27,20 @@ class VoteController{
       body: null
     );  
     String votes = "0";
+    final utf8body = utf8.decode(response.bodyBytes); 
+    votes = utf8body; 
+    return votes;
+    }
 
+    Future getIFVoteChoice(String username,String postId) async{
+    var url = Uri.parse(baseURL + '/votes/ifvote/${username}/${postId}');
+
+    http.Response response = await http.post(
+      url,
+      headers: headers,
+      body: null
+    );  
+    String votes = "0";
     final utf8body = utf8.decode(response.bodyBytes); 
     votes = utf8body; 
     return votes;

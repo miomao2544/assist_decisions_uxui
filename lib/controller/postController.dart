@@ -14,8 +14,8 @@ class PostController {
       String postPoint,
       String dateStart,
       String dateStop,
-      String qtyMax,
       String qtyMin,
+      String qtyMax,
       String username,
       String interestId) async {
 
@@ -44,7 +44,7 @@ class PostController {
 
   Future doEditPost(String postId,
       String title,
-      File image,
+      String image,
       String description,
       String postPoint,
       String dateStart,
@@ -54,11 +54,9 @@ class PostController {
       String qtyMin,
       String username,
       String interestId) async {
-    var imageName = await upload(image);
-
     Map data = {
       "postId":postId,
-      "postImage": imageName.toString(),
+      "postImage": image,
       "title": title,
       "description": description,
       "postPoint": postPoint,

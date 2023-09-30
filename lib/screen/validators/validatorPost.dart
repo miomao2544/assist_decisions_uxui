@@ -10,7 +10,7 @@ String? validateTitle(String? value) {
   return null;
 }
 
-String? validatePoint(String? value) {
+String? validatePoint(String? value,int pointmember) {
   final RegExp validPoint = RegExp(r'^[0-9]+$');
   if (value == null || value.isEmpty) {
     return 'กรุณากรอกคะแนน';
@@ -22,6 +22,8 @@ String? validatePoint(String? value) {
       return 'คะแนนต้องเป็นจำนวนเต็มระหว่าง 2 ถึง 1000 เท่านั้น';
     } else if (value.contains(' ')) {
       return 'คะแนนไม่ควรมีช่องว่างระหว่างตัวเลข';
+    }else if(point > pointmember){
+       return 'ไม่เพียงพอ';
     }
   }
   return null;

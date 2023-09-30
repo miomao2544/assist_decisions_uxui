@@ -143,4 +143,12 @@ Future doLoginMember(String username,String password) async {
       return null;
     }
   }
+
+
+    Future doUpdatePoint(String username,String point) async {
+    var url = Uri.parse(baseURL + '/members/updatepoint/${username}/${point}');
+    http.Response response = await http.post(url, headers: headers, body: null);
+    final utf8body = utf8.decode(response.bodyBytes);
+    print("-------------------------------${utf8body}-----------------");
+  }
 }

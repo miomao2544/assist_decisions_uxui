@@ -27,12 +27,12 @@ class ChoiceController{
     return  jsonResponse;
   }
 
-    Future editChoice(String choiceId,String choiceName,File choiceImages,String postId)async{
-    var choiceImage = await upload(choiceImages);
+    Future editChoice(String choiceId,String choiceName,String choiceImages,String postId)async{
+   
     Map data = {
       "choiceId": choiceId,
       "choiceName" : choiceName,
-      "choiceImage" : choiceImage,
+      "choiceImage" : choiceImages,
       "postId" : postId,
     };
 
