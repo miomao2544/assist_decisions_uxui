@@ -1,6 +1,7 @@
 import 'package:assist_decisions_app/constant/constant_value.dart';
 import 'package:assist_decisions_app/controller/commentController.dart';
 import 'package:assist_decisions_app/model/comment.dart';
+import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
@@ -32,7 +33,7 @@ class _ListCommentScreenState extends State<ListCommentScreen> {
     if (inputDate != null) {
       final DateTime date = DateTime.parse(inputDate);
       final DateFormat formatter = DateFormat('dd/MM/yyyy');
-      return formatter.format(date);
+      return formatter.format(date.toLocal());
     }
     return '';
   }
@@ -50,7 +51,7 @@ class _ListCommentScreenState extends State<ListCommentScreen> {
         children: [
           SizedBox(height: 16),
           isDataLoaded
-              ? ListView.builder(
+              ? commentList!.length > 0? ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   itemCount: commentList!.length >= 5 ? 5 : commentList!.length,
@@ -65,14 +66,25 @@ class _ListCommentScreenState extends State<ListCommentScreen> {
                           child: ListTile(
                             contentPadding: EdgeInsets.all(
                                 16), // Padding inside the ListTile.
-                            leading: CircleAvatar(
-                              radius: 30, // Adjust the size as needed
-                              child: Image.network(
-                                baseURL +
+                            leading: 
+                                            Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: SecondColor,
+                      width: 4.0,
+                    ),
+                  ),
+                  child: ClipOval(
+                    child: Image.network(
+                      baseURL +
                                     '/members/downloadimg/${commentList![index].member!.image.toString()}',
-                                fit: BoxFit.cover,
-                              ),
-                            ),
+                      fit: BoxFit.cover,
+                      width: 50,
+                      height: 50,
+                    ),
+                  ),
+                ),
                             title: Text(
                               "${commentList![index].member!.nickname.toString()}",
                               style: TextStyle(
@@ -95,8 +107,8 @@ class _ListCommentScreenState extends State<ListCommentScreen> {
                       ],
                     );
                   },
-                )
-              : CircularProgressIndicator(),
+                ):Text("ไม่มีคอมเม้น")
+              : Center(child: CircularProgressIndicator()),
         ],
       ),
     );

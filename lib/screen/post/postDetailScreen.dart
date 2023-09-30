@@ -3,8 +3,8 @@ import 'package:assist_decisions_app/controller/postController.dart';
 import 'package:assist_decisions_app/controller/voteController.dart';
 import 'package:assist_decisions_app/screen/post/chackDeletePostScreen.dart';
 import 'package:assist_decisions_app/screen/post/editPostScreen.dart';
-import 'package:assist_decisions_app/screen/vote/homeScreen.dart';
 import 'package:assist_decisions_app/screen/post/listCommentScreen.dart';
+import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:assist_decisions_app/model/choice.dart';
 import 'package:assist_decisions_app/model/member.dart';
@@ -41,7 +41,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
     if (inputDate != null) {
       final DateTime date = DateTime.parse(inputDate);
       final DateFormat formatter = DateFormat('dd/MM/yyyy');
-      return formatter.format(date);
+      return formatter.format(date.toLocal());
     }
     return '';
   }
@@ -83,17 +83,14 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
+        backgroundColor: MainColor,
         title: Text(
             "${formatDate(post?.dateStart)} - ${formatDate(post?.dateStop)}"),
         leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return HomeScreen(
-                username: widget.username.toString(),
-              );
-            }));
+            Navigator.of(context).pop();
           },
-          icon: Icon(Icons.arrow_back),
         ),
       ),
       body: isDataLoaded == true
@@ -151,8 +148,8 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                                 elevation: 2,
                                 shape: Border.all(
                                   color: selectedChoiceIndex == index
-                                      ? Colors.green
-                                      : Colors.transparent,
+                                      ? SecondColor
+                                      : MainColor,
                                   width: 2,
                                 ),
                                 child: InkWell(
@@ -167,7 +164,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                                           MainAxisAlignment.spaceAround,
                                       children: [
                                         Text("${index + 1}"),
-                                        choices![index].choiceImage !=""
+                                        choices![index].choiceImage != ""
                                             ? Image.network(
                                                 baseURL +
                                                     '/choices/downloadimg/${choices![index].choiceImage}',
@@ -175,8 +172,13 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                                                 width: 50,
                                                 height: 50,
                                               )
-                                            : SizedBox(width: 2, height: 50),
-                                        Text(choices![index].choiceName ?? ""),
+                                            : SizedBox(height: 50),
+                                        Row(
+                                          children: [
+                                            Text(choices![index].choiceName ??
+                                                ""),
+                                          ],
+                                        ),
                                         Text("${votes[index]}",
                                             style: TextStyle(fontSize: 16)),
                                       ],
@@ -186,44 +188,59 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                               );
                             },
                           ),
+                          SizedBox(width: 20),
                           Text(
                             "จำนวนผู้โหวต : ${counts} ",
                             style: TextStyle(fontSize: 18),
                           ),
+                          SizedBox(height: 5,),
                           Container(
                             child: Center(
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                EditPostScreen(
-                                                  username: widget.username,
-                                                  postId:
-                                                      post!.postId.toString(),
-                                                )),
-                                      );
-                                    },
-                                    child: Text("แก้ไข"),
+                                  Container(
+                                    width: 120,
+                                    height: 45,
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EditPostScreen(
+                                                    username: widget.username,
+                                                    postId:
+                                                        post!.postId.toString(),
+                                                  )),
+                                        );
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        primary: MainColor,
+                                      ),
+                                      child: Text("แก้ไข",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 18),),
+                                    ),
                                   ),
-                                  SizedBox(width: 20),
-                                  ChackDeletePostScreen(
-                                    postId: post!.postId.toString(),
-                                    username: widget.username,
-                                  ),
+                                  counts == 0?SizedBox(width: 20):SizedBox(),
+                                  counts == 0
+                                      ? ChackDeletePostScreen(
+                                          postId: post!.postId.toString(),
+                                          username: widget.username,
+                                        )
+                                      : SizedBox(),
                                 ],
                               ),
                             ),
                           ),
+                          SizedBox(width: 20),
                           Text(
                             "ความคิดเห็น",
                             style: TextStyle(fontSize: 18),
                           ),
-                          ListCommentScreen(postId: post!.postId.toString())
+                          ListCommentScreen(postId: post!.postId.toString()),
+                          SizedBox(
+                            height: 100,
+                          ),
                         ],
                       ),
                     ),
@@ -231,7 +248,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                 ),
               ),
             )
-          : CircularProgressIndicator(),
+          : Center(child: CircularProgressIndicator()),
     ));
   }
 }

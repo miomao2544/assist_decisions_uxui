@@ -587,7 +587,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                               for (int i = 0;
                                   i < fileImagesToDisplay!.length;
                                   i++) {
-                                if (fileImagesToDisplay![i] != null) {
+                                if (fileImagesToDisplay?[i] != null) {
                                   var uploadedFile = await choiceController
                                       .upload(fileImagesToDisplay![i]);
 

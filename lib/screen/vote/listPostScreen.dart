@@ -1,6 +1,7 @@
 import 'package:assist_decisions_app/controller/postController.dart';
 import 'package:assist_decisions_app/model/post.dart';
 import 'package:assist_decisions_app/screen/post/postDetailScreen.dart';
+import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:flutter/material.dart';
 import '../../constant/constant_value.dart';
 import 'package:intl/intl.dart';
@@ -32,15 +33,15 @@ Future fetchPost() async {
     });
   }
 
-
   String formatDate(String? inputDate) {
-    if (inputDate != null) {
-      final DateTime date = DateTime.parse(inputDate);
-      final DateFormat formatter = DateFormat('dd/MM/yyyy');
-      return formatter.format(date);
-    }
-    return '';
+  if (inputDate != null) {
+    final DateTime date = DateTime.parse(inputDate);
+    final DateFormat formatter = DateFormat('dd/MM/yyyy');
+    return formatter.format(date.toLocal());
   }
+  return '';
+}
+
 
   @override
   void initState() {
@@ -73,18 +74,27 @@ Future fetchPost() async {
                               height: 100,
                               child: Column(
                                 children: [
-                                  ClipOval(
+                                                              Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: SecondColor, // สีเส้นขอบแดง
+                                  width: 2.0, // ความหนาของเส้นขอบ 2
+                                ),
+                              ),
+                              child: ClipOval(
                                     child: Image.network(
                                       baseURL +
                                           '/posts/downloadimg/${posts![index].postImage}',
                                       fit: BoxFit.cover,
-                                      width: 36,
-                                      height: 36,
+                                      width: 33,
+                                      height: 33,
                                     ),
                                   ),
-                                  const SizedBox(height: 1),
+                            ),
                                   Text(
                                     " ${counts![index]} คน",
+                                    style: TextStyle(fontWeight: FontWeight.bold),
                                   ),
                                 ],
                               ),
@@ -94,7 +104,7 @@ Future fetchPost() async {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "สิ้นสุดการโหวต ${formatDate(posts![index].dateStop)}",
+                                  "สิ้นสุด : ${formatDate(posts![index].dateStop)}",
                                   style: const TextStyle(
                                     fontFamily: 'Itim',
                                     fontSize: 10,
@@ -104,13 +114,13 @@ Future fetchPost() async {
                                   "${posts![index].title}",
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                      fontFamily: 'Itim', fontSize: 20),
+                                  style:  TextStyle(
+                                      fontFamily: 'Itim', fontSize: 20,color: MainColor,fontWeight: FontWeight.bold),
                                 ),
                                 Text(
                                   "คะแนน : ${posts![index].postPoint?.toInt()}",
-                                  style: const TextStyle(
-                                      fontFamily: 'Itim', fontSize: 16),
+                                  style:  TextStyle(
+                                      fontFamily: 'Itim', fontSize: 16,fontWeight: FontWeight.bold),
                                 ),
                                 Text(
                                   "${posts![index].description}",

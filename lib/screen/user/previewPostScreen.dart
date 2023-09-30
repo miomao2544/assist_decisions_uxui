@@ -5,7 +5,6 @@ import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:assist_decisions_app/widgets/customNewCard.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import '../../widgets/customPostCard.dart';
 
 class PreviewPostScreen extends StatefulWidget {
   const PreviewPostScreen({super.key});

@@ -2,10 +2,10 @@ import 'package:assist_decisions_app/controller/postController.dart';
 import 'package:assist_decisions_app/model/post.dart';
 import 'package:assist_decisions_app/screen/post/postDetailScreen.dart';
 import 'package:assist_decisions_app/screen/vote/viewPostScreen.dart';
+import 'package:assist_decisions_app/widgets/customNewCard.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../widgets/customPostCard.dart';
 
 class MemberScreen extends StatefulWidget {
   final String username;
@@ -59,7 +59,7 @@ class _MemberScreenState extends State<MemberScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return  isDataLoaded == true ? Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
@@ -90,12 +90,12 @@ class _MemberScreenState extends State<MemberScreen> {
             ),
             Container(
               padding: EdgeInsets.all(10.0),
-              height: MediaQuery.of(context).size.height / 4,
+              height: MediaQuery.of(context).size.height / 3.8,
               child: ListView.builder(
                 itemCount: openPosts?.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
-                  return CustomPostCard(
+                  return CustomNewCard(
                     postImage: openPosts?[index].postImage ?? '',
                     interestName:
                         openPosts?[index].interest?.interestName ?? '',
@@ -114,12 +114,12 @@ class _MemberScreenState extends State<MemberScreen> {
             ),
             Container(
               padding: EdgeInsets.all(10.0),
-              height: MediaQuery.of(context).size.height / 4,
+              height: MediaQuery.of(context).size.height / 3.8,
               child: ListView.builder(
                 itemCount: closedPosts?.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
-                  return CustomPostCard(
+                  return CustomNewCard(
                     postImage: closedPosts?[index].postImage ?? '',
                     interestName:
                         closedPosts?[index].interest?.interestName ?? '',
@@ -136,6 +136,6 @@ class _MemberScreenState extends State<MemberScreen> {
           ],
         ),
       ),
-    );
+    ):Center(child: CircularProgressIndicator());
   }
 }

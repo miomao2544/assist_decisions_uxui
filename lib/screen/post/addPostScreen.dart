@@ -601,7 +601,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                 (pointmember! - pointresult).toString());
                             var response = await postController.doAddPost(
                                 title ?? "",
-                                image ?? "I00001.png",
+                                image ?? "I00002.png",
                                 description ?? "",
                                 point ?? "",
                                 dateStart ?? "",

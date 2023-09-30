@@ -5,8 +5,9 @@ import 'package:assist_decisions_app/controller/voteController.dart';
 import 'package:assist_decisions_app/model/choice.dart';
 import 'package:assist_decisions_app/model/member.dart';
 import 'package:assist_decisions_app/screen/vote/commentScreen.dart';
-import 'package:assist_decisions_app/screen/vote/homeScreen.dart';
 import 'package:assist_decisions_app/screen/admin/reportPostScreen.dart';
+import 'package:assist_decisions_app/screen/vote/homeScreen.dart';
+import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../constant/constant_value.dart';
@@ -37,7 +38,7 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
     if (inputDate != null) {
       final DateTime date = DateTime.parse(inputDate);
       final DateFormat formatter = DateFormat('dd/MM/yyyy');
-      return formatter.format(date);
+      return formatter.format(date.toLocal());
     }
     return '';
   }
@@ -72,17 +73,23 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: MainColor,
           title: Text(
               "${formatDate(post?.dateStart)} - ${formatDate(post?.dateStop)}"),
-          leading: IconButton(
+        leading: IconButton(
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return HomeScreen(
-                  username: widget.username.toString(),
-                );
-              }));
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (BuildContext context) {
+                    return HomeScreen(
+                      username: widget.username,
+                    );
+                  },
+                ),
+              );
             },
             icon: Icon(Icons.arrow_back),
+            color: Colors.white,
           ),
           actions: [
             IconButton(
@@ -93,7 +100,7 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
                       username: widget.username.toString());
                 }));
               },
-              icon: Icon(Icons.report),
+              icon: Icon(Icons.report,size: 35,),
             ),
           ],
         ),
@@ -108,10 +115,13 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
+                                                        SizedBox(
+                              height: 20,
+                            ),
                             Text('${post?.title ?? ""}',
                                 style: TextStyle(fontSize: 30)),
                             SizedBox(
-                              height: 20,
+                              height: 25,
                             ),
                             Image.network(
                               baseURL + '/posts/downloadimg/${post?.postImage}',
@@ -124,7 +134,7 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
                             ),
                             Text(' ${post?.description ?? ""}'),
                             SizedBox(
-                              height: 20,
+                              height: 15,
                             ),
                             Row(
                               children: [
@@ -157,8 +167,8 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
                                   elevation: 2,
                                   shape: Border.all(
                                     color: selectedChoiceIndex == index
-                                        ? Colors.green
-                                        : Colors.transparent,
+                                        ? SecondColor
+                                        : MainColor,
                                     width: 2,
                                   ),
                                   child: RadioListTile<int>(
@@ -169,16 +179,18 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
                                         selectedChoiceIndex = value;
                                       });
                                     },
-                                    activeColor: Colors.green,
+                                    activeColor: SecondColor,
                                     title: Row(
                                       children: [
-                                        Image.network(
-                                          baseURL +
-                                              '/choices/downloadimg/${choices![index].choiceImage}',
-                                          fit: BoxFit.cover,
-                                          width: 50,
-                                          height: 50,
-                                        ),
+                                        choices![index].choiceImage !=""
+                                            ? Image.network(
+                                                baseURL +
+                                                    '/choices/downloadimg/${choices![index].choiceImage}',
+                                                fit: BoxFit.cover,
+                                                width: 50,
+                                                height: 50,
+                                              )
+                                            : SizedBox(width: 2, height: 50),
                                         Text(choices![index].choiceName ?? ""),
                                       ],
                                     ),
@@ -186,43 +198,51 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
                                 );
                               },
                             ),
-                           ifvote == "0"? ElevatedButton(
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: Text("ยืนยันคำตอบ"),
-                                      content: Text(
-                                          "คุณแน่ใจหรือไม่ที่ต้องการยืนยันคำตอบนี้?"),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: ()async {
-                                            
-                                            Navigator.of(context)
-                                                .pop(); // ปิด Alert Dialog
-                                          },
-                                          child: Text("ยกเลิก"),
-                                        ),
-                                        TextButton(
-                                          onPressed: () async {
-                                            await voteController.doVotePost(
-                                                widget.username.toString(),
-                                                choices![selectedChoiceIndex!]
-                                                    .choiceId
-                                                    .toString());
-                                            await voteController.getIFVoteChoice(widget.username,widget.postId);
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: Text("ยืนยัน"),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              },
-                              child: Text("ยืนยันคำตอบ"),
-                            ):SizedBox(height: 10,),
+                            SizedBox(height: 10,),
+                           ifvote == "0"? Container(
+                            width: 120,
+                            height: 45,
+                             child: ElevatedButton(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: Text("ยืนยันคำตอบ"),
+                                        content: Text(
+                                            "คุณแน่ใจหรือไม่ที่ต้องการยืนยันคำตอบนี้?"),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: ()async {
+                                              
+                                              Navigator.of(context)
+                                                  .pop(); // ปิด Alert Dialog
+                                            },
+                                            child: Text("ยกเลิก"),
+                                          ),
+                                          TextButton(
+                                            onPressed: () async {
+                                              await voteController.doVotePost(
+                                                  widget.username.toString(),
+                                                  choices![selectedChoiceIndex!]
+                                                      .choiceId
+                                                      .toString());
+                                              await voteController.getIFVoteChoice(widget.username,widget.postId);
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Text("ยืนยัน"),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                               primary: MainColor, // Change this to your desired color
+                             ),
+                                child: Text("ยืนยันคำตอบ"),
+                              ),
+                           ):SizedBox(height: 10,),
                             SizedBox(height: 16.0),
                             CommentScreen(
                               member: member,

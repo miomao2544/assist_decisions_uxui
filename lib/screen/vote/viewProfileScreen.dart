@@ -1,5 +1,6 @@
 import 'package:assist_decisions_app/controller/memberController.dart';
 import 'package:assist_decisions_app/screen/vote/editProfileScreen.dart';
+import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:assist_decisions_app/widgets/divider_box.dart';
 import 'package:flutter/material.dart';
 
@@ -29,12 +30,10 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
     member = await memberController.getMemberById(widget.username);
     if (member != null) {
       if (member!.interests != null) {
-        // Map interests to a list of strings
         interestSelect = member!.interests!
             .map((interest) => interest.interestName ?? "")
             .toList();
       }
-      // Fetch interests for the user (you should implement this)
       interests = member!.interests!;
       ;
       setState(() {
@@ -58,7 +57,14 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        backgroundColor: MainColor,
+        title: Text('ข้อมูลส่วนตัว'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
       ),
       body: isDataLoaded == true
           ? SingleChildScrollView(
@@ -66,12 +72,21 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                 padding: const EdgeInsets.all(30.0),
                 child: Container(
                   child: Column(children: [
-                    ClipOval(
-                      child: Image.network(
-                        baseURL + '/members/downloadimg/${member?.image}',
-                        fit: BoxFit.cover,
-                        width: 150,
-                        height: 150,
+                    Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: SecondColor, 
+                          width: 4.0,
+                        ),
+                      ),
+                      child: ClipOval(
+                        child: Image.network(
+                          baseURL + '/members/downloadimg/${member?.image}',
+                          fit: BoxFit.cover,
+                          width: 150,
+                          height: 150,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 15),
@@ -115,7 +130,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                         ),
                       ],
                     ),
-                    InfoRow(label: "คะแนน", value: "${member?.point}"),
+                    InfoRow(label: "เพศ", value: "${member?.gender == "M"? "ชาย":"หญิง"}"),
                     DividerBoxBlack(),
                     InfoRow(label: "ชื่อ", value: "${member?.firstname}"),
                     DividerBoxBlack(),
@@ -125,8 +140,9 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                     DividerBoxBlack(),
                     InfoRow(label: "เบอร์โทรศัพท์", value: "${member?.tel}"),
                     DividerBoxBlack(),
+                    SizedBox(height: 5,),
                     InfoRow(label: "สิ่งที่สนใจ", value: ""),
-                    DividerBoxBlack(),
+                    SizedBox(height: 5,),
                     Container(
                       height: 35.0,
                       child: ListView.builder(
@@ -139,14 +155,15 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                             child: GestureDetector(
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: Color.fromARGB(255, 255, 179, 0),
-                                  borderRadius: BorderRadius.circular(8.0),
+                                
+                                  color: MainColor,
+                                  borderRadius: BorderRadius.circular(10.0),
                                 ),
                                 padding: EdgeInsets.symmetric(
-                                    horizontal: 16.0, vertical: 8.0),
+                                    horizontal: 20.0, vertical: 8.0),
                                 child: Text(
                                   interest.interestName ?? "",
-                                  style: TextStyle(color: Colors.white),
+                                  style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),
                                 ),
                               ),
                             ),
@@ -154,24 +171,29 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                         },
                       ),
                     ),
+                    SizedBox(height: 10,),
                     InfoRow(
                         label: "ชื่อผู้ใช้งาน", value: "${member?.username}"),
                     DividerBoxBlack(),
                     SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  EditProfileScreen(username: widget.username)),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.amber, // เปลี่ยนสีปุ่มเป็นสีฟ้า
+                    Container(
+                      width: 150,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    EditProfileScreen(username: widget.username)),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: MainColor, // เปลี่ยนสีปุ่มเป็นสีฟ้า
+                        ),
+                        child: Text("แก้ไขข้อมูล",
+                            style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold)),
                       ),
-                      child: Text("แก้ไขข้อมูล",
-                          style: TextStyle(color: Colors.white)),
                     ),
                   ]),
                 ),

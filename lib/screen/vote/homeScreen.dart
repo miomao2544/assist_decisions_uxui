@@ -1,5 +1,6 @@
 import 'package:assist_decisions_app/controller/memberController.dart';
 import 'package:assist_decisions_app/controller/postController.dart';
+import 'package:assist_decisions_app/controller/voteController.dart';
 import 'package:assist_decisions_app/model/member.dart';
 import 'package:assist_decisions_app/model/post.dart';
 import 'package:assist_decisions_app/screen/post/chackPointScreen.dart';
@@ -10,6 +11,7 @@ import 'package:assist_decisions_app/screen/vote/memberScreen.dart';
 import 'package:assist_decisions_app/screen/vote/notifyPostScreen.dart';
 import 'package:assist_decisions_app/screen/vote/searchPostScreen.dart';
 import 'package:assist_decisions_app/screen/vote/viewProfileScreen.dart';
+import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:assist_decisions_app/widgets/myNotificationWidget%20.dart';
 import 'package:flutter/material.dart';
 
@@ -33,12 +35,22 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Post>? posts;
   final MemberController memberController = MemberController();
   final PostController postController = PostController();
+  final VoteController voteController = VoteController();
   Member? member;
 
   void fetchMember() async {
     member = await memberController.getMemberById(widget.username);
     posts = await postController.listPostsInterest(widget.username.toString());
     imageUser = member?.image.toString();
+      int i = 0;
+  while (i < posts!.length) {
+    String ifvote = await voteController.getIFVoteChoice(widget.username, posts![i].postId.toString());
+    if (ifvote != "0") {
+      posts!.removeAt(i);
+    } else {
+      i++;
+    }
+  }
     setState(() {
       isDataLoaded = true;
     });
@@ -51,8 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
     selectedChoice = 0;
 
     widgets = [
-      MemberScreen(
-          username: widget.username), 
+      MemberScreen(username: widget.username),
       SearchPostScreen(username: widget.username),
       ListPostScreen(username: widget.username),
       NotifyPostScreen(username: widget.username),
@@ -69,53 +80,32 @@ class _HomeScreenState extends State<HomeScreen> {
     return isDataLoaded == true
         ? Scaffold(
             drawer: Drawer(
-              child: ListView(
-                children: [
-                  DrawerHeader(
-                    child: Column(
-                      children: [
-                        Container(
-                          height: 100,
-                          width: 100,
-                          decoration: BoxDecoration(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(50)),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text("@username"),
-                      ],
-                    ),
+              child: IconButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) {
+                      return LoginMemberScreen();
+                    },
+                  ));
+                },
+                icon: Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle, // กำหนดให้รูปร่างเป็นวงกลม
+                    color: MainColor2, // สีพื้นหลังของวงกลม
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: 60,
-                      child: ElevatedButton.icon(
-                        icon: Icon(Icons.ac_unit),
-                        label:
-                            Text("ออกจากระบบ", style: TextStyle(fontSize: 20)),
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              Color(0xFFe6a53b)), // กำหนดสีพื้นหลังของปุ่ม
-                        ),
-                        onPressed: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return LoginMemberScreen();
-                          }));
-                        },
-                      ),
-                    ),
+                  child: Icon(
+                    Icons.login, // ใส่ไอคอนที่คุณต้องการแสดง
+                    color: Colors.white, // สีไอคอน
+                    size: 30, // กำหนดขนาดไอคอน
                   ),
-                ],
+                ),
               ),
             ),
             appBar: AppBar(
-              backgroundColor: Colors.teal,
-              title: Text("Home Page"),
+              backgroundColor: MainColor,
+              title: Text("หน้าหลัก"),
               centerTitle: true,
               actions: <Widget>[
                 ClipOval(
@@ -131,9 +121,19 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                     child: Container(
                       width: 50,
-                      child: Image.network(
-                        baseURL + '/members/downloadimg/${imageUser}',
-                        fit: BoxFit.cover,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: SecondColor, // สีกรอบ
+                          width: 2, // ความกว้างของกรอบ
+                        ),
+                      ),
+                      child: ClipOval(
+                        child: Image.network(
+                          baseURL + '/members/downloadimg/${imageUser}',
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),
@@ -143,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerDocked,
             floatingActionButton: FloatingActionButton(
-              backgroundColor: Colors.teal,
+              backgroundColor: MainColor,
               onPressed: () {
                 Widget destinationWidget;
                 if ((member?.point ?? 0) >= 100) {
@@ -162,7 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Icon(Icons.add),
             ),
             bottomNavigationBar: BottomAppBar(
-              color: Colors.teal,
+              color: MainColor,
               shape: CircularNotchedRectangle(),
               notchMargin: 12,
               child: Container(

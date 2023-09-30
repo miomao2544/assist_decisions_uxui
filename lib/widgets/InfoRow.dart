@@ -1,3 +1,4 @@
+import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:flutter/material.dart';
 
 class InfoRow extends StatelessWidget {
@@ -13,7 +14,7 @@ class InfoRow extends StatelessWidget {
         Expanded(
           child: Text(
             label,
-            style: TextStyle(fontSize: 18),
+            style: TextStyle(fontSize: 17,color: MainColor,fontWeight: FontWeight.bold),
             textAlign: TextAlign.left,
           ),
         ),
