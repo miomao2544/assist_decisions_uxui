@@ -27,7 +27,7 @@ class CustomTextFormField extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: TextFormField(
-
+        initialValue: controller.text,
         controller: controller,
         maxLength: maxLength,
         maxLines: maxLines,

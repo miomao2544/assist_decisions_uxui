@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:assist_decisions_app/controller/choiceController.dart';
 import 'package:assist_decisions_app/controller/postController.dart';
 import 'package:assist_decisions_app/screen/vote/homeScreen.dart';
-import 'package:assist_decisions_app/widgets/custom_text.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -198,83 +197,72 @@ class _AddPostScreenState extends State<AddPostScreen> {
                     padding: EdgeInsets.all(8.0),
                     child: Center(child: Text("เพิ่มโพสต์")),
                   ),
-                  CustomTextFormField(
-       
-                    controller: titleTextController,
-                    hintText: "หัวข้อ",
-                    maxLength: 50,
-                    validator: (value) {
-                      if (value!.isNotEmpty) {
-                        return null;
-                      } else {
-                        return "หัวข้อ";
-                      }
-                    },
-                    icon: const Icon(Icons.account_circle),
-                  ),
-                  Center(
-                    child: isLoadingPicture
-                        ? Image.asset(
-                            "assets/images/logo.png",
-                            width: 250,
-                          ) // Add a loading indicator while loading the picture
-                        : fileToDisplay != null
-                            ? Image.file(
-                                fileToDisplay!,
-                                height: 200, // Set the desired image height
-                              )
-                            : Container(), // Display an empty container if no image is selected
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: TextFormField(
-                            controller: postImageTextController,
-                            enabled: false,
-                            decoration: InputDecoration(
-                                labelText: "รูปภาพของโพสต์",
-                                counterText: "",
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10)),
-                                prefixIcon: const Icon(Icons.image),
-                                prefixIconColor: Colors.black),
-                            style: const TextStyle(
-                                fontFamily: 'Itim', fontSize: 18),
+                  TextFormField(
+                                decoration: InputDecoration(
+                                  labelText: 'หัวข้อ',
+                                  labelStyle: TextStyle(color: Color(0xFF1c174d)),
+                                   border: OutlineInputBorder(),
+                                prefixIcon: const Icon(Icons.account_circle),
+                                prefixIconColor: Colors.black,
+                                ),
+                                maxLines: null,
+                                onChanged: (value) {
+                                  setState(() {
+                                    titleTextController.text = value;
+                                  });
+                                },
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'กรุณากรอกหัวข้อ';
+                                  }
+                                  return null;
+                                },
+                              ),
+                      Center(
+                        child: isLoadingPicture
+                            ? Image.asset(
+                                "assets/images/logo.png",
+                                width: 250,
+                              ) 
+                            : fileToDisplay != null
+                                ? Image.file(
+                                    fileToDisplay!,
+                                    height: 200, 
+                                  )
+                                : Container(), 
+                      ),
+                      Align(
+                        alignment: Alignment.center,
+                        child: ElevatedButton.icon(
+                          onPressed: () {
+                            _pickFile();
+                          },
+                          icon: Icon(Icons.image),
+                          label: Text("เลือกรูปภาพ"),
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                              isLoadingPicture
+                                  ? Color(0xFF1c174d)
+                                  : Colors.teal,
+                            ),
                           ),
                         ),
                       ),
-                      Expanded(
-                          flex: 1,
-                          child: SizedBox(
-                            height: 50,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                _pickFile();
-                              },
-                              child: const Text("เลือกรูปภาพ"),
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                  isLoadingPicture
-                                      ? Colors.grey
-                                      : Colors
-                                          .teal, // Change button color based on loading state
+                 TextFormField(
+                                decoration: InputDecoration(
+                                  labelText: 'รายละเอียด',
+                                  labelStyle: TextStyle(color: Color(0xFF1c174d)),
+                                   border: OutlineInputBorder(),
+                                prefixIcon: const Icon(Icons.account_circle),
+                                prefixIconColor: Colors.black,
                                 ),
+                                maxLines: null,
+                                onChanged: (value) {
+                                  setState(() {
+                                    descriptionTextController.text = value;
+                                  });
+                                },
                               ),
-                            ),
-                          )),
-                    ],
-                  ),
-                  CustomTextFormField(
-         
-                    controller: descriptionTextController,
-                    hintText: "คำอธิบาย",
-                    maxLength: 1000,
-                    maxLines: 10,
-                  ),
                   Row(
                     children: [
                       Container(
@@ -524,13 +512,21 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       elevation: 0,
                     ),
                     onPressed: () async {
+                            String? fileToSend ="I00001.png";
+                                    if (fileToDisplay != null) {
+                                      var uploadedFile = await postController
+                                          .upload(fileToDisplay!);
+                                      if (uploadedFile != null) {
+                                        fileToSend = uploadedFile;
+                                      }
+                                    }
                       print(
                           "------fileToDisplay-------${fileToDisplay!}-----------");
                       if (fromKey.currentState!.validate()) {
-                        var response = await postController.addPost(
+                        var response = await postController.doAddPost(
                             titleTextController.text,
-                            fileToDisplay!,
-                            descriptionTextController.text,
+                            fileToSend!,
+                            descriptionTextController.text?? "",
                             postPointTextController.text,
                             dateStarts ?? "",
                             dateStops ?? "",
@@ -539,12 +535,12 @@ class _AddPostScreenState extends State<AddPostScreen> {
                             widget.username.toString(),
                             selectedInterest ?? '');
                         for (int i = 0; i < choices.length; i++) {
-                          Choice choice = choices[i];
-                          await choiceController.addChoice(
-                            choice.choiceName ?? '',
-                            fileImagesToDisplay![i],
-                            response["postId"],
-                          );
+                          // Choice choice = choices[i];
+                          // await choiceController.addChoice(
+                          //   choice.choiceName ?? '',
+                          //   fileImagesToDisplay![i],
+                          //   response["postId"],
+                          // );
                         }
                         Navigator.push(
                           context,

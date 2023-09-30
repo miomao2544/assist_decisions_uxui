@@ -7,9 +7,9 @@ import '../constant/constant_value.dart';
 class PostController {
   Post? posts;
 
-  Future addPost(
+  Future doAddPost(
       String title,
-      File image,
+      String image,
       String description,
       String postPoint,
       String dateStart,
@@ -18,10 +18,10 @@ class PostController {
       String qtyMin,
       String username,
       String interestId) async {
-    var imageName = await upload(image);
+
 
     Map data = {
-      "postImage": imageName.toString(),
+      "postImage": image,
       "title": title,
       "description": description,
       "postPoint": postPoint,

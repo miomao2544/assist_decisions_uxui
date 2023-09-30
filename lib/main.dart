@@ -1,5 +1,7 @@
+import 'package:assist_decisions_app/screen/vote/addPostScreen.dart';
 import 'package:assist_decisions_app/screen/user/previewPostScreen.dart';
 import 'package:assist_decisions_app/screen/vote/loginMemberScreen.dart';
+import 'package:assist_decisions_app/screen/vote/viewPostScreen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -14,7 +16,8 @@ class MainApp extends StatelessWidget {
     return  MaterialApp(
 
       // // home: HomeScreen(username: "post",),
-      home: LoginMemberScreen(),
+      home: AddPostScreen(username: "post"),
+      // home: LoginMemberScreen(),
       debugShowCheckedModeBanner: false,
     );
     
