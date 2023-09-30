@@ -4,6 +4,7 @@ import 'package:assist_decisions_app/model/interest.dart';
 import 'package:assist_decisions_app/model/post.dart';
 import 'package:assist_decisions_app/screen/post/postDetailScreen.dart';
 import 'package:assist_decisions_app/screen/vote/viewPostScreen.dart';
+import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:flutter/material.dart';
 import '../../constant/constant_value.dart';
 import 'package:intl/intl.dart';
@@ -60,7 +61,7 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
     if (inputDate != null) {
       final DateTime date = DateTime.parse(inputDate);
       final DateFormat formatter = DateFormat('dd/MM/yyyy');
-      return formatter.format(date);
+      return formatter.format(date.toLocal());
     }
     return '';
   }
@@ -97,7 +98,14 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
       builder: (BuildContext context) {
         return Scaffold(
           appBar: AppBar(
+            backgroundColor: MainColor,
             title: Text("ค้นหาโพสต์"),
+            leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
           ),
           body: Container(
             child: SingleChildScrollView(
@@ -132,9 +140,12 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
                               Navigator.of(context).pop();
                               fetchPost();
                             },
+                            style: ElevatedButton.styleFrom(
+                              primary: MainColor,
+                            ),
                             child: Icon(
                               Icons.search,
-                              color: Colors.black,
+                              color: Colors.white,
                             ),
                           ),
                         )
@@ -210,9 +221,7 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
                               });
                             },
                             style: ElevatedButton.styleFrom(
-                              primary: isSelected
-                                  ? Color(0xFF479f76)
-                                  : Color(0xFF1c174d),
+                              primary: isSelected ? SecondColor : MainColor,
                             ),
                             child: Text(interest.interestName ?? ""),
                           ),
@@ -242,8 +251,8 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.white,
         appBar: AppBar(
+          backgroundColor: MainColor2,
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(25.0), // ปรับความสูงตามที่คุณต้องการ
             child: Padding(
@@ -264,7 +273,7 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
                       ),
                       child: Icon(
                         Icons.settings,
-                        color: Colors.black,
+                        color: MainColor,
                       ),
                     ),
                   ),
@@ -338,16 +347,24 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
                               // height: double.infinity,
                               child: Column(
                                 children: [
-                                  ClipOval(
-                                    child: Image.network(
-                                      baseURL +
-                                          '/members/downloadimg/${posts?[index].member?.image}',
-                                      fit: BoxFit.cover,
-                                      width: 36,
-                                      height: 36,
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color: SecondColor, // สีเส้นขอบแดง
+                                        width: 2.0, // ความหนาของเส้นขอบ 2
+                                      ),
+                                    ),
+                                    child: ClipOval(
+                                      child: Image.network(
+                                        baseURL +
+                                            '/members/downloadimg/${posts?[index].member?.image}',
+                                        fit: BoxFit.cover,
+                                        width: 36,
+                                        height: 36,
+                                      ),
                                     ),
                                   ),
-                                  const SizedBox(height: 5),
                                   Text(
                                     "${posts?[index].member?.nickname}",
                                     style: TextStyle(
@@ -367,13 +384,18 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
                                   "${posts?[index].title}",
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                      fontFamily: 'Itim', fontSize: 20),
+                                  style: TextStyle(
+                                      fontFamily: 'Itim',
+                                      fontSize: 20,
+                                      color: MainColor,
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 Text(
                                   "คะแนน : ${posts?[index].postPoint?.toInt()}",
-                                  style: const TextStyle(
-                                      fontFamily: 'Itim', fontSize: 16),
+                                  style: TextStyle(
+                                      fontFamily: 'Itim',
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 Text(
                                   "${posts?[index].description}",
@@ -383,7 +405,7 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
                                       fontFamily: 'Itim', fontSize: 16),
                                 ),
                                 Text(
-                                  "สิ้นสุดการโหวต ${formatDate(posts?[index].dateStop)}",
+                                  "สิ้นสุด : ${formatDate(posts?[index].dateStop)}",
                                   style: const TextStyle(
                                     fontFamily: 'Itim',
                                     fontSize: 10,
@@ -395,7 +417,11 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Icon(Icons.chevron_right_sharp),
+                                Icon(
+                                  Icons.chevron_right_sharp,
+                                  size: 30,
+                                  color: MainColor,
+                                ),
                               ],
                             ),
 
@@ -405,16 +431,18 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => PostDetailScreen(
-                                        postId:
-                                              posts![index].postId.toString(),username: widget.username.toString(),
+                                          postId:
+                                              posts![index].postId.toString(),
+                                          username: widget.username.toString(),
                                         ),
                                       ),
                                     )
                                   : Navigator.push(context,
                                       MaterialPageRoute(builder: (context) {
                                       return ViewPostScreen(
-                                          postId:
-                                              posts![index].postId.toString(),username: widget.username.toString(),);
+                                        postId: posts![index].postId.toString(),
+                                        username: widget.username.toString(),
+                                      );
                                     }));
                             },
                           ),

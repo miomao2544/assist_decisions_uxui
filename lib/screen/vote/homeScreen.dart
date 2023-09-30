@@ -226,6 +226,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             body: widgets[selectedChoice],
           )
-        : CircularProgressIndicator();
+        : Center(child: CircularProgressIndicator());
   }
 }

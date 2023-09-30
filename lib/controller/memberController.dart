@@ -151,4 +151,22 @@ Future doLoginMember(String username,String password) async {
     final utf8body = utf8.decode(response.bodyBytes);
     print("-------------------------------${utf8body}-----------------");
   }
+
+    Future doUpdatePointVote(String username,String point) async {
+    var url = Uri.parse(baseURL + '/members/pointvote/${username}/${point}');
+    http.Response response = await http.post(url, headers: headers, body: null);
+    final utf8body = utf8.decode(response.bodyBytes);
+    print("-------------------------------${utf8body}-----------------");
+  }
+
+Future<List<String>> getUsernameVotePost(String postId) async {
+  var url = Uri.parse(baseURL + '/members/usernamevotepost/${postId}');
+
+  http.Response response = await http.post(url, headers: headers, body: null);
+  final utf8body = utf8.decode(response.bodyBytes);
+  List<dynamic> jsonList = json.decode(utf8body);
+  print("object--------------------${jsonList.cast<String>()}-------------");
+  return jsonList.cast<String>();
+}
+
 }

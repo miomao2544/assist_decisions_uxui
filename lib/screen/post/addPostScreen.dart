@@ -6,6 +6,7 @@ import 'package:assist_decisions_app/model/choice.dart';
 import 'package:assist_decisions_app/model/interest.dart';
 import 'package:assist_decisions_app/model/member.dart';
 import 'package:assist_decisions_app/screen/vote/homeScreen.dart';
+import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
@@ -177,8 +178,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Colors.teal,
-          title: Text("Add post"),
+          backgroundColor: MainColor,
+          title: Text("สร้างโพสต์"),
           centerTitle: true,
           leading: IconButton(
             onPressed: () {
@@ -203,7 +204,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
             child: Center(
               child: Column(
                 children: [
-                  Text("เพิ่มโพสต์"),
                   SizedBox(height: 16),
                   TextFormField(
                     decoration: InputDecoration(
@@ -243,7 +243,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       label: Text("เลือกรูปภาพ"),
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
-                          isLoadingPicture ? Color(0xFF1c174d) : Colors.teal,
+                          isLoadingPicture ? MainColor : SecondColor,
                         ),
                       ),
                     ),
@@ -461,7 +461,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                       _pickFileChoices();
                                     },
                                     child: Icon(Icons.image,
-                                        size: 30, color: Colors.blue),
+                                        size: 30, color: MainColor),
                                   ),
                           ),
                           Expanded(
@@ -510,7 +510,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   ElevatedButton(
                       child: Text("ยืนยัน"),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
+                        backgroundColor: MainColor,
                         elevation: 0,
                       ),
                       onPressed: () async {

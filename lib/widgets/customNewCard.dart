@@ -89,6 +89,7 @@ class _CustomNewCardState extends State<CustomNewCard> {
                         width: 120,
                         height: 20,
                         child: Text(
+                           maxLines: 1,
                           widget.description,
                           style: TextStyle(
                             overflow: TextOverflow.ellipsis,
@@ -124,7 +125,6 @@ class _CustomNewCardState extends State<CustomNewCard> {
                 ],
               ),
             ),
-            Container(height: 5),
           ],
         ),
       ),

@@ -22,34 +22,32 @@ class _MemberScreenState extends State<MemberScreen> {
     "assets/images/page3.png",
   ];
 
-  List<Post> posts = [];
+ List<Post>? posts = [];
   bool? isDataLoaded = false;
 
-  List<Post>? openPosts;
-  List<Post>? closedPosts;
+  List<Post>? openPosts = [];
+  List<Post>? closedPosts = [];
 
   final PostController postController = PostController();
 
-  void fetchPost() async {
-    posts = await postController.listPostsInterest(widget.username);
-    final now = DateTime.now();
-    final dateFormatter = DateFormat('yyyy-MM-ddTHH:mm:ss.SSSZZZZZ');
+void fetchPost() async {
+  posts = await postController.listAllPosts();
+  openPosts = [];
+  closedPosts = [];
 
-    try {
-      openPosts = posts
-          .where((post) => dateFormatter.parse(post.dateStop!).isAfter(now))
-          .toList();
-      closedPosts = posts
-          .where((post) => dateFormatter.parse(post.dateStop!).isBefore(now))
-          .toList();
-    } catch (e) {
-      print("Error parsing date: $e");
+  for (int i = 0; i < posts!.length; i++) {
+    if (posts![i].result.toString() == "r") {
+      openPosts!.add(posts![i]);
+    } else {
+      closedPosts!.add(posts![i]);
     }
-
-    setState(() {
-      isDataLoaded = true;
-    });
   }
+
+  setState(() {
+    isDataLoaded = true;
+  });
+}
+
 
   @override
   void initState() {
@@ -125,7 +123,7 @@ class _MemberScreenState extends State<MemberScreen> {
                         closedPosts?[index].interest?.interestName ?? '',
                     title: closedPosts?[index].title ?? '',
                     description: closedPosts?[index].description ?? '',
-                    screen: widget.username ==  closedPosts?[index].member?.username? PostDetailScreen(postId: openPosts![index].postId.toString(),username: widget.username.toString(),):ViewPostScreen(postId: closedPosts![index].postId.toString(),username: widget.username.toString()),
+                    screen: widget.username ==  closedPosts?[index].member?.username? PostDetailScreen(postId: closedPosts![index].postId.toString(),username: widget.username.toString(),):ViewPostScreen(postId: closedPosts![index].postId.toString(),username: widget.username.toString()),
                   );
                 },
               ),

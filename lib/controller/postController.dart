@@ -174,6 +174,13 @@ class PostController {
     return list;
   }
 
+    Future doUpdateResult(String result,String postId) async {
+    var url = Uri.parse(baseURL + '/posts/updateresult/${result}/${postId}');
+    http.Response response = await http.post(url, headers: headers, body: null);
+    final utf8body = utf8.decode(response.bodyBytes);
+    print("-------------------------------${utf8body}-----------------");
+  }
+
   Future getListCountMember(String? postId) async {
     var url = Uri.parse(baseURL + '/posts/count/$postId');
 

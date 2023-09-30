@@ -70,7 +70,7 @@ class _NotifyPostScreenState extends State<NotifyPostScreen> {
                 return Center(child: Text("ไม่มีโพสต์ของคุณ"));
               } else {
                 return Container(
-                  height: 110,
+                  height: 115,
                   child: Card(
                     elevation: 5,
                     shape: RoundedRectangleBorder(

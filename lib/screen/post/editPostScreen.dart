@@ -7,6 +7,7 @@ import 'package:assist_decisions_app/controller/postController.dart';
 import 'package:assist_decisions_app/model/member.dart';
 import 'package:assist_decisions_app/model/post.dart';
 import 'package:assist_decisions_app/screen/vote/homeScreen.dart';
+import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -216,7 +217,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Colors.teal,
+          backgroundColor: MainColor,
           title: Text("แก้ไขโพสต์"),
           centerTitle: true,
           leading: IconButton(
@@ -287,8 +288,8 @@ class _EditPostScreenState extends State<EditPostScreen> {
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all<Color>(
                                 isLoadingPicture
-                                    ? Color(0xFF1c174d)
-                                    : Colors.teal,
+                                    ? MainColor
+                                    : SecondColor,
                               ),
                             ),
                           ),
@@ -458,7 +459,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   prefixIcon: Icon(Icons.calendar_today),
-                                  prefixIconColor: Colors.black,
+                                  prefixIconColor: MainColor,
                                 ),
                                 style: TextStyle(
                                   fontFamily: 'Itim',
@@ -480,7 +481,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   prefixIcon: Icon(Icons.calendar_today),
-                                  prefixIconColor: Colors.black,
+                                  prefixIconColor: MainColor,
                                 ),
                                 style: TextStyle(
                                   fontFamily: 'Itim',
@@ -523,7 +524,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                                             width: 50,
                                             height: 50,
                                           ):Icon(Icons.image,
-                                        size: 30, color: Colors.blue),
+                                        size: 30, color: MainColor),
                                         ),
                                 ),
                                 Expanded(
@@ -573,7 +574,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                         ElevatedButton(
                             child: Text("ยืนยัน"),
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green,
+                              backgroundColor: MainColor,
                               elevation: 0,
                             ),
                             onPressed: () async {

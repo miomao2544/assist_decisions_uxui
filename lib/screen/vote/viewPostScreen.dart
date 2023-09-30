@@ -42,24 +42,54 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
     }
     return '';
   }
+
   int counts = 0;
   String ifvote = "";
+  List<String> usernames = [];
   Future<void> fetchPost() async {
     Post? postRequired;
     List<Choice> choiceRequired;
     Member? memberRequired;
+    List<String> username = [];
     postRequired = await postController.getPostById(widget.postId);
     choiceRequired = await choiceController.listAllChoicesById(widget.postId);
     memberRequired = await memberController.getMemberById(widget.username);
-      counts = await postController.getListCountMember(widget.postId);
-      ifvote = await voteController.getIFVoteChoice(widget.username,widget.postId);
-      print("---------------${widget.postId.toString()}--------------${ifvote}----------------");
+    counts = await postController.getListCountMember(widget.postId);
+    ifvote =
+        await voteController.getIFVoteChoice(widget.username, widget.postId);
+    print(
+        "---------------${widget.postId.toString()}--------------${ifvote}----------------");
+    username = await memberController.getUsernameVotePost(widget.postId);
     setState(() {
       post = postRequired;
       choices = choiceRequired;
       member = memberRequired;
+      usernames = List<String>.from(username);
+      calculateScorepoint();
       isDataLoaded = true;
     });
+  }
+
+  Future calculateScorepoint() async {
+    if ((post!.qtyMax == counts ||
+            (post!.dateStop != null &&
+
+                DateTime.parse(post!.dateStop!).isBefore(DateTime.now()))) &&
+        post!.result == "r") {
+      double score = double.parse(post!.postPoint.toString());
+      int qtyMax = counts;
+      if (score % 1 == 0) {
+        int scorepoint = (score / qtyMax).toInt();
+        print("----------point--${scorepoint}-------");
+        for (int i = 0; i < usernames.length; i++) {
+          print(
+              "---------------${usernames[i].toString()}-------Vote<<<-------------");
+          await memberController.doUpdatePointVote(
+              usernames[i].toString(), scorepoint.toString());
+        }
+        await postController.doUpdateResult("1", post!.postId.toString());
+      }
+    }
   }
 
   @override
@@ -76,7 +106,7 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
           backgroundColor: MainColor,
           title: Text(
               "${formatDate(post?.dateStart)} - ${formatDate(post?.dateStop)}"),
-        leading: IconButton(
+          leading: IconButton(
             onPressed: () {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
@@ -100,7 +130,10 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
                       username: widget.username.toString());
                 }));
               },
-              icon: Icon(Icons.report,size: 35,),
+              icon: Icon(
+                Icons.report,
+                size: 35,
+              ),
             ),
           ],
         ),
@@ -115,7 +148,7 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                                                        SizedBox(
+                            SizedBox(
                               height: 20,
                             ),
                             Text('${post?.title ?? ""}',
@@ -163,7 +196,6 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
                               itemCount: choices?.length ?? 0,
                               itemBuilder: (context, index) {
                                 return Card(
-                                 
                                   elevation: 2,
                                   shape: Border.all(
                                     color: selectedChoiceIndex == index
@@ -182,7 +214,7 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
                                     activeColor: SecondColor,
                                     title: Row(
                                       children: [
-                                        choices![index].choiceImage !=""
+                                        choices![index].choiceImage != ""
                                             ? Image.network(
                                                 baseURL +
                                                     '/choices/downloadimg/${choices![index].choiceImage}',
@@ -198,51 +230,66 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
                                 );
                               },
                             ),
-                            SizedBox(height: 10,),
-                           ifvote == "0"? Container(
-                            width: 120,
-                            height: 45,
-                             child: ElevatedButton(
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: Text("ยืนยันคำตอบ"),
-                                        content: Text(
-                                            "คุณแน่ใจหรือไม่ที่ต้องการยืนยันคำตอบนี้?"),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: ()async {
-                                              
-                                              Navigator.of(context)
-                                                  .pop(); // ปิด Alert Dialog
-                                            },
-                                            child: Text("ยกเลิก"),
-                                          ),
-                                          TextButton(
-                                            onPressed: () async {
-                                              await voteController.doVotePost(
-                                                  widget.username.toString(),
-                                                  choices![selectedChoiceIndex!]
-                                                      .choiceId
-                                                      .toString());
-                                              await voteController.getIFVoteChoice(widget.username,widget.postId);
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: Text("ยืนยัน"),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
-                                style: ElevatedButton.styleFrom(
-                               primary: MainColor, // Change this to your desired color
-                             ),
-                                child: Text("ยืนยันคำตอบ"),
-                              ),
-                           ):SizedBox(height: 10,),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            ifvote == "0"
+                                ? Container(
+                                    width: 120,
+                                    height: 45,
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: Text("ยืนยันคำตอบ"),
+                                              content: Text(
+                                                  "คุณแน่ใจหรือไม่ที่ต้องการยืนยันคำตอบนี้?"),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () async {
+                                                    Navigator.of(context)
+                                                        .pop(); // ปิด Alert Dialog
+                                                  },
+                                                  child: Text("ยกเลิก"),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () async {
+                                                    await voteController.doVotePost(
+                                                        widget.username
+                                                            .toString(),
+                                                        choices![
+                                                                selectedChoiceIndex!]
+                                                            .choiceId
+                                                            .toString());
+                                                    await voteController
+                                                        .getIFVoteChoice(
+                                                            widget.username,
+                                                            widget.postId);
+                                                    Navigator.of(context).pop();
+                                                     Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return ViewPostScreen(username: widget.username,postId: post!.postId.toString(),);
+                              }));
+                                                  },
+                                                  child: Text("ยืนยัน"),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        primary:
+                                            MainColor, // Change this to your desired color
+                                      ),
+                                      child: Text("ยืนยันคำตอบ"),
+                                    ),
+                                  )
+                                : SizedBox(
+                                    height: 10,
+                                  ),
                             SizedBox(height: 16.0),
                             CommentScreen(
                               member: member,
