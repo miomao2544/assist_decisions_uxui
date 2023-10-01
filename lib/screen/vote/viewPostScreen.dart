@@ -200,7 +200,7 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
                                   shape: Border.all(
                                     color: selectedChoiceIndex == index
                                         ? SecondColor
-                                        : MainColor,
+                                        : Color.fromARGB(255, 255, 249, 196),
                                     width: 2,
                                   ),
                                   child: RadioListTile<int>(
@@ -302,7 +302,7 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
                   ),
                 ),
               )
-            : CircularProgressIndicator(),
+            : Center(child: CircularProgressIndicator()),
       ),
     );
   }

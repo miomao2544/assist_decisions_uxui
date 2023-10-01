@@ -340,11 +340,11 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: ListTile(
-                            contentPadding: EdgeInsets.all(10.0),
+                            contentPadding: EdgeInsets.all(8.0),
                             // ตรงนี้คือส่วนที่แสดงข้อมูลของโพสต์
                             leading: Container(
                               width: 100,
-                              // height: double.infinity,
+             
                               child: Column(
                                 children: [
                                   Container(
@@ -360,8 +360,8 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
                                         baseURL +
                                             '/members/downloadimg/${posts?[index].member?.image}',
                                         fit: BoxFit.cover,
-                                        width: 36,
-                                        height: 36,
+                                        width: 34,
+                                        height: 34,
                                       ),
                                     ),
                                   ),

@@ -56,7 +56,7 @@ void fetchPost() async {
 
   @override
   Widget build(BuildContext context) {
-    return  isDataLoaded == true ? Scaffold(
+    return   Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
@@ -85,7 +85,7 @@ void fetchPost() async {
               style: TextStyle(fontSize: 25),
               textAlign: TextAlign.left,
             ),
-            Container(
+           isDataLoaded == true ? Container(
               padding: EdgeInsets.all(10.0),
               height: MediaQuery.of(context).size.height / 3.8,
               child: ListView.builder(
@@ -103,13 +103,13 @@ void fetchPost() async {
                   );
                 },
               ),
-            ),
+            ):SizedBox(height: 200,),
             Text(
               "ปิดทำการโหวต",
               style: TextStyle(fontSize: 25),
               textAlign: TextAlign.left,
             ),
-            Container(
+           isDataLoaded == true ? Container(
               padding: EdgeInsets.all(10.0),
               height: MediaQuery.of(context).size.height / 3.8,
               child: ListView.builder(
@@ -126,13 +126,13 @@ void fetchPost() async {
                   );
                 },
               ),
-            ),
+            ):SizedBox(height: 200,),
             SizedBox(
               height: 20.0,
             ),
           ],
         ),
       ),
-    ):Center(child: CircularProgressIndicator());
+    );
   }
 }

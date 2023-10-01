@@ -144,20 +144,28 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                             physics: NeverScrollableScrollPhysics(),
                             itemCount: choices?.length ?? 0,
                             itemBuilder: (context, index) {
+                              // หาตัวเลือกที่มีคะแนนสูงสุด
+                              final List<int> intVotes =
+                                  votes.map((vote) => int.parse(vote)).toList();
+
+                              int maxVotes = intVotes.reduce(
+                                  (max, vote) => vote > max ? vote : max);
+
+                              // ตรวจสอบว่าตัวปัจจุบันมีคะแนนเท่ากับคะแนนสูงสุดหรือไม่
+                              bool isSelected =
+                                  int.parse(votes[index]) == maxVotes;
+
+                              // กำหนดสีของ Border ของ Card
+                              Color borderColor =
+                                  isSelected ? MainColor : Color.fromARGB(255, 255, 240, 197);
+
                               return Card(
                                 elevation: 2,
                                 shape: Border.all(
-                                  color: selectedChoiceIndex == index
-                                      ? SecondColor
-                                      : MainColor,
+                                  color: borderColor,
                                   width: 2,
                                 ),
                                 child: InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      selectedChoiceIndex = index;
-                                    });
-                                  },
                                   child: ListTile(
                                     title: Row(
                                       mainAxisAlignment:
@@ -193,7 +201,9 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                             "จำนวนผู้โหวต : ${counts} ",
                             style: TextStyle(fontSize: 18),
                           ),
-                          SizedBox(height: 5,),
+                          SizedBox(
+                            height: 5,
+                          ),
                           Container(
                             child: Center(
                               child: Row(
@@ -218,10 +228,18 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                                       style: ElevatedButton.styleFrom(
                                         primary: MainColor,
                                       ),
-                                      child: Text("แก้ไข",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 18),),
+                                      child: Text(
+                                        "แก้ไข",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18),
+                                      ),
                                     ),
                                   ),
-                                  counts == 0?SizedBox(width: 20):SizedBox(),
+                                  counts == 0
+                                      ? SizedBox(width: 20)
+                                      : SizedBox(),
                                   counts == 0
                                       ? ChackDeletePostScreen(
                                           postId: post!.postId.toString(),

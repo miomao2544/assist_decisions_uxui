@@ -1,5 +1,6 @@
 import 'package:assist_decisions_app/controller/memberController.dart';
 import 'package:assist_decisions_app/screen/vote/editProfileScreen.dart';
+import 'package:assist_decisions_app/screen/vote/homeScreen.dart';
 import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:assist_decisions_app/widgets/divider_box.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +63,15 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (BuildContext context) {
+                    return HomeScreen(
+                      username: widget.username,
+                    );
+                  },
+                ),
+              );
           },
         ),
       ),

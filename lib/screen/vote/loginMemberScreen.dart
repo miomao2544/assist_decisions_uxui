@@ -14,7 +14,7 @@ class LoginMemberScreen extends StatefulWidget {
 class _LoginMemberScreenState extends State<LoginMemberScreen> {
   String username = "";
   String password = "11111111";
-  String result = "";
+  String? result;
   final GlobalKey<FormState> fromKey = GlobalKey<FormState>();
   MemberController memberController = MemberController();
   Future doLoginMember() async {
@@ -67,7 +67,7 @@ class _LoginMemberScreenState extends State<LoginMemberScreen> {
                     onChanged: (value) {
                       setState(() {
                         username = value;
-                        // doLoginMember();
+                        doLoginMember();
                       });
                     },
                     validator:(value) => validateUsername(value,result),
@@ -87,7 +87,7 @@ class _LoginMemberScreenState extends State<LoginMemberScreen> {
                     onChanged: (value) {
                       setState(() {
                         password = value;
-                        // doLoginMember();
+                        doLoginMember();
                       });
                     },
                     validator:(value) => validatePassword(value ,result),

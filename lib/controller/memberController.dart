@@ -44,7 +44,7 @@ class MemberController {
       "email": email,
       "tel": tel,
       "image": imageName,
-      "adminstatus": "true",
+      "adminstatus": "false",
       "interests": interestId
     };
     var body = json.encode(data);

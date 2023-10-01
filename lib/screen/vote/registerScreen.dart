@@ -278,6 +278,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               fontWeight: FontWeight.bold),
                         ),
                       ),
+                      SizedBox(height: 10.0),
                       Center(
                         child: isLoadingPicture
                             ? Image.asset(
@@ -287,6 +288,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             : fileToDisplay != null
                                 ? Image.file(
                                     fileToDisplay!,
+                                    fit: BoxFit.cover,
+                                    width: 200,
                                     height: 200, 
                                   )
                                 : Container(), 

@@ -59,8 +59,8 @@ class _NotifyPostScreenState extends State<NotifyPostScreen> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
-        body: isDataLoaded == true? posts != null && posts!.isNotEmpty
-                ? Container(
+        body:  posts != null && posts!.isNotEmpty
+                ?isDataLoaded == true? Container(
           padding: EdgeInsets.all(10.0),
           child: ListView.builder(
             itemCount: posts?.length ?? 0,
@@ -96,8 +96,8 @@ class _NotifyPostScreenState extends State<NotifyPostScreen> {
                                   baseURL +
                                       '/members/downloadimg/${posts?[index].member?.image}',
                                   fit: BoxFit.cover,
-                                  width: 36,
-                                  height: 36,
+                                  width: 34,
+                                  height: 34,
                                 ),
                               ),
                             ),
@@ -170,7 +170,7 @@ class _NotifyPostScreenState extends State<NotifyPostScreen> {
               }
             },
           ),
-        ):Center(child: Text("ไม่มีโพสต์ตามความสนใจของคุณ")):Center(child: CircularProgressIndicator())
+        ):Center(child: CircularProgressIndicator()):Center(child: Text("ไม่มีโพสต์ตามความสนใจของคุณ"))
       ),
     );
   }

@@ -71,9 +71,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       print(e);
     }
   }
+
   String result = "";
-    Future doLoginMember() async {
-    result = await memberController.doLoginMember(widget.username.toString(), password.toString());
+  Future doLoginMember() async {
+    result = await memberController.doLoginMember(
+        widget.username.toString(), password.toString());
     print("-----------$result------------");
   }
 
@@ -139,8 +141,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-            appBar: AppBar(
-              backgroundColor: MainColor,
+      appBar: AppBar(
+        backgroundColor: MainColor,
         title: Text('แก้ไข ข้อมูลส่วนตัว'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
@@ -162,8 +164,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         children: [
                           Align(
                             alignment: Alignment.center,
-                            child: 
-                            Image.asset(
+                            child: Image.asset(
                               "assets/images/logo.png",
                               width: 100,
                             ),
@@ -172,7 +173,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             alignment: Alignment.center,
                             child: Text(
                               'แพลตฟอร์มสนับสนุนการตัดสินใจ',
-                               style: TextStyle(fontSize: 22.0,fontWeight: FontWeight.bold ,color: MainColor),
+                              style: TextStyle(
+                                  fontSize: 22.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: MainColor),
                             ),
                           ),
                           SizedBox(height: 12.0),
@@ -180,10 +184,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             alignment: Alignment.center,
                             child: Text(
                               'ส่วนของข้อมูลส่วนตัว',
-                              style: TextStyle(fontSize: 18.0,fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  fontSize: 18.0, fontWeight: FontWeight.bold),
                             ),
                           ),
-                          Text('เพศ',style: TextStyle(color: MainColor,fontWeight: FontWeight.bold,fontSize: 16),),
+                          Text(
+                            'เพศ',
+                            style: TextStyle(
+                                color: MainColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16),
+                          ),
                           Row(
                             children: [
                               ElevatedButton(
@@ -193,9 +204,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   });
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  primary: gender == 'M'
-                                      ? SecondColor
-                                      : MainColor,
+                                  primary:
+                                      gender == 'M' ? SecondColor : MainColor,
                                 ),
                                 child: Text('ชาย'),
                               ),
@@ -207,9 +217,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   });
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  primary: gender == 'F'
-                                      ? SecondColor
-                                      : MainColor,
+                                  primary:
+                                      gender == 'F' ? SecondColor : MainColor,
                                 ),
                                 child: Text('หญิง'),
                               ),
@@ -219,8 +228,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             initialValue: firstname,
                             decoration: InputDecoration(
                               labelText: 'ชื่อ',
-                              prefixIcon:
-                                  Icon(Icons.person, color: MainColor),
+                              prefixIcon: Icon(Icons.person, color: MainColor),
                               labelStyle: TextStyle(color: MainColor),
                             ),
                             onChanged: (value) {
@@ -244,8 +252,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             initialValue: lastname,
                             decoration: InputDecoration(
                               labelText: 'นามสกุล',
-                              prefixIcon:
-                                  Icon(Icons.person, color: MainColor),
+                              prefixIcon: Icon(Icons.person, color: MainColor),
                               labelStyle: TextStyle(color: MainColor),
                             ),
                             onChanged: (value) {
@@ -270,8 +277,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             initialValue: email,
                             decoration: InputDecoration(
                               labelText: 'อีเมล์',
-                              prefixIcon:
-                                  Icon(Icons.email, color: MainColor),
+                              prefixIcon: Icon(Icons.email, color: MainColor),
                               labelStyle: TextStyle(color: MainColor),
                             ),
                             onChanged: (value) {
@@ -298,8 +304,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             initialValue: tel,
                             decoration: InputDecoration(
                               labelText: 'หมายเลขโทรศัพท์',
-                              prefixIcon:
-                                  Icon(Icons.phone, color: MainColor),
+                              prefixIcon: Icon(Icons.phone, color: MainColor),
                               labelStyle: TextStyle(color: MainColor),
                             ),
                             onChanged: (value) {
@@ -360,9 +365,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                       });
                                     },
                                     style: ElevatedButton.styleFrom(
-                                      primary: isSelected
-                                          ? SecondColor
-                                          : MainColor,
+                                      primary:
+                                          isSelected ? SecondColor : MainColor,
                                     ),
                                     child: Text(interest.interestName ?? ""),
                                   ),
@@ -373,8 +377,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           SizedBox(height: 12.0),
                           Text(
                             'สามารถเลือกได้มากกว่า 1 ตัวเลือก',
-                            style: TextStyle(
-                                fontSize: 16.0, color: MainColor),
+                            style: TextStyle(fontSize: 16.0, color: MainColor),
                           ),
                           SizedBox(height: 20.0),
                           Align(
@@ -387,21 +390,20 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   fontWeight: FontWeight.bold),
                             ),
                           ),
+                          SizedBox(height: 12.0),
                           Center(
                             child: isLoadingPicture
-                                ? 
-                                Image.network(
-                                      baseURL + '/members/downloadimg/${member!.image}',
-                                      width: 250,
-                                      height: 250,
-                                      fit: BoxFit.cover,
-                                    )
-                             
+                                ? Image.network(
+                                    baseURL +
+                                        '/members/downloadimg/${member!.image}',
+                                    width: 250,
+                                    height: 250,
+                                    fit: BoxFit.cover,
+                                  )
                                 : fileToDisplay != null
                                     ? Image.file(
                                         fileToDisplay!,
-                                        height:
-                                            200, 
+                                        height: 200,
                                       )
                                     : Container(),
                           ),
@@ -416,9 +418,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               style: ButtonStyle(
                                 backgroundColor:
                                     MaterialStateProperty.all<Color>(
-                                  isLoadingPicture
-                                      ? MainColor
-                                      : SecondColor,
+                                  isLoadingPicture ? MainColor : SecondColor,
                                 ),
                               ),
                             ),
@@ -427,11 +427,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           TextFormField(
                             initialValue: nickname,
                             decoration: InputDecoration(
-                                labelText: 'ชื่อบัญชี',
-                                 prefixIcon:
-                              Icon(Icons.account_circle, color: MainColor),
-                          labelStyle: TextStyle(color: MainColor),
-                                ),
+                              labelText: 'ชื่อบัญชี',
+                              prefixIcon:
+                                  Icon(Icons.account_circle, color: MainColor),
+                              labelStyle: TextStyle(color: MainColor),
+                            ),
                             onChanged: (value) {
                               setState(() {
                                 nickname = value;
@@ -454,9 +454,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             initialValue: username,
                             decoration: InputDecoration(
                               labelText: 'ชื่อผู้ใช้งาน (ห้ามซ้ำ)',
-                               prefixIcon:
-                              Icon(Icons.account_box, color: MainColor),
-                          labelStyle: TextStyle(color: MainColor),
+                              prefixIcon:
+                                  Icon(Icons.account_box, color: MainColor),
+                              labelStyle: TextStyle(color: MainColor),
                             ),
                             enabled: false,
                           ),
@@ -464,9 +464,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           TextFormField(
                             decoration: InputDecoration(
                               labelText: 'รหัสผ่าน',
-                                prefixIcon:
-                              Icon(Icons.key, color: MainColor),
-                          labelStyle: TextStyle(color: MainColor),
+                              prefixIcon: Icon(Icons.key, color: MainColor),
+                              labelStyle: TextStyle(color: MainColor),
                             ),
                             obscureText: true,
                             onChanged: (value) {
@@ -491,9 +490,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           TextFormField(
                             decoration: InputDecoration(
                               labelText: 'ยืนยันรหัสผ่าน',
-                                prefixIcon:
-                              Icon(Icons.key, color: MainColor),
-                          labelStyle: TextStyle(color: MainColor),
+                              prefixIcon: Icon(Icons.key, color: MainColor),
+                              labelStyle: TextStyle(color: MainColor),
                             ),
                             obscureText: true,
                             onChanged: (value) {
@@ -518,12 +516,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               height: 60,
                               child: ElevatedButton.icon(
                                   icon: Icon(Icons.add),
-                                  label: Text("บันทึก",
+                                  label: Text("บันทึกข้อมูล",
                                       style: TextStyle(fontSize: 20)),
                                   style: ButtonStyle(
-                                    backgroundColor:
-                                        MaterialStateProperty.all<Color>(Color(
-                                            0xFF479f76)), // กำหนดสีพื้นหลังของปุ่ม
+                                    backgroundColor: MaterialStateProperty.all<
+                                            Color>(
+                                        MainColor), // กำหนดสีพื้นหลังของปุ่ม
                                   ),
                                   onPressed: () async {
                                     if (fromKey.currentState!.validate()) {
@@ -567,7 +565,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                             fileToSend = uploadedFile;
                                           }
                                         }
-                                        
+
                                         print("---------- result------------");
                                         print(username);
                                         print(password);
@@ -602,13 +600,24 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                             builder: (BuildContext context) {
                                               return AlertDialog(
                                                 title: Text('สำเร็จ'),
-                                                content:
-                                                    Text('บันทึกการเปลี่ยนแปลงสำเร็จ'),
+                                                content: Text(
+                                                    'บันทึกการเปลี่ยนแปลงสำเร็จ'),
                                                 actions: [
                                                   ElevatedButton(
                                                     onPressed: () {
                                                       Navigator.of(context)
-                                                          .pop();
+                                                          .pushReplacement(
+                                                        MaterialPageRoute(
+                                                          builder: (BuildContext
+                                                              context) {
+                                                            return ViewProfileScreen(
+                                                              username: widget
+                                                                  .username
+                                                                  .toString(),
+                                                            );
+                                                          },
+                                                        ),
+                                                      );
                                                     },
                                                     child: Text('ปิด'),
                                                   ),
@@ -621,7 +630,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                             Navigator.push(context,
                                                 MaterialPageRoute(
                                                     builder: (context) {
-                                              return ViewProfileScreen(username: widget.username.toString());
+                                              return ViewProfileScreen(
+                                                  username: widget.username
+                                                      .toString());
                                             }));
                                           });
                                         } else {
