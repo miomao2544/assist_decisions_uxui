@@ -4,6 +4,7 @@ import 'package:assist_decisions_app/controller/reportController.dart';
 import 'package:assist_decisions_app/model/member.dart';
 import 'package:assist_decisions_app/model/report.dart';
 import 'package:assist_decisions_app/screen/admin/viewReportPostDetailScreen.dart';
+import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -48,7 +49,7 @@ class _ListReportScreenState extends State<ListReportScreen> {
     if (inputDate != null) {
       final DateTime date = DateTime.parse(inputDate);
       final DateFormat formatter = DateFormat('dd/MM/yyyy');
-      return formatter.format(date);
+      return formatter.format(date.toLocal());
     }
     return '';
   }
@@ -90,19 +91,17 @@ class _ListReportScreenState extends State<ListReportScreen> {
     }
   }
 
-
-
   Future fetchReport() async {
     List<Report> report;
     report = await reportController.getListReport();
-        Member? member;
-    member = await memberController.getMemberById(widget.username.toString());
+    Member? members;
+    members = await memberController.getMemberById(widget.username.toString());
     print(
         "object-----------------${report[0].reportComment.toString()}---------------------");
-        
-    print("-----------------${member!.nickname}---------------------");
+
+    print("-----------------${members!.nickname}---------------------");
     setState(() {
-      member = member;
+      member = members;
       reports = report;
       isDataLoaded = true;
     });
@@ -119,29 +118,58 @@ class _ListReportScreenState extends State<ListReportScreen> {
     return isDataLoaded
         ? Scaffold(
             appBar: AppBar(
-              title: Text("Logo ${widget.username}"),
+              backgroundColor: MainColor,
+              title: Text("Logo"),
               actions: [
-                Row(
-                  children: [
-                    // ClipOval(
-                    //     child: Image.network(
-                    //   baseURL + '/members/downloadimg/${member!.image}',
-                    //   fit: BoxFit.cover,
-                    //   width: 36,
-                    //   height: 36,
-                    // )), // ไอคอนผู้ใช้ (หรือแสดงไอคอนของผู้ใช้ที่คุณต้องการ)
-                    SizedBox(width: 4), // ระยะห่างระหว่างไอคอนกับข้อความผู้ใช้
-                    Column(
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white, // สีพื้นหลังสีขาว
+                    borderRadius:
+                        BorderRadius.circular(10.0), // การกำหนดมุมโค้ง
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text("ชื่อบัญชี"),
-                        Text(widget.username),
+                        member != null
+                            ? Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: SecondColor,
+                                    width: 2.0,
+                                  ),
+                                ),
+                                child: ClipOval(
+                                  child: Image.network(
+                                    baseURL +
+                                        '/members/downloadimg/${member?.image}',
+                                    fit: BoxFit.cover,
+                                    width: 36,
+                                    height: 36,
+                                  ),
+                                ),
+                              )
+                            : SizedBox(),
+                        SizedBox(
+                            width: 10), // ระยะห่างระหว่างไอคอนกับข้อความผู้ใช้
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start, // ชิดซ้าย
+                          children: [
+                            SizedBox(height: 2),
+                            Text("ชื่อบัญชี",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
+                            Text(member!.nickname.toString(),style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
+                          ],
+                        ), // แสดงชื่อผู้ใช้ (หรือข้อมูลผู้ใช้ที่คุณต้องการ)
+                        SizedBox(
+                          width: 16,
+                        ), // ระยะห่างระหว่างข้อมูลผู้ใช้และข้อมูลอื่น ๆ ใน AppBar
                       ],
-                    ), // แสดงชื่อผู้ใช้ (หรือข้อมูลผู้ใช้ที่คุณต้องการ)
-                    SizedBox(
-                        width:
-                            16), // ระยะห่างระหว่างข้อมูลผู้ใช้และข้อมูลอื่น ๆ ใน AppBar
-                  ],
-                ),
+                    ),
+                  ),
+                )
               ],
             ),
             body: SingleChildScrollView(
@@ -190,12 +218,12 @@ class _ListReportScreenState extends State<ListReportScreen> {
                                     height: 48.0,
                                     decoration: BoxDecoration(
                                       shape: BoxShape.rectangle,
-                                      color: Colors.white,
+                                      color: MainColor,
                                       borderRadius: BorderRadius.circular(8.0),
                                     ),
                                     child: Icon(
                                       Icons.search,
-                                      color: Colors.black,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),
@@ -223,7 +251,7 @@ class _ListReportScreenState extends State<ListReportScreen> {
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       prefixIcon: Icon(Icons.calendar_today),
-                                      prefixIconColor: Colors.black,
+                                      prefixIconColor: MainColor,
                                     ),
                                     style: TextStyle(
                                       fontFamily: 'Itim',
@@ -242,7 +270,6 @@ class _ListReportScreenState extends State<ListReportScreen> {
                     ),
                     Container(
                       width: 1270,
-                      color: Colors.blue,
                       child: Center(
                         child: Stack(
                           alignment: Alignment
@@ -257,16 +284,16 @@ class _ListReportScreenState extends State<ListReportScreen> {
                                             10), // ปรับค่าตามที่คุณต้องการ
                                         child: Container(
                                           width: 300,
-                                          height: 400,
+                                          height: 430,
                                           decoration: BoxDecoration(
-                                            color: Colors.amber,
+                                            color: Colors.white,
                                             boxShadow: [
                                               BoxShadow(
-                                                color: Colors.grey
-                                                    .withOpacity(0.5),
-                                                spreadRadius: 5,
-                                                blurRadius: 7,
-                                                offset: Offset(0, 3),
+                                                color: SecondColor.withOpacity(
+                                                    0.8),
+                                                spreadRadius: 10,
+                                                blurRadius: 10,
+                                                offset: Offset(10, 3),
                                               ),
                                             ],
                                           ),
@@ -280,23 +307,42 @@ class _ListReportScreenState extends State<ListReportScreen> {
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
                                                   children: [
+                                                    SizedBox(
+                                                      width: 80,
+                                                    ),
                                                     Text(
                                                         '${formatDate(report.reportDate)}'),
                                                     SizedBox(
-                                                      width: 20,
+                                                      width: 40,
                                                     ),
-                                                    ClipOval(
-                                                      child: Image.network(
-                                                        baseURL +
-                                                            '/members/downloadimg/${report.member!.image}',
-                                                        fit: BoxFit.cover,
-                                                        width: 36,
-                                                        height: 36,
+                                                    Container(
+                                                      decoration: BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                        border: Border.all(
+                                                          color: SecondColor,
+                                                          width: 2.0,
+                                                        ),
                                                       ),
-                                                    ),
+                                                      child: ClipOval(
+                                                        child: Image.network(
+                                                          baseURL +
+                                                              '/members/downloadimg/${report.member!.image}',
+                                                          fit: BoxFit.cover,
+                                                          width: 36,
+                                                          height: 36,
+                                                        ),
+                                                      ),
+                                                    )
                                                   ],
                                                 ),
-                                                Text('${report.post!.title}'),
+                                                Text(
+                                                  '${report.post!.title}',
+                                                  style: TextStyle(
+                                                      color: MainColor,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 20),
+                                                ),
                                                 SizedBox(height: 10),
                                                 Image.network(
                                                   baseURL +
@@ -305,7 +351,14 @@ class _ListReportScreenState extends State<ListReportScreen> {
                                                   width: 180,
                                                   height: 180,
                                                 ),
-                                                Text("เหตุผลที่รายงาน"),
+                                                SizedBox(height: 10),
+                                                Text(
+                                                  "เหตุผลที่รายงาน",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 16),
+                                                ),
                                                 SizedBox(height: 10),
                                                 Text(report.reportComment
                                                         .toString()
@@ -323,7 +376,7 @@ class _ListReportScreenState extends State<ListReportScreen> {
                                                       icon: Icon(
                                                           Icons.other_houses),
                                                       label: Text(
-                                                        "เพิ่มเติม >",
+                                                        "เพิ่มเติม",
                                                         style: TextStyle(
                                                             fontSize: 20),
                                                       ),
@@ -331,13 +384,21 @@ class _ListReportScreenState extends State<ListReportScreen> {
                                                         backgroundColor:
                                                             MaterialStateProperty
                                                                 .all<Color>(
-                                                          Color(0xFF479f76),
+                                                          SecondColor,
                                                         ),
                                                       ),
                                                       onPressed: () {
-                                                                     Navigator.push(context,
-                                                            MaterialPageRoute(builder: (context) {
-                                                          return ViewReportPostDetail(reportId:  report.reportId.toString(),username: widget.username,);
+                                                        Navigator.push(context,
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) {
+                                                          return ViewReportPostDetail(
+                                                            reportId: report
+                                                                .reportId
+                                                                .toString(),
+                                                            username:
+                                                                widget.username,
+                                                          );
                                                         }));
                                                       },
                                                     ),

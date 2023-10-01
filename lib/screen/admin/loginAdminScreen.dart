@@ -1,5 +1,9 @@
+import 'package:assist_decisions_app/controller/memberController.dart';
 import 'package:assist_decisions_app/screen/admin/listReportScreen.dart';
+import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:flutter/material.dart';
+
+import '../validators/validatorLogin.dart';
 
 class LoginAdminScreen extends StatefulWidget {
   const LoginAdminScreen({super.key});
@@ -10,6 +14,16 @@ class LoginAdminScreen extends StatefulWidget {
 
 class _LoginAdminScreenState extends State<LoginAdminScreen> {
   String username = "";
+  String password = "";
+  String result = "";
+  final GlobalKey<FormState> fromKey = GlobalKey<FormState>();
+  MemberController memberController = MemberController();
+  
+  Future doLoginAdmin() async {
+    result = await memberController.doLoginAdmin(username, password);
+    print("-----------$result------------");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,6 +39,7 @@ class _LoginAdminScreenState extends State<LoginAdminScreen> {
                     width: 400,
                     color: Colors.white,
                     child: Form(
+                      key: fromKey,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -47,53 +62,56 @@ class _LoginAdminScreenState extends State<LoginAdminScreen> {
                               'เข้าสู่ระบบ',
                               style: TextStyle(
                                 fontSize: 30.0,
-                                color: Color.fromARGB(255, 30, 97, 66),
+                                color: MainColor,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
+                          SizedBox(height: 16.0),
                           Container(
-                            width: 400,
-                            child: TextField(
-                              style: TextStyle(
-                                color: Color(0xFF1c174d),
-                                fontSize: 20.0,
-                              ),
+                            width: 300,
+                            child: TextFormField(
+                              style:
+                                  TextStyle(color: MainColor, fontSize: 20.0),
                               decoration: InputDecoration(
                                 labelText: 'ชื่อผู้ใช้งาน',
-                                labelStyle: TextStyle(color: Color(0xFF1c174d)),
-                                prefixIcon: Icon(Icons.person,
-                                    color: Color(0xFF1c174d)),
+                                labelStyle: TextStyle(color: MainColor),
+                                prefixIcon:
+                                    Icon(Icons.person, color: MainColor),
                               ),
                               onChanged: (value) {
                                 setState(() {
-                                  username =
-                                      value; // อัปเดตค่า username ทุกครั้งที่ผู้ใช้ป้อนข้อมูล
+                                  username = value;
+                                  doLoginAdmin();
                                 });
                               },
+                              validator: (value) =>
+                                  validateUsername(value, result),
                             ),
                           ),
                           SizedBox(height: 16.0),
                           Container(
-                            width: 400,
-                            child: TextField(
+                            width: 300,
+                            child: TextFormField(
                               obscureText: true,
-                              style: TextStyle(
-                                color: Color(0xFF1c174d),
-                                fontSize: 20.0,
-                              ),
+                              style:
+                                  TextStyle(color: MainColor, fontSize: 20.0),
                               decoration: InputDecoration(
                                 labelText: 'รหัสผ่าน',
-                                labelStyle: TextStyle(color: Color(0xFF1c174d)),
-                                prefixIcon:
-                                    Icon(Icons.key, color: Color(0xFF1c174d)),
-                                contentPadding: EdgeInsets.symmetric(
-                                  vertical: 20.0,
-                                  horizontal: 16.0,
-                                ),
+                                labelStyle: TextStyle(color: MainColor),
+                                prefixIcon: Icon(Icons.key, color: MainColor),
                               ),
+                              onChanged: (value) {
+                                setState(() {
+                                  password = value;
+                                  doLoginAdmin();
+                                });
+                              },
+                              validator: (value) =>
+                                  validatePassword(value, result),
                             ),
                           ),
+                          SizedBox(height: 16.0),
                           SizedBox(height: 16.0),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -109,14 +127,39 @@ class _LoginAdminScreenState extends State<LoginAdminScreen> {
                                 style: ButtonStyle(
                                   backgroundColor:
                                       MaterialStateProperty.all<Color>(
-                                    Color(0xFF479f76),
+                                    MainColor,
                                   ),
                                 ),
                                 onPressed: () {
-                                   Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return ListReportScreen(username:  username,);
-                      }));
+                                  if (fromKey.currentState!.validate()) {
+                                    doLoginAdmin();
+                                    if (result == "admin") {
+                                      Navigator.push(context,
+                                          MaterialPageRoute(builder: (context) {
+                                        return ListReportScreen(
+                                          username: username,
+                                        );
+                                      }));
+                                    } else if (result == "true") {
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: Text('ข้อจำกัด'),
+                                            content: Text('คุณไม่มีสิทธิเข้า'),
+                                            actions: [
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text('ปิด'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    }
+                                  }
                                 },
                               ),
                             ),
@@ -131,8 +174,7 @@ class _LoginAdminScreenState extends State<LoginAdminScreen> {
                 // ฝั่งขวา: Container ที่มีสีพื้นหลัง (แสดงเฉพาะเว็บ)
                 Expanded(
                   child: Container(
-                    color: Color.fromARGB(
-                        255, 1, 51, 79), // สีพื้นหลังที่คุณต้องการใช้
+                    color: SecondColor, // สีพื้นหลังที่คุณต้องการใช้
                   ),
                 ),
             ],

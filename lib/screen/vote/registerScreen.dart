@@ -507,7 +507,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
               ],
             ),
-          )):CircularProgressIndicator(),
+          )):Center(child: CircularProgressIndicator()),
     );
   }
 }

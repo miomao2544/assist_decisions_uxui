@@ -43,7 +43,7 @@ class _LoginMemberScreenState extends State<LoginMemberScreen> {
                     style: TextStyle(fontSize: 22.0),
                   ),
                 ),
-                SizedBox(height: 30.0),
+                SizedBox(height: 10.0),
                 Align(
                   alignment: Alignment.center,
                   child: Text(
@@ -67,7 +67,7 @@ class _LoginMemberScreenState extends State<LoginMemberScreen> {
                     onChanged: (value) {
                       setState(() {
                         username = value;
-                        doLoginMember();
+                        // doLoginMember();
                       });
                     },
                     validator:(value) => validateUsername(value,result),
@@ -87,7 +87,7 @@ class _LoginMemberScreenState extends State<LoginMemberScreen> {
                     onChanged: (value) {
                       setState(() {
                         password = value;
-                        doLoginMember();
+                        // doLoginMember();
                       });
                     },
                     validator:(value) => validatePassword(value ,result),

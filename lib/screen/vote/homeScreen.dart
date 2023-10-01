@@ -92,13 +92,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   width: 60,
                   height: 60,
                   decoration: BoxDecoration(
-                    shape: BoxShape.circle, // กำหนดให้รูปร่างเป็นวงกลม
-                    color: MainColor2, // สีพื้นหลังของวงกลม
+                    shape: BoxShape.circle, 
+                    color: MainColor2, 
                   ),
                   child: Icon(
-                    Icons.login, // ใส่ไอคอนที่คุณต้องการแสดง
-                    color: Colors.white, // สีไอคอน
-                    size: 30, // กำหนดขนาดไอคอน
+                    Icons.login,
+                    color: Colors.white,
+                    size: 30, 
                   ),
                 ),
               ),

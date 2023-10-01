@@ -44,7 +44,7 @@ class MemberController {
       "email": email,
       "tel": tel,
       "image": imageName,
-      "adminstatus": "false",
+      "adminstatus": "true",
       "interests": interestId
     };
     var body = json.encode(data);
@@ -107,6 +107,12 @@ Future updateMember(
   }
 
 Future doLoginMember(String username,String password) async {
+    var url = Uri.parse(baseURL + "/members/loginmember/${username}/${password}");
+     http.Response response = await http.post(url, headers: headers, body: null);
+    return response.body;
+  }
+
+  Future doLoginAdmin(String username,String password) async {
     var url = Uri.parse(baseURL + "/members/loginmember/${username}/${password}");
      http.Response response = await http.post(url, headers: headers, body: null);
     return response.body;

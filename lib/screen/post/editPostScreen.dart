@@ -148,7 +148,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
     if (inputDate != null) {
       final DateTime date = DateTime.parse(inputDate);
       final DateFormat formatter = DateFormat('dd/MM/yyyy');
-      return formatter.format(date);
+      return formatter.format(date.toLocal());
     }
     return '';
   }
@@ -157,7 +157,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
     if (inputDate != null) {
       final DateTime date = DateTime.parse(inputDate);
       final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm:ss');
-      return formatter.format(date);
+      return formatter.format(date.toLocal());
     }
     return '';
   }

@@ -1,3 +1,5 @@
+import 'package:assist_decisions_app/screen/admin/changeBannedStatusScreen.dart';
+import 'package:assist_decisions_app/screen/admin/loginAdminScreen.dart';
 import 'package:assist_decisions_app/screen/post/addPostScreen.dart';
 import 'package:assist_decisions_app/screen/post/editPostScreen.dart';
 import 'package:assist_decisions_app/screen/user/previewPostScreen.dart';
@@ -17,8 +19,9 @@ class MainApp extends StatelessWidget {
     return  MaterialApp(
 
       // // home: HomeScreen(username: "post",),
-      // home: EditPostScreen(username: "post",postId: "P00000000012",),
-      home: PreviewPostScreen(),
+      // home: ChangeBannedStatusScreen(reportId: "R00000000001",username: "adminmember",),
+      // home: LoginAdminScreen(),
+      home: LoginMemberScreen(),
       debugShowCheckedModeBanner: false,
     );
     
