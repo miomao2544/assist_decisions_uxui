@@ -242,7 +242,7 @@ class _ListReportScreenState extends State<ListReportScreen> {
                                       String selectedDate =
                                           postDateStopController.text;
                                       postDateStopController.text =
-                                          selectedDate; // อัปเดต TextField ด้วยวันที่ที่เลือก
+                                          selectedDate;
                                       searchReportsByDate(selectedDate);
                                     },
                                     decoration: InputDecoration(
@@ -337,7 +337,9 @@ class _ListReportScreenState extends State<ListReportScreen> {
                                                 ),
                                                 Text(
                                                   '${report.post!.title}',
+ 
                                                   style: TextStyle(
+                                                    overflow: TextOverflow.ellipsis,
                                                       color: MainColor,
                                                       fontWeight:
                                                           FontWeight.bold,
@@ -365,7 +367,7 @@ class _ListReportScreenState extends State<ListReportScreen> {
                                                         .isNotEmpty
                                                     ? report.reportComment
                                                         .toString()
-                                                    : "ไม่มีข้อมูล"),
+                                                    : "ไม่มีข้อมูล",style: TextStyle(overflow: TextOverflow.ellipsis),),
                                                 Padding(
                                                   padding:
                                                       const EdgeInsets.all(8.0),

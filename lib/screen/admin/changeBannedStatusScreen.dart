@@ -135,98 +135,107 @@ class _ChangeBannedStatusScreenState extends State<ChangeBannedStatusScreen> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                          Column(
-                                            children: [
-                                              Text(
-                                                  reports!.post!.title
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                      color: MainColor,
-                                                      fontSize: 24,
-                                                      fontWeight:
-                                                          FontWeight.bold)),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                              Image.network(
-                                                baseURL +
-                                                    '/posts/downloadimg/${reports!.post!.postImage}',
-                                                fit: BoxFit.cover,
-                                                width: 180,
-                                                height: 180,
-                                              ),
-                                            ],
+                                          Container(
+                                            width: 250,
+                                            child: Column(
+                                              children: [
+                                                Text(
+                                                    reports!.post!.title
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                      overflow: TextOverflow
+                                                                .ellipsis,
+                                                        color: MainColor,
+                                                        fontSize: 24,
+                                                        fontWeight:
+                                                            FontWeight.bold)),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Image.network(
+                                                  baseURL +
+                                                      '/posts/downloadimg/${reports!.post!.postImage}',
+                                                  fit: BoxFit.cover,
+                                                  width: 180,
+                                                  height: 180,
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                          Column(
-                                            children: [
-                                              Text(reports!.post!.description
-                                                  .toString()),
-                                              Row(
-                                                children: [
-                                                  Column(
-                                                    children: [
-                                                      Text("คะแนน",
-                                                          style: TextStyle(
-                                                              fontSize: 16,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold)),
-                                                      Text(
-                                                          reports!
-                                                              .post!.postPoint
-                                                              .toString(),
-                                                          style: TextStyle(
-                                                              fontSize: 20,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold)),
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    width: 15,
-                                                  ),
-                                                  Column(
-                                                    children: [
-                                                      Text("จำนวนต่ำสุด",
-                                                          style: TextStyle(
-                                                              fontSize: 16,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold)),
-                                                      Text(
-                                                          reports!.post!.qtyMin
-                                                              .toString(),
-                                                          style: TextStyle(
-                                                              fontSize: 20,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold)),
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    width: 15,
-                                                  ),
-                                                  Column(
-                                                    children: [
-                                                      Text("จำนวนสูงสุด",
-                                                          style: TextStyle(
-                                                              fontSize: 16,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold)),
-                                                      Text(
-                                                          reports!.post!.qtyMax
-                                                              .toString(),
-                                                          style: TextStyle(
-                                                              fontSize: 20,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold)),
-                                                    ],
-                                                  )
-                                                ],
-                                              )
-                                            ],
+                                          Container(
+                                            width: 250,
+                                            child: Column(
+                                              children: [
+                                                Text(reports!.post!.description
+                                                    .toString(),style: TextStyle(overflow: TextOverflow
+                                                              .ellipsis),),
+                                                Row(
+                                                  children: [
+                                                    Column(
+                                                      children: [
+                                                        Text("คะแนน",
+                                                            style: TextStyle(
+                                                                fontSize: 16,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)),
+                                                        Text(
+                                                            reports!
+                                                                .post!.postPoint
+                                                                .toString(),
+                                                            style: TextStyle(
+                                                                fontSize: 20,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)),
+                                                      ],
+                                                    ),
+                                                    SizedBox(
+                                                      width: 15,
+                                                    ),
+                                                    Column(
+                                                      children: [
+                                                        Text("จำนวนต่ำสุด",
+                                                            style: TextStyle(
+                                                                fontSize: 16,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)),
+                                                        Text(
+                                                            reports!.post!.qtyMin
+                                                                .toString(),
+                                                            style: TextStyle(
+                                                                fontSize: 20,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)),
+                                                      ],
+                                                    ),
+                                                    SizedBox(
+                                                      width: 15,
+                                                    ),
+                                                    Column(
+                                                      children: [
+                                                        Text("จำนวนสูงสุด",
+                                                            style: TextStyle(
+                                                                fontSize: 16,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)),
+                                                        Text(
+                                                            reports!.post!.qtyMax
+                                                                .toString(),
+                                                            style: TextStyle(
+                                                                fontSize: 20,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)),
+                                                      ],
+                                                    )
+                                                  ],
+                                                )
+                                              ],
+                                            ),
                                           )
                                         ],
                                       ),
