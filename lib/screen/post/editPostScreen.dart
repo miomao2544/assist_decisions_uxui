@@ -35,6 +35,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
   String? point;
   String? min;
   String? max;
+  String? avgPoint;
   String? selectedInterest;
   String? dateStart;
   String? dateStop;
@@ -48,9 +49,10 @@ class _EditPostScreenState extends State<EditPostScreen> {
   File? fileToDisplay;
   bool isLoadingPicture = true;
   FilePickerResult? filePickerResult;
-  List<String>? fileImageName = [];
-  List<File>? fileImagesToDisplay = [];
+  List<String?> fileImageName = [];
+  List<File?> fileImagesToDisplay = [];
   List<bool>? isLoadingImagePicture;
+
   void _pickFile() async {
     try {
       setState(() {
@@ -64,7 +66,6 @@ class _EditPostScreenState extends State<EditPostScreen> {
         fileToDisplay = File(pickedFile!.path.toString());
         image = fileName.toString();
         print("File is ${fileName}");
-        
       }
       setState(() {
         isLoadingPicture = false;
@@ -74,7 +75,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
     }
   }
 
-  void _pickFileChoices() async {
+  void _pickFileChoices(int index) async {
     try {
       setState(() {
         isLoadingPicture = true;
@@ -82,13 +83,16 @@ class _EditPostScreenState extends State<EditPostScreen> {
 
       filePickerResult = await FilePicker.platform
           .pickFiles(allowMultiple: false, type: FileType.image);
-      if (filePickerResult != null) {
-        fileImageName?.add(filePickerResult!.files.first.name);
-        pickedFile = filePickerResult!.files.first;
-        fileImagesToDisplay?.add(File(pickedFile!.path.toString()));
-      }
+
       print("File is ${fileImageName![0]}");
+
       setState(() {
+        if (filePickerResult != null) {
+          fileImageName?[index] = filePickerResult!.files.first.name;
+          pickedFile = filePickerResult!.files.first;
+          fileImagesToDisplay?[index] = File(pickedFile!.path!);
+          isLoadingImagePicture?.add(false);
+        }
         isLoadingPicture = false;
       });
     } catch (e) {
@@ -96,12 +100,36 @@ class _EditPostScreenState extends State<EditPostScreen> {
     }
   }
 
+  void _addNewChoice() {
+    setState(() {
+      choices.add(Choice(choiceName: "", choiceImage: ""));
+      fileImagesToDisplay.add(null);
+      fileImageName.add("");
+      print("-------A--------- ${choices.length}");
+      print("-------B--------- ${fileImagesToDisplay.length}");
+      print("-------C--------- ${fileImageName.length}");
+      isLoadingImagePicture?.add(true);
+    });
+  }
+
   void _removeChoice(int index) {
     setState(() {
-      choices.removeAt(index);
-      choicesList.removeAt(index);
-      fileImagesToDisplay?.removeAt(index);
-      fileImageName?.removeAt(index);
+      if (index >= 0 && index < choices.length) {
+        choices.removeAt(index);
+        for (int i = 0; i < choices.length; i++) {
+          choices[i].choiceName;
+        }
+      }
+      if (fileImagesToDisplay != null &&
+          index >= 0 &&
+          index < fileImagesToDisplay!.length) {
+        fileImagesToDisplay!.removeAt(index);
+      }
+      if (fileImageName != null &&
+          index >= 0 &&
+          index < fileImageName!.length) {
+        fileImageName!.removeAt(index);
+      }
     });
   }
 
@@ -144,22 +172,11 @@ class _EditPostScreenState extends State<EditPostScreen> {
     }
   }
 
-  String formatDate(String? inputDate) {
-    if (inputDate != null) {
-      final DateTime date = DateTime.parse(inputDate);
-      final DateFormat formatter = DateFormat('dd/MM/yyyy');
-      return formatter.format(date.toLocal());
-    }
-    return '';
-  }
-
-  String formatDateEdit(String? inputDate) {
-    if (inputDate != null) {
-      final DateTime date = DateTime.parse(inputDate);
-      final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm:ss');
-      return formatter.format(date.toLocal());
-    }
-    return '';
+  Future<String> formattedDate(String selectedDate) async {
+    DateTime parsedDate = DateTime.parse(selectedDate);
+    String formattedDate =
+        "${parsedDate.toLocal().day.toString().padLeft(2, '0')}/${parsedDate.toLocal().month.toString().padLeft(2, '0')}/${parsedDate.toLocal().year.toString().padLeft(4, '0')}";
+    return formattedDate;
   }
 
   List<Choice> choices = [];
@@ -167,50 +184,63 @@ class _EditPostScreenState extends State<EditPostScreen> {
   InterestController interestController = InterestController();
   bool? isDataLoaded = false;
   int? pointmember;
-  Post? posts;
-  List<Choice> choicesList = [];
 
-  Future loadData() async {
+  Future loadInterests() async {
     Member? member;
-    Post? post;
-    List<Choice>? choice;
     List<Interest> interestList =
         await interestController.listInterestsByUser(widget.username);
     member = await memberController.getMemberById(widget.username);
-    post = await postController.getPostById(widget.postId);
-
-    choice = await choiceController.listAllChoicesById(widget.postId);
-
-    choicesList = choice!;
-
-    print(
-        "object ----------------${choicesList[1].choiceId.toString()}-------------");
     setState(() {
       interests = interestList;
       pointmember = member!.point;
+    });
+  }
+
+  Post? posts;
+  Future<void> setInitialValues() async {
+    Post? post = await postController.getPostById(widget.postId);
+    List<Choice> choice =
+        await choiceController.listAllChoicesById(widget.postId);
+    for (int i = 0; i < choice.length; i++) {
+      fileImagesToDisplay.add(null);
+      fileImageName.add("");
+    }
+    setState(() {
       posts = post;
-      postDateStartController.text = formatDate(post!.dateStart.toString());
-      postDateStopController.text = formatDate(post.dateStop.toString());
-      dateStart = post.dateStart.toString();
-      dateStop = post.dateStop.toString();
-      selectedInterest = post.interest!.interestId;
-      title = post.title.toString();
-      description = post.description.toString();
-      point = (posts!.postPoint!.toInt()).toString();
-      min = (posts!.qtyMin!.toInt()).toString();
-      max = (posts!.qtyMax!.toInt()).toString();
+      choices = choice;
+      print("-------A--------- ${choices.length}");
+      print("-------B--------- ${fileImagesToDisplay!.length}");
+      print("-------C--------- ${fileImageName!.length}");
+      selectedInterest = posts!.interest!.interestId;
+      postDateStartController.text = formatDate(posts!.dateStart.toString());
+      postDateStopController.text = formatDate(posts!.dateStop.toString());
       isDataLoaded = true;
     });
   }
 
+  String formatDate(String? inputDate) {
+  if (inputDate != null) {
+    final DateTime date = DateTime.parse(inputDate);
+    final DateFormat formatter = DateFormat('dd/MM/yyyy');
+    return formatter.format(date.toLocal());
+  }
+  return '';
+}
+
+  String formatDateNew(String? inputDate) {
+  if (inputDate != null) {
+    final DateTime date = DateTime.parse(inputDate);
+    final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm:ss');
+    return formatter.format(date.toLocal());
+  }
+  return '';
+}
+
   @override
   void initState() {
     super.initState();
-
-    loadData();
-    for (int i = 0; i < 2; i++) {
-      choices.add(Choice(choiceName: ''));
-    }
+    loadInterests();
+    setInitialValues();
   }
 
   @override
@@ -235,485 +265,491 @@ class _EditPostScreenState extends State<EditPostScreen> {
             icon: Icon(Icons.arrow_back),
             color: Colors.white,
           )),
-      body: isDataLoaded == true
-          ? SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Form(
-                  key: fromKey,
-                  child: Center(
-                    child: Column(
-                      children: [
-                      
-                        SizedBox(height: 16),
-                        TextFormField(
-                          initialValue: posts!.title.toString(),
-                          decoration: InputDecoration(
-                            labelText: 'หัวข้อ',
-                            border: OutlineInputBorder(),
-                          ),
-                          maxLines: null,
-                          onChanged: (value) {
-                            setState(() {
-                              title = value;
-                            });
-                          },
-                          validator: validateTitle,
-                        ),
-                        SizedBox(height: 16),
-                        Center(
-                          child: isLoadingPicture
-                              ?                           Image.network(
-                            baseURL + '/posts/downloadimg/${posts?.postImage}',
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Form(
+            key: fromKey,
+            child: Center(
+              child: Column(
+                children: [
+                  SizedBox(height: 16),
+                  TextFormField(
+                    initialValue: posts!.title.toString(),
+                    decoration: InputDecoration(
+                      labelText: 'หัวข้อ',
+                      border: OutlineInputBorder(),
+                    ),
+                    maxLines: null,
+                    onChanged: (value) {
+                      setState(() {
+                        title = value;
+                      });
+                    },
+                    validator: validateTitle,
+                  ),
+                  SizedBox(height: 16),
+                  Center(
+                    child: isLoadingPicture
+                        ? Image.network(
+                            baseURL + '/posts/downloadimg/${posts!.postImage}',
                             fit: BoxFit.cover,
                             width: 250,
                             height: 250,
                           )
-                              : fileToDisplay != null
-                                  ? Image.file(
-                                      fileToDisplay!,
-                                      height: 200,
-                                    )
-                                  : Container(),
+                        : fileToDisplay != null
+                            ? Image.file(
+                                fileToDisplay!,
+                                height: 200,
+                              )
+                            : Container(),
+                  ),
+                  SizedBox(height: 16),
+                  Align(
+                    alignment: Alignment.center,
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        _pickFile();
+                      },
+                      icon: Icon(Icons.image),
+                      label: Text("เลือกรูปภาพ"),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                          isLoadingPicture ? MainColor : SecondColor,
                         ),
-                        SizedBox(height: 16),
-                        Align(
-                          alignment: Alignment.center,
-                          child: ElevatedButton.icon(
-                            onPressed: () {
-                              _pickFile();
-                            },
-                            icon: Icon(Icons.image),
-                            label: Text("เลือกรูปภาพ"),
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                isLoadingPicture
-                                    ? MainColor
-                                    : SecondColor,
-                              ),
-                            ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  TextFormField(
+                    initialValue: posts!.description,
+                    decoration: InputDecoration(
+                      labelText: 'รายละเอียด',
+                      border: OutlineInputBorder(),
+                    ),
+                    maxLines: null,
+                    onChanged: (value) {
+                      setState(() {
+                        description = value;
+                      });
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "คะแนน",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
                           ),
-                        ),
-                        SizedBox(height: 16),
-                        TextFormField(
-                          initialValue: posts!.description,
-                          decoration: InputDecoration(
-                            labelText: 'รายละเอียด',
-                            border: OutlineInputBorder(),
-                          ),
-                          maxLines: null,
-                          onChanged: (value) {
-                            setState(() {
-                              description = value;
-                            });
-                          },
-                        ),
-                        SizedBox(height: 16),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "คะแนน",
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Container(
-                                  width: 120.0,
-                                  child: TextFormField(
-                                    initialValue:
-                                        (posts!.postPoint!.toInt()).toString(),
-                                    keyboardType: TextInputType.number,
-                                    inputFormatters: <TextInputFormatter>[
-                                      FilteringTextInputFormatter.digitsOnly
-                                    ],
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(),
-                                    ),
-                                    onChanged: (value) {
-                                      setState(() {
-                                        point = value;
-                                      });
-                                    },
-                                    validator: (value) =>
-                                        validatePoint(value, pointmember!),
-                                  ),
-                                ),
+                          Container(
+                            width: 120.0,
+                            child: TextFormField(
+                              enabled: false,
+                              initialValue:
+                                  (posts!.postPoint)?.toInt().toString(),
+                              keyboardType: TextInputType.number,
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.digitsOnly
                               ],
-                            ),
-                            SizedBox(width: 16),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "ต่ำสุด",
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Container(
-                                  width: 120.0,
-                                  child: TextFormField(
-                                    initialValue:
-                                        (posts!.qtyMin!.toInt()).toString(),
-                                    keyboardType: TextInputType.number,
-                                    inputFormatters: <TextInputFormatter>[
-                                      FilteringTextInputFormatter.digitsOnly
-                                    ],
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(),
-                                    ),
-                                    onChanged: (value) {
-                                      setState(() {
-                                        min = value;
-                                      });
-                                    },
-                                    validator: validateMin,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(width: 16),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "สูงสุด",
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Container(
-                                  width: 120.0,
-                                  child: TextFormField(
-                                    initialValue:
-                                        (posts!.qtyMax!.toInt()).toString(),
-                                    keyboardType: TextInputType.number,
-                                    inputFormatters: <TextInputFormatter>[
-                                      FilteringTextInputFormatter.digitsOnly
-                                    ],
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(),
-                                    ),
-                                    onChanged: (value) {
-                                      setState(() {
-                                        max = value;
-                                      });
-                                    },
-                                    validator: validateMax,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 16),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Container(
-                            width: 300,
-                            child: DropdownButtonFormField<String>(
                               decoration: InputDecoration(
-                                labelText: 'สิ่งที่สนใจ',
                                 border: OutlineInputBorder(),
                               ),
-                              value: selectedInterest,
-                              onChanged: (newValue) {
+                              onChanged: (value) {
                                 setState(() {
-                                  selectedInterest = newValue;
+                                  point = value;
                                 });
                               },
-                              validator: (value) {
-                                if (value != null && value.isNotEmpty) {
-                                  return null;
-                                } else {
-                                  return "กรุณาเลือกสิ่งที่สนใจ";
-                                }
-                              },
-                              items: interests.map((interest) {
-                                return DropdownMenuItem<String>(
-                                  value: interest.interestId,
-                                  child: Text(interest.interestName ?? ''),
-                                );
-                              }).toList(),
+                              validator: (value) =>
+                                  validatePoint(value, pointmember!),
                             ),
                           ),
-                        ),
-                        SizedBox(height: 16),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              width: 160,
-                              child: TextFormField(
-                                controller: postDateStartController,
-                                readOnly: true,
-                                onTap: () => _selectDateStart(context),
-                                decoration: InputDecoration(
-                                  labelText: "วันที่เริ่ม",
-                                  counterText: "",
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  prefixIcon: Icon(Icons.calendar_today),
-                                  prefixIconColor: MainColor,
-                                ),
-                                style: TextStyle(
-                                  fontFamily: 'Itim',
-                                  fontSize: 18,
-                                ),
+                        ],
+                      ),
+                      SizedBox(width: 16),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "ต่ำสุด",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          Container(
+                            width: 120.0,
+                            child: TextFormField(
+                              enabled: false,
+                              initialValue: (posts!.qtyMin)?.toInt().toString(),
+                              keyboardType: TextInputType.number,
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
                               ),
+                              onChanged: (value) {
+                                setState(() {
+                                  min = value;
+                                });
+                              },
+                              validator: validateMin,
                             ),
-                            SizedBox(width: 16),
-                            SizedBox(
-                              width: 160,
-                              child: TextFormField(
-                                controller: postDateStopController,
-                                readOnly: true,
-                                onTap: () => _selectDateStop(context),
-                                decoration: InputDecoration(
-                                  labelText: "วันที่",
-                                  counterText: "",
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  prefixIcon: Icon(Icons.calendar_today),
-                                  prefixIconColor: MainColor,
-                                ),
-                                style: TextStyle(
-                                  fontFamily: 'Itim',
-                                  fontSize: 18,
-                                ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(width: 16),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "สูงสุด",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          Container(
+                            width: 120.0,
+                            child: TextFormField(
+                            
+                              initialValue: (posts!.qtyMax)?.toInt().toString(),
+                              keyboardType: TextInputType.number,
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
                               ),
+                              onChanged: (value) {
+                                setState(() {
+                                  max = value;
+                                });
+                              },
+                              validator: validateMax,
                             ),
-                          ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 16),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Container(
+                      width: 300,
+                      child: DropdownButtonFormField<String>(
+                        decoration: InputDecoration(
+                          labelText: 'สิ่งที่สนใจ',
+                          border: OutlineInputBorder(),
                         ),
-                        SizedBox(height: 16),
-                        for (int i = 0; i < choicesList.length; i++) ...[
-                          SizedBox(height: 20),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 10.0),
-                            child: Row(
-                              children: [
-                                Center(
-                                  child: fileImagesToDisplay != null &&
-                                          fileImagesToDisplay!.isNotEmpty &&
-                                          i < fileImagesToDisplay!.length
+                        value: selectedInterest,
+                        onChanged: (newValue) {
+                          setState(() {
+                            selectedInterest = newValue;
+                          });
+                        },
+                        validator: (value) {
+                          if (value != null && value.isNotEmpty) {
+                            return null;
+                          } else {
+                            return "กรุณาเลือกสิ่งที่สนใจ";
+                          }
+                        },
+                        items: interests.map((interest) {
+                          return DropdownMenuItem<String>(
+                            value: interest.interestId,
+                            child: Text(interest.interestName ?? ''),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 160,
+                        child: TextFormField(
+                          controller: postDateStartController,
+                          enabled: false,
+                          readOnly: true,
+                          onTap: () => _selectDateStart(context),
+                          decoration: InputDecoration(
+                            labelText: "วันที่เริ่ม",
+                            counterText: "",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            prefixIcon: Icon(Icons.calendar_today),
+                            prefixIconColor: Colors.black,
+                          ),
+                          style: TextStyle(
+                            fontFamily: 'Itim',
+                            fontSize: 18,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 16),
+                      SizedBox(
+                        width: 160,
+                        child: TextFormField(
+                          controller: postDateStopController,
+                          readOnly: true,
+                          onTap: () => _selectDateStop(context),
+                          decoration: InputDecoration(
+                            labelText: "วันที่สิ้นสุด",
+                            counterText: "",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            prefixIcon: Icon(Icons.calendar_today),
+                            prefixIconColor: Colors.black,
+                          ),
+                          style: TextStyle(
+                            fontFamily: 'Itim',
+                            fontSize: 18,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 16),
+                  Container(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: choices.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              choices[index].choiceImage != "" &&
+                                      fileImagesToDisplay[index] == null
+                                  ? GestureDetector(
+                                      onTap: () {
+                                        _pickFileChoices(index);
+                                      },
+                                      child: fileImagesToDisplay[index] == null
+                                          ? Image.network(
+                                              baseURL +
+                                                  '/choices/downloadimg/${choices[index].choiceImage}',
+                                              fit: BoxFit.cover,
+                                              width: 50,
+                                              height: 50,
+                                            )
+                                          : Image.file(
+                                              fileImagesToDisplay[index] ??
+                                                  File(""),
+                                              width: 50,
+                                              height: 50,
+                                            ),
+                                    )
+                                  : fileImagesToDisplay[index] != null
                                       ? GestureDetector(
-                                          child: Image.file(
-                                            fileImagesToDisplay![i],
-                                            width: 100,
-                                            height: 100,
-                                          ),
+                                          child: fileImagesToDisplay[index] !=
+                                                  null
+                                              ? Image.file(
+                                                  fileImagesToDisplay[index] ??
+                                                      File(""),
+                                                  width: 50,
+                                                  height: 50,
+                                                )
+                                              : Image.asset(
+                                                  'assets/images/logo.png'),
                                           onTap: () {
-                                            _pickFileChoices();
+                                            _pickFileChoices(index);
                                           },
                                         )
                                       : GestureDetector(
                                           onTap: () {
-                                            _pickFileChoices();
+                                            _pickFileChoices(index);
                                           },
-                                          child:choicesList[i].choiceImage !=""? Image.network(
-                                            baseURL +
-                                                '/choices/downloadimg/${choicesList[i].choiceImage}',
-                                            fit: BoxFit.cover,
-                                            width: 50,
-                                            height: 50,
-                                          ):Icon(Icons.image,
-                                        size: 30, color: MainColor),
+                                          child: Icon(Icons.image,
+                                              size: 30, color: MainColor),
                                         ),
-                                ),
-                                Expanded(
-                                  child: TextFormField(
-                                    initialValue: choicesList[i].choiceName,
-                                    decoration: InputDecoration(
-                                      labelText: 'ตัวเลือกที่ ${i + 1}',
-                                      border: OutlineInputBorder(),
-                                    ),
-                                    onChanged: (value) {
-                                      setState(() {
-                                        choices[i].choiceName = value;
-                                      });
-                                    },
-                                    validator: (value) {
-                                      if (value!.isNotEmpty) {
-                                        return null;
-                                      } else {
-                                        return "กรุณากรอกตัวเลือก";
-                                      }
-                                    },
+                              SizedBox(width: 10),
+                              Expanded(
+                                child: TextFormField(
+                                  initialValue: choices[index].choiceName,
+                                  decoration: InputDecoration(
+                                    labelText: 'ตัวเลือกที่ ${index + 1}',
+                                    border: OutlineInputBorder(),
                                   ),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      choices[index].choiceName = value;
+                                    });
+                                  },
+                                  validator: (value) {
+                                    if (value!.isNotEmpty) {
+                                      return null;
+                                    } else {
+                                      return "กรุณากรอกตัวเลือก";
+                                    }
+                                  },
                                 ),
-                                SizedBox(width: 10),
-                                InkWell(
-                                  onTap: () => _removeChoice(i),
-                                  child: Icon(Icons.cancel,
-                                      size: 30, color: Colors.red),
-                                ),
-                              ],
-                            ),
+                              ),
+                              SizedBox(width: 10),
+                              choices[index].choiceId == null
+                                  ? InkWell(
+                                      onTap: () => _removeChoice(index),
+                                      child: Icon(Icons.cancel,
+                                          size: 30, color: Colors.red),
+                                    )
+                                  : SizedBox(
+                                      width: 30,
+                                    )
+                            ],
                           ),
-                        ],
-                        SizedBox(height: 20),
-                        IconButton(
-                          icon: Icon(
-                            Icons.add_circle,
-                            color: Colors.green,
-                            size: 30,
-                          ), // ไอคอนและสี
-                          onPressed: () {
-                            setState(() {
-                              choices.add(Choice(choiceName: ''));
-                            });
-                          },
-                        ),
-                        ElevatedButton(
-                            child: Text("ยืนยัน"),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: MainColor,
-                              elevation: 0,
-                            ),
-                            onPressed: () async {
-                              if (fileToDisplay != null) {
-                                var uploadedFile =
-                                    await postController.upload(fileToDisplay!);
-                                if (uploadedFile != null) {
-                                  image = uploadedFile;
-                                }
-                              }
-                              for (int i = 0;
-                                  i < fileImagesToDisplay!.length;
-                                  i++) {
-                                if (fileImagesToDisplay?[i] != null) {
-                                  var uploadedFile = await choiceController
-                                      .upload(fileImagesToDisplay![i]);
-
-                                  if (uploadedFile != null) {
-                                    images!.add(uploadedFile);
-                                  }
-                                  print(
-                                      "----------${images![i].toString()}-----------");
-                                }
-                              }
-
-                              if (fromKey.currentState!.validate()) {
-                                if (postDateStartController.text.isEmpty) {
-                                  // แจ้งเตือนผู้ใช้ให้เลือกวันที่
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        title: Text("แจ้งเตือน"),
-                                        content: Text("โปรดเลือกวันที่เริ่ม"),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: Text("ปิด"),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                } else if (postDateStopController
-                                    .text.isEmpty) {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        title: Text("แจ้งเตือน"),
-                                        content: Text("โปรดเลือกวันที่สิ้นสุด"),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: Text("ปิด"),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                } else if (postDateStopController.text
-                                        .compareTo(
-                                            postDateStartController.text) <
-                                    1) {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        title: Text("แจ้งเตือน"),
-                                        content: Text(
-                                            "โปรดเลือกวันที่สิ้นสุดให้มากกว่าวันที่เริ่ม"),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: Text("ปิด"),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                } else {
-                                  int pointresult = int.parse(point!);
-                                  await memberController.doUpdatePoint(
-                                      widget.username,
-                                      (pointmember! - pointresult).toString());
-                                  var response =
-                                      await postController.doEditPost(
-                                          posts!.postId.toString(),
-                                          title ?? posts!.title.toString(),
-                                          image ?? posts!.postImage.toString(),
-                                          description ??
-                                              posts!.description.toString(),
-                                          point ?? posts!.postPoint.toString(),
-                                          formatDateEdit(dateStart ??
-                                              posts!.dateStart.toString()),
-                                          formatDateEdit(dateStop ??
-                                              posts!.dateStop.toString()),
-                                          posts!.result.toString(),
-                                          max ?? posts!.qtyMax.toString(),
-                                          min ?? posts!.qtyMin.toString(),
-                                          widget.username.toString(),
-                                          selectedInterest ??
-                                              posts!.interest!.interestId
-                                                  .toString());
-                                  for (int i = 0; i < choicesList.length; i++) {
-                                    Choice choice = choicesList[i];
-                                    await choiceController.editChoice(
-                                      choicesList[i].choiceId.toString(),
-                                      choice.choiceName ??
-                                          choicesList[i].choiceName.toString(),
-                                      images != null && i < images!.length
-                                          ? images![i]
-                                          : choicesList[i]
-                                              .choiceImage
-                                              .toString(),
-                                      response["postId"],
-                                    );
-                                  }
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return HomeScreen(
-                                        username: widget.username);
-                                  }));
-                                }
-                              }
-                            }),
-                      ],
+                        );
+                      },
                     ),
                   ),
-                ),
+                  SizedBox(height: 20),
+                  IconButton(
+                    icon: Icon(
+                      Icons.add_circle,
+                      color: Colors.green,
+                      size: 30,
+                    ), // ไอคอนและสี
+                    onPressed: () {
+                      _addNewChoice();
+                    },
+                  ),
+                  ElevatedButton(
+                      child: Text("ยืนยัน"),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: MainColor,
+                        elevation: 0,
+                      ),
+                      onPressed: () async {
+                        if (fileToDisplay != null) {
+                          var uploadedFile =
+                              await postController.upload(fileToDisplay!);
+                          if (uploadedFile != null) {
+                            image = uploadedFile;
+                          }
+                        }
+                        if (fromKey.currentState!.validate()) {
+                          if (postDateStartController.text.isEmpty) {
+                            // แจ้งเตือนผู้ใช้ให้เลือกวันที่
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Text("แจ้งเตือน"),
+                                  content: Text("โปรดเลือกวันที่เริ่ม"),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text("ปิด"),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          } else if (postDateStopController.text.isEmpty) {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Text("แจ้งเตือน"),
+                                  content: Text("โปรดเลือกวันที่สิ้นสุด"),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text("ปิด"),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          } else if (postDateStopController.text
+                                  .compareTo(postDateStartController.text) <
+                              1) {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Text("แจ้งเตือน"),
+                                  content: Text(
+                                      "โปรดเลือกวันที่สิ้นสุดให้มากกว่าวันที่เริ่ม"),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text("ปิด"),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          } else {
+                          print("------object pass------");
+                          print("${title??posts!.title}");
+                          print("${image ??posts!.postImage}");
+                          print("${description??posts!.description}");
+                          print("${point??posts!.postPoint}");
+                          print("${min??posts!.qtyMin}");
+                          print("${max??posts!.qtyMax}");
+                          print("${selectedInterest}");
+                          print("${dateStart??formatDateNew(posts!.dateStart.toString())}");
+                          print("${dateStop??formatDateNew(posts!.dateStop.toString())}");
+                           postController.doEditPost(
+                                posts!.postId.toString(),
+                                title??posts!.title.toString(),
+                                image ??posts!.postImage.toString(),
+                                description??posts!.description.toString(),
+                                point??posts!.postPoint.toString(),
+                                dateStart??formatDateNew(posts!.dateStart.toString()),
+                                dateStop??formatDateNew(posts!.dateStop.toString()),
+                               min??posts!.qtyMin.toString(),
+                                max??posts!.qtyMax.toString(),
+                                widget.username.toString(),
+                                selectedInterest ??posts!.interest!.interestId.toString());
+                            for (int i = 0; i < choices.length; i++) {
+                              if (fileImagesToDisplay[i] != null) {
+                                var uploadedFile = await choiceController
+                                    .upload(fileImagesToDisplay[i] ?? File(""));
+                                if (uploadedFile != null) {
+                                  choices[i].choiceImage = uploadedFile;
+                                }
+                              }
+                              print(
+                                  "----------${choices[i].choiceImage}-----------");
+                              print("${choices[i].choiceId}");
+                              print("${choices[i].choiceName}");
+                              print("${choices[i].choiceImage}");
+
+                              if (fromKey.currentState!.validate()) {
+                                await choiceController.editChoice(
+                                    choices[i].choiceId ?? "",
+                                    choices[i].choiceName ?? "",
+                                    choices[i].choiceImage ?? "",
+                                    posts!.postId?? "");
+                              }
+                            }
+                            Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return HomeScreen(username: widget.username);
+                              }));
+                          }
+                        }
+                      }),
+                ],
               ),
-            )
-          : CircularProgressIndicator(),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

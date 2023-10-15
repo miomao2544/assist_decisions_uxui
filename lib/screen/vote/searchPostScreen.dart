@@ -92,106 +92,99 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
     });
   }
 
-  void _showSearchDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Scaffold(
-          appBar: AppBar(
-            backgroundColor: MainColor,
-            title: Text("ค้นหาโพสต์"),
-            leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-          ),
-          body: Container(
-            child: SingleChildScrollView(
+  @override
+  void initState() {
+    super.initState();
+    point = numbers[0];
+    fetchPost();
+    loadInterests();
+    isSelected = List<bool>.filled(interests.length, false);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: MainColor2,
+          bottom: PreferredSize(
+            preferredSize: Size.fromHeight(50.0), // ปรับความสูงตามที่คุณต้องการ
+            child: Padding(
+              padding: EdgeInsets.all(8.0),
               child: Column(
-                mainAxisSize: MainAxisSize.min,
                 children: [
-                  SizedBox(height: 16.0),
-                  Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 300,
-                          height: 50,
+                  Row(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius:
+                              BorderRadius.circular(12.0), // กำหนดมุมโค้ง
+                        ),
+                        child: DropdownButton<String>(
+                          value: point,
+                          onChanged: (String? newValue) {
+                            updatePoint(newValue!);
+                          },
+                          items: numbers
+                              .map<DropdownMenuItem<String>>((String point) {
+                            return DropdownMenuItem<String>(
+                              value: point,
+                              child: Text(point),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 50,
+                        width: 10,
+                      ),
+                      Expanded(
+                        child: Container(
+                          width: 200.0,
+                          height: 50.0,
                           child: TextField(
                             onChanged: (value) {
-                              search =
-                                  value; // อัปเดตค่า search เมื่อผู้ใช้พิมพ์
+                              search = value;
                             },
                             decoration: InputDecoration(
-                              labelText: "ค้นหา",
                               hintText: "ค้นหาโพสต์...",
-                              border: OutlineInputBorder(),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
+                              filled: true,
+                              fillColor: Colors.white,
                             ),
                           ),
                         ),
-                        SizedBox(width: 10.0),
-                        SizedBox(
-                          height: 50.0,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                              fetchPost();
-                            },
-                            style: ElevatedButton.styleFrom(
-                              primary: MainColor,
-                            ),
-                            child: Icon(
-                              Icons.search,
-                              color: Colors.white,
-                            ),
+                      ),
+                      SizedBox(
+                        height: 50,
+                        width: 10,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          fetchPost();
+                        },
+                        child: Container(
+                          width: 48.0,
+                          height: 48.0,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.rectangle,
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8.0),
                           ),
-                        )
-                      ],
-                    ),
+                          child: Icon(
+                            Icons.search,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 16.0),
-                  Text('วัน เดือน ปี'),
                   SizedBox(
-                    width: 160,
-                    height: 50,
-                    child: TextFormField(
-                      controller: postDateStopController,
-                      readOnly: true,
-                      onTap: () => _selectDateStop(context),
-                      decoration: InputDecoration(
-                        counterText: "",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        prefixIcon: Icon(Icons.calendar_today),
-                        prefixIconColor: Colors.black,
-                      ),
-                      style: TextStyle(
-                        fontFamily: 'Itim',
-                        fontSize: 18,
-                      ),
-                    ),
+                    height: 5,
                   ),
-                  SizedBox(height: 16.0),
-                  Text('คะแนน'),
-                  DropdownButton<String>(
-                    value: point, // ค่าที่ถูกเลือก
-                    onChanged: (String? newValue) {
-                      updatePoint(newValue!);
-                    },
-                    items:
-                        numbers.map<DropdownMenuItem<String>>((String point) {
-                      return DropdownMenuItem<String>(
-                        value: point,
-                        child: Text(point),
-                      );
-                    }).toList(),
-                  ),
-                  SizedBox(height: 16.0),
-                  Text('ความสนใจ'),
                   Container(
                     height: 30.0,
                     child: ListView.builder(
@@ -233,99 +226,6 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
               ),
             ),
           ),
-        );
-      },
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    point = numbers[0];
-    fetchPost();
-    loadInterests();
-    isSelected = List<bool>.filled(interests.length, false);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: MainColor2,
-          bottom: PreferredSize(
-            preferredSize: Size.fromHeight(25.0), // ปรับความสูงตามที่คุณต้องการ
-            child: Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  InkWell(
-                    onTap: () {
-                      _showSearchDialog(context);
-                    },
-                    child: Container(
-                      width: 48.0,
-                      height: 48.0,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      child: Icon(
-                        Icons.settings,
-                        color: MainColor,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 50,
-                    width: 10,
-                  ),
-                  Expanded(
-                    child: Container(
-                      width: 200.0,
-                      height: 50.0,
-                      child: TextField(
-                        onChanged: (value) {
-                          search = value;
-                        },
-                        decoration: InputDecoration(
-                          hintText: "ค้นหาโพสต์...",
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          filled: true,
-                          fillColor: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 50,
-                    width: 10,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      fetchPost();
-                    },
-                    child: Container(
-                      width: 48.0,
-                      height: 48.0,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      child: Icon(
-                        Icons.search,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
         ),
         body: isDataLoaded == true
             ? posts != null && posts!.isNotEmpty
@@ -344,7 +244,6 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
                             // ตรงนี้คือส่วนที่แสดงข้อมูลของโพสต์
                             leading: Container(
                               width: 100,
-             
                               child: Column(
                                 children: [
                                   Container(

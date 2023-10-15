@@ -1,5 +1,6 @@
 
 import 'package:assist_decisions_app/screen/admin/loginAdminScreen.dart';
+import 'package:assist_decisions_app/screen/post/editPostScreen.dart';
 import 'package:assist_decisions_app/screen/user/previewPostScreen.dart';
 import 'package:assist_decisions_app/screen/vote/homeScreen.dart';
 import 'package:assist_decisions_app/screen/vote/loginMemberScreen.dart';
@@ -17,8 +18,8 @@ class MainApp extends StatelessWidget {
     return  MaterialApp(
       // home: PreviewPostScreen(),
       // home: LoginAdminScreen(),
-      // home: LoginMemberScreen(),
-      home: HomeScreen(username: 'maihom2003'),
+      // home: HomeScreen(username: 'postmember'),
+      home: EditPostScreen(username: 'postmember',postId: 'P00000000005',),
       debugShowCheckedModeBanner: false,
     );
     

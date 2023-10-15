@@ -31,7 +31,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
   String? point;
   String? min;
   String? max;
-  String? avgPoint = "0.0";
+  String? avgPoint;
   String? selectedInterest;
   String? dateStart;
   String? dateStop;
@@ -49,6 +49,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
   List<String>? fileImageName = [];
   List<File>? fileImagesToDisplay = [];
   List<bool>? isLoadingImagePicture;
+
   void _pickFile() async {
     try {
       setState(() {
@@ -93,10 +94,19 @@ class _AddPostScreenState extends State<AddPostScreen> {
     }
   }
 
+  void _addNewChoice() {
+    setState(() {
+      choices.add(Choice(choiceName: '', choiceImage: ''));
+    });
+  }
+
   void _removeChoice(int index) {
     setState(() {
       if (index >= 0 && index < choices.length) {
         choices.removeAt(index);
+        for (int i = 0; i < choices.length; i++) {
+          choices[i].choiceName;
+        }
       }
       if (fileImagesToDisplay != null &&
           index >= 0 &&
@@ -173,7 +183,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
     loadInterests();
     for (int i = 0; i < 2; i++) {
-      choices.add(Choice(choiceName: ''));
+      choices.add(Choice(choiceName: '', choiceImage: ''));
     }
   }
 
@@ -452,8 +462,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                 ? GestureDetector(
                                     child: Image.file(
                                       fileImagesToDisplay![i],
-                                      width: 100,
-                                      height: 100,
+                                      width: 50,
+                                      height: 50,
                                     ),
                                     onTap: () {
                                       _pickFileChoices();
@@ -467,8 +477,12 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                         size: 30, color: MainColor),
                                   ),
                           ),
+                          SizedBox(
+                            width: 10,
+                          ),
                           Expanded(
                             child: TextFormField(
+                              initialValue: choices[i].choiceName,
                               decoration: InputDecoration(
                                 labelText: 'ตัวเลือกที่ ${i + 1}',
                                 border: OutlineInputBorder(),
@@ -505,9 +519,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       size: 30,
                     ), // ไอคอนและสี
                     onPressed: () {
-                      setState(() {
-                        choiceDtoList?.add(ChoiceDto(choiceName: ''));
-                      });
+                      _addNewChoice();
                     },
                   ),
                   ElevatedButton(
@@ -531,10 +543,10 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                 .upload(fileImagesToDisplay![i]);
 
                             if (uploadedFile != null) {
-                              images!.add(uploadedFile);
+                              choices[i].choiceImage = uploadedFile;
                             }
                             print(
-                                "----------${images![i].toString()}-----------");
+                                "----------${choices[i].choiceImage}-----------");
                           }
                         }
 
@@ -613,7 +625,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                 max ?? "",
                                 widget.username.toString(),
                                 selectedInterest ?? '');
-
                             for (int i = 0; i < choices.length; i++) {
                               Choice choice = choices[i];
                               await choiceController.addChoice(
@@ -639,6 +650,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
                           print("${selectedInterest}");
                           print("${dateStart}");
                           print("${dateStop}");
+                          print("${choices[0].choiceName}");
+                          print("${choices[0].choiceImage}");
                         }
                       }),
                 ],

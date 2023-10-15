@@ -73,7 +73,6 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
   Future calculateScorepoint() async {
     if ((post!.qtyMax == counts ||
             (post!.dateStop != null &&
-
                 DateTime.parse(post!.dateStop!).isBefore(DateTime.now()))) &&
         post!.result == "r") {
       double score = double.parse(post!.postPoint.toString());
@@ -268,10 +267,16 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
                                                             widget.username,
                                                             widget.postId);
                                                     Navigator.of(context).pop();
-                                                     Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return ViewPostScreen(username: widget.username,postId: post!.postId.toString(),);
-                              }));
+                                                    Navigator.push(context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) {
+                                                      return ViewPostScreen(
+                                                        username:
+                                                            widget.username,
+                                                        postId: post!.postId
+                                                            .toString(),
+                                                      );
+                                                    }));
                                                   },
                                                   child: Text("ยืนยัน"),
                                                 ),
