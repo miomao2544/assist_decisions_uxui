@@ -3,9 +3,10 @@ import 'package:assist_decisions_app/model/report.dart';
 import 'package:http/http.dart' as http;
 import '../constant/constant_value.dart';
 
-class ReportController{
+class ReportController {
   Report? report;
-  Future doReportPost(String reportComment,String postId,String username) async {
+  Future doReportPost(
+      String reportComment, String postId, String username) async {
     Map data = {
       "reportComment": reportComment,
       "postId": postId,
@@ -30,11 +31,12 @@ class ReportController{
     final utf8body = utf8.decode(response.bodyBytes);
     List<dynamic> jsonList = json.decode(utf8body);
     list = jsonList.map((e) => Report.fromJsonToReport(e)).toList();
-    print("--------------------------${list[0].reportId}----------------------------------");
+    print(
+        "--------------------------${list[0].reportId}----------------------------------");
     return list;
   }
 
-    Future doViewReportDetail(String reportId) async {
+  Future doViewReportDetail(String reportId) async {
     try {
       var url = Uri.parse(baseURL + '/reports/getReportById/$reportId');
       http.Response response =
@@ -50,4 +52,28 @@ class ReportController{
       return null;
     }
   }
+
+  Future getReportCommentByPost(String postId) async {
+    var url = Uri.parse(baseURL + '/reports/comments/$postId');
+    http.Response response = await http.post(url, headers: headers, body: null);
+    List<String>? list;
+    final utf8body = utf8.decode(response.bodyBytes);
+    List<dynamic> jsonList = json.decode(utf8body);
+    list = jsonList.map((item) => item.toString()).toList();
+    return list;
+  }
+
+
+Future<String> getReportCountByPost(String postId) async {
+  var url = Uri.parse(baseURL + '/reports/count/$postId');
+http.Response response = await http.post(
+      url,
+      headers: headers,
+      body: null
+    );  
+    String counts = "1";
+    final utf8body = utf8.decode(response.bodyBytes); 
+    counts = utf8body; 
+    return counts;
+}
 }

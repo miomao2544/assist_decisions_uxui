@@ -73,6 +73,14 @@ class _ListReportScreenState extends State<ListReportScreen> {
     }
   }
 
+  Future<List<Text>> getReportComments(Report report) async {
+    List<String> reportComments = await reportController
+        .getReportCommentByPost(report.post!.postId.toString());
+    List<Text> textComments =
+        reportComments.map((comment) => Text(comment)).toList();
+    return textComments;
+  }
+
   void searchReports(String searchKeyword) {
     if (searchKeyword.isEmpty && searchKeyword == "") {
       fetchReport();
@@ -90,7 +98,7 @@ class _ListReportScreenState extends State<ListReportScreen> {
       });
     }
   }
-
+  List<String> counts = [];
   Future fetchReport() async {
     List<Report> report;
     report = await reportController.getListReport();
@@ -100,6 +108,11 @@ class _ListReportScreenState extends State<ListReportScreen> {
         "object-----------------${report[0].reportComment.toString()}---------------------");
 
     print("-----------------${members!.nickname}---------------------");
+    for(int i = 0 ; i < report.length;i++){
+      String reportCounts = await reportController.getReportCountByPost(report[i].post!.postId.toString());
+      counts.add(reportCounts);
+      print("object------${reportCounts}");
+    }
     setState(() {
       member = members;
       reports = report;
@@ -156,11 +169,22 @@ class _ListReportScreenState extends State<ListReportScreen> {
                             width: 10), // ระยะห่างระหว่างไอคอนกับข้อความผู้ใช้
                         Column(
                           mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start, // ชิดซ้าย
+                          crossAxisAlignment:
+                              CrossAxisAlignment.start, // ชิดซ้าย
                           children: [
                             SizedBox(height: 2),
-                            Text("ชื่อบัญชี",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
-                            Text(member!.nickname.toString(),style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
+                            Text(
+                              "ชื่อบัญชี",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              member!.nickname.toString(),
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ],
                         ), // แสดงชื่อผู้ใช้ (หรือข้อมูลผู้ใช้ที่คุณต้องการ)
                         SizedBox(
@@ -276,7 +300,9 @@ class _ListReportScreenState extends State<ListReportScreen> {
                               .center, // Center the Stack within the Container
                           children: [
                             Wrap(
-                              children: reports?.map((report) {
+                              children: reports?.asMap().entries.map((entry) {
+                                final int index = entry.key;
+                                 final Report report = entry.value;
                                     return Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: ClipRRect(
@@ -284,7 +310,6 @@ class _ListReportScreenState extends State<ListReportScreen> {
                                             10), // ปรับค่าตามที่คุณต้องการ
                                         child: Container(
                                           width: 300,
-                                          height: 430,
                                           decoration: BoxDecoration(
                                             color: Colors.white,
                                             boxShadow: [
@@ -323,23 +348,25 @@ class _ListReportScreenState extends State<ListReportScreen> {
                                                           width: 2.0,
                                                         ),
                                                       ),
-                                                      child: ClipOval(
-                                                        child: Image.network(
-                                                          baseURL +
-                                                              '/members/downloadimg/${report.member!.image}',
-                                                          fit: BoxFit.cover,
-                                                          width: 36,
-                                                          height: 36,
-                                                        ),
-                                                      ),
+                                                      child: Text("${counts[index]}"),
+                                                      
+                                                      // child: ClipOval(
+                                                      //   child: Image.network(
+                                                      //     baseURL +
+                                                      //         '/members/downloadimg/${report.member!.image}',
+                                                      //     fit: BoxFit.cover,
+                                                      //     width: 36,
+                                                      //     height: 36,
+                                                      //   ),
+                                                      // ),
                                                     )
                                                   ],
                                                 ),
                                                 Text(
                                                   '${report.post!.title}',
- 
                                                   style: TextStyle(
-                                                    overflow: TextOverflow.ellipsis,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
                                                       color: MainColor,
                                                       fontWeight:
                                                           FontWeight.bold,
@@ -362,12 +389,61 @@ class _ListReportScreenState extends State<ListReportScreen> {
                                                       fontSize: 16),
                                                 ),
                                                 SizedBox(height: 10),
-                                                Text(report.reportComment
-                                                        .toString()
-                                                        .isNotEmpty
-                                                    ? report.reportComment
-                                                        .toString()
-                                                    : "ไม่มีข้อมูล",style: TextStyle(overflow: TextOverflow.ellipsis),),
+                                                Text(
+                                                  report.reportComment !=
+                                                              null &&
+                                                          report.reportComment
+                                                              .toString()
+                                                              .isNotEmpty
+                                                      ? report.reportComment
+                                                          .toString()
+                                                      : "ไม่มีข้อมูล",
+                                                  style: TextStyle(
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+
+                                                // Container(
+                                                //   child:
+                                                //       FutureBuilder<List<Text>>(
+                                                //     future: getReportComments(
+                                                //         report),
+                                                //     // ต้องกำหนด report ให้กับตัวแปรนี้
+                                                //     builder:
+                                                //         (context, snapshot) {
+                                                //       if (snapshot
+                                                //               .connectionState ==
+                                                //           ConnectionState
+                                                //               .waiting) {
+                                                //         return CircularProgressIndicator(); // หรือใดๆ ก็ได้เพื่อแสดงว่าข้อมูลกำลังโหลด
+                                                //       } else if (snapshot
+                                                //           .hasError) {
+                                                //         return Text(
+                                                //             'Error: ${snapshot.error}');
+                                                //       } else if (snapshot
+                                                //           .hasData) {
+                                                //         List<Text>
+                                                //             commentTexts =
+                                                //             snapshot.data!;
+                                                //         return ListView.builder(
+                                                //           shrinkWrap: true,
+                                                //           itemCount:
+                                                //               commentTexts
+                                                //                   .length,
+                                                //           itemBuilder:
+                                                //               (context, index) {
+                                                //             return commentTexts[
+                                                //                 index];
+                                                //           },
+                                                //         );
+                                                //       } else {
+                                                //         return Text(
+                                                //             'No data available');
+                                                //       }
+                                                //     },
+                                                //   ),
+                                                // ),
                                                 Padding(
                                                   padding:
                                                       const EdgeInsets.all(8.0),

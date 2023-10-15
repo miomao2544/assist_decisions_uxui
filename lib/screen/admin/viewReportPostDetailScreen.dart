@@ -33,15 +33,22 @@ class _ViewReportPostDetailState extends State<ViewReportPostDetail> {
     return '';
   }
 
+  Future<List<Text>> getReportComments(Report report) async {
+    List<String> reportComments = await reportController
+        .getReportCommentByPost(report.post!.postId.toString());
+    List<Text> textComments =
+        reportComments.map((comment) => Text(comment)).toList();
+    return textComments;
+  }
+
   int? selectedChoiceIndex = 0;
   List<Choice>? choices = [];
+
   Future fetchReport() async {
     Report? report;
     List<Choice> choiceRequired;
-    report =
-        await reportController.doViewReportDetail(widget.reportId.toString());
-    choiceRequired = await choiceController
-        .listAllChoicesById(report!.post!.postId.toString());
+    report = await reportController.doViewReportDetail(widget.reportId.toString());
+    choiceRequired = await choiceController.listAllChoicesById(report!.post!.postId.toString());
     setState(() {
       reports = report;
       choices = choiceRequired;
@@ -252,56 +259,56 @@ class _ViewReportPostDetailState extends State<ViewReportPostDetail> {
                                           )
                                         ],
                                       ),
-                                      Container(
-                                        width: 400,
-                                        child: ListView.builder(
-                                          shrinkWrap: true,
-                                          physics:
-                                              NeverScrollableScrollPhysics(),
-                                          itemCount: choices?.length ?? 0,
-                                          itemBuilder: (context, index) {
-                                            return Card(
-                                              elevation: 2,
-                                              child: InkWell(
-                                                onTap: () {
-                                                  setState(() {
-                                                    selectedChoiceIndex = index;
-                                                  });
-                                                },
-                                                child: ListTile(
-                                                  title: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                    
-                                                      choices![index]
-                                                                  .choiceImage !=
-                                                              ""
-                                                          ? Image.network(
-                                                              baseURL +
-                                                                  '/choices/downloadimg/${choices![index].choiceImage}',
-                                                              fit: BoxFit.cover,
-                                                              width: 50,
-                                                              height: 50,
-                                                            )
-                                                          : SizedBox(
-                                                              height: 50),
-                                                      Row(
-                                                        children: [
-                                                          Text(choices![index]
-                                                                  .choiceName ??
-                                                              ""),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
+                                                             Container(
+                            width: 400,
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: choices?.length ?? 0,
+                              itemBuilder: (context, index) {
+                                if (choices != null && choices!.isNotEmpty) {
+                                  return Card(
+                                    elevation: 2,
+                                    child: InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          selectedChoiceIndex = index;
+                                        });
+                                      },
+                                      child: ListTile(
+                                        title: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            if (choices![index].choiceImage != null &&
+                                                choices![index].choiceImage != "")
+                                              Image.network(
+                                                baseURL +
+                                                    '/choices/downloadimg/${choices![index].choiceImage}',
+                                                fit: BoxFit.cover,
+                                                width: 50,
+                                                height: 50,
+                                              )
+                                            else
+                                              SizedBox(
+                                                height: 50,
                                               ),
-                                            );
-                                          },
+                                            Row(
+                                              children: [
+                                                Text(choices![index].choiceName ?? ""),
+                                              ],
+                                            ),
+                                          ],
                                         ),
                                       ),
+                                    ),
+                                  );
+                                } else {
+                                  return SizedBox(); // Or display some default content
+                                }
+                              },
+                            ),
+                          ),
                                       Column(
                                         children: [
                                           Row(
@@ -357,15 +364,55 @@ class _ViewReportPostDetailState extends State<ViewReportPostDetail> {
                                                   .toString())),
                                             ],
                                           ),
-                                          Row(
-                                            children: [
-                                             reports!.reportComment!.isNotEmpty
-                                                  ? Text(reports!.reportComment
-                                                      .toString())
-                                                  : Text(
-                                                      "ไม่มีเหตุผลที่รายงาน"),
-                                            ],
-                                          ),
+                                          // Row(
+                                          //   children: [
+                                          //   //  reports!.reportComment!.isNotEmpty
+                                          //   //       ? Text(reports!.reportComment
+                                          //   //           .toString())
+                                          //   //       : Text(
+                                          //   //           "ไม่มีเหตุผลที่รายงาน"),
+                                          //   ],
+                                          // ),
+                                           Container(
+                                                  child:
+                                                      FutureBuilder<List<Text>>(
+                                                    future: getReportComments(
+                                                        reports!),
+                                                    // ต้องกำหนด report ให้กับตัวแปรนี้
+                                                    builder:
+                                                        (context, snapshot) {
+                                                      if (snapshot
+                                                              .connectionState ==
+                                                          ConnectionState
+                                                              .waiting) {
+                                                        return CircularProgressIndicator(); // หรือใดๆ ก็ได้เพื่อแสดงว่าข้อมูลกำลังโหลด
+                                                      } else if (snapshot
+                                                          .hasError) {
+                                                        return Text(
+                                                            'Error: ${snapshot.error}');
+                                                      } else if (snapshot
+                                                          .hasData) {
+                                                        List<Text>
+                                                            commentTexts =
+                                                            snapshot.data!;
+                                                        return ListView.builder(
+                                                          shrinkWrap: true,
+                                                          itemCount:
+                                                              commentTexts
+                                                                  .length,
+                                                          itemBuilder:
+                                                              (context, index) {
+                                                            return commentTexts[
+                                                                index];
+                                                          },
+                                                        );
+                                                      } else {
+                                                        return Text(
+                                                            'No data available');
+                                                      }
+                                                    },
+                                                  ),
+                                                ),
                                           Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
