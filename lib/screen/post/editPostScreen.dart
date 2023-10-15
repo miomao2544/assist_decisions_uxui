@@ -84,13 +84,13 @@ class _EditPostScreenState extends State<EditPostScreen> {
       filePickerResult = await FilePicker.platform
           .pickFiles(allowMultiple: false, type: FileType.image);
 
-      print("File is ${fileImageName![0]}");
+      print("File is ${fileImageName[0]}");
 
       setState(() {
         if (filePickerResult != null) {
-          fileImageName?[index] = filePickerResult!.files.first.name;
+          fileImageName[index] = filePickerResult!.files.first.name;
           pickedFile = filePickerResult!.files.first;
-          fileImagesToDisplay?[index] = File(pickedFile!.path!);
+          fileImagesToDisplay[index] = File(pickedFile!.path!);
           isLoadingImagePicture?.add(false);
         }
         isLoadingPicture = false;
@@ -120,15 +120,15 @@ class _EditPostScreenState extends State<EditPostScreen> {
           choices[i].choiceName;
         }
       }
-      if (fileImagesToDisplay != null &&
+      if (
           index >= 0 &&
-          index < fileImagesToDisplay!.length) {
-        fileImagesToDisplay!.removeAt(index);
+          index < fileImagesToDisplay.length) {
+        fileImagesToDisplay.removeAt(index);
       }
-      if (fileImageName != null &&
+      if (
           index >= 0 &&
-          index < fileImageName!.length) {
-        fileImageName!.removeAt(index);
+          index < fileImageName.length) {
+        fileImageName.removeAt(index);
       }
     });
   }
@@ -209,8 +209,8 @@ class _EditPostScreenState extends State<EditPostScreen> {
       posts = post;
       choices = choice;
       print("-------A--------- ${choices.length}");
-      print("-------B--------- ${fileImagesToDisplay!.length}");
-      print("-------C--------- ${fileImageName!.length}");
+      print("-------B--------- ${fileImagesToDisplay.length}");
+      print("-------C--------- ${fileImageName.length}");
       selectedInterest = posts!.interest!.interestId;
       postDateStartController.text = formatDate(posts!.dateStart.toString());
       postDateStopController.text = formatDate(posts!.dateStop.toString());
