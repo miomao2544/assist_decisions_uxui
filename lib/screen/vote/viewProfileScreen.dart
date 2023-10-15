@@ -1,6 +1,7 @@
 import 'package:assist_decisions_app/controller/memberController.dart';
 import 'package:assist_decisions_app/screen/vote/editProfileScreen.dart';
 import 'package:assist_decisions_app/screen/vote/homeScreen.dart';
+import 'package:assist_decisions_app/screen/vote/viewVoteHistoryScreen.dart';
 import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:assist_decisions_app/widgets/divider_box.dart';
 import 'package:flutter/material.dart';
@@ -64,14 +65,14 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
             Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                  builder: (BuildContext context) {
-                    return HomeScreen(
-                      username: widget.username,
-                    );
-                  },
-                ),
-              );
+              MaterialPageRoute(
+                builder: (BuildContext context) {
+                  return HomeScreen(
+                    username: widget.username,
+                  );
+                },
+              ),
+            );
           },
         ),
       ),
@@ -85,7 +86,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: SecondColor, 
+                          color: SecondColor,
                           width: 4.0,
                         ),
                       ),
@@ -115,10 +116,27 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                                 style: TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),
-                              Text("${member?.point}",
+                              InkWell(
+                                onTap: () {
+                                   Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ViewPostHistoryScreen(
+                                    username: widget.username.toString(),
+                                  ),
+                                ),
+                              );
+                                },
+                                child: Text(
+                                  "${member?.point}",
                                   style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold)),
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    // decoration: TextDecoration
+                                    //     .underline, // เพิ่มขีดเส้นใต้เพื่อแสดงให้ใช้งานได้ง่ายขึ้น
+                                  ),
+                                ),
+                              )
                             ],
                           ),
                         ),
@@ -139,7 +157,9 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                         ),
                       ],
                     ),
-                    InfoRow(label: "เพศ", value: "${member?.gender == "M"? "ชาย":"หญิง"}"),
+                    InfoRow(
+                        label: "เพศ",
+                        value: "${member?.gender == "M" ? "ชาย" : "หญิง"}"),
                     DividerBoxBlack(),
                     InfoRow(label: "ชื่อ", value: "${member?.firstname}"),
                     DividerBoxBlack(),
@@ -149,9 +169,13 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                     DividerBoxBlack(),
                     InfoRow(label: "เบอร์โทรศัพท์", value: "${member?.tel}"),
                     DividerBoxBlack(),
-                    SizedBox(height: 5,),
+                    SizedBox(
+                      height: 5,
+                    ),
                     InfoRow(label: "สิ่งที่สนใจ", value: ""),
-                    SizedBox(height: 5,),
+                    SizedBox(
+                      height: 5,
+                    ),
                     Container(
                       height: 35.0,
                       child: ListView.builder(
@@ -164,7 +188,6 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                             child: GestureDetector(
                               child: Container(
                                 decoration: BoxDecoration(
-                                
                                   color: MainColor,
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),
@@ -172,7 +195,9 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                                     horizontal: 20.0, vertical: 8.0),
                                 child: Text(
                                   interest.interestName ?? "",
-                                  style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
                             ),
@@ -180,7 +205,9 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                         },
                       ),
                     ),
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
                     InfoRow(
                         label: "ชื่อผู้ใช้งาน", value: "${member?.username}"),
                     DividerBoxBlack(),
@@ -193,15 +220,17 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    EditProfileScreen(username: widget.username)),
+                                builder: (context) => EditProfileScreen(
+                                    username: widget.username)),
                           );
                         },
                         style: ElevatedButton.styleFrom(
                           primary: MainColor, // เปลี่ยนสีปุ่มเป็นสีฟ้า
                         ),
                         child: Text("แก้ไขข้อมูล",
-                            style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold)),
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold)),
                       ),
                     ),
                   ]),

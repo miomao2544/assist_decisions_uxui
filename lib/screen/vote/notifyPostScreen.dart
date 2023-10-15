@@ -1,4 +1,5 @@
 import 'package:assist_decisions_app/controller/postController.dart';
+import 'package:assist_decisions_app/controller/viewPostController.dart';
 import 'package:assist_decisions_app/controller/voteController.dart';
 import 'package:assist_decisions_app/model/post.dart';
 import 'package:assist_decisions_app/screen/vote/viewPostScreen.dart';
@@ -20,6 +21,7 @@ class _NotifyPostScreenState extends State<NotifyPostScreen> {
   bool? isDataLoaded = false;
   final PostController postController = PostController();
   VoteController voteController = VoteController();
+  ViewPostController viewPostController = ViewPostController();
  List<String> ifvotes = [];
 
   void fetchPost() async {
@@ -157,6 +159,7 @@ class _NotifyPostScreenState extends State<NotifyPostScreen> {
                         ],
                       ),
                       onTap: () {
+                         viewPostController.addViewPost(posts![index].postId.toString(),widget.username.toString());
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
                           return ViewPostScreen(

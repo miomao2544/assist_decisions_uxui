@@ -66,6 +66,20 @@ class ChoiceController{
     return response.body;
   }
 
+
+    Future ViewPostHistory(String username) async {
+    var url = Uri.parse(baseURL + '/choices/listpoint/${username}');
+
+    http.Response response = await http.post(url, headers: headers, body: null);
+    List<Choice>? list;
+
+    final utf8body = utf8.decode(response.bodyBytes);
+    List<dynamic> jsonList = json.decode(utf8body);
+    list = jsonList.map((e) => Choice.fromJsonToChoice(e)).toList();
+    print("-------------------------------Choice-----------------");
+    return list;
+  }
+
     Future listAllChoicesById(String postId) async{
     var url = Uri.parse(baseURL + '/choices/getChoiceById/${postId}');
 

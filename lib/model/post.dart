@@ -15,6 +15,7 @@ class Post{
   String? result;
   int? qtyMax;
   int? qtyMin;
+  double? avgPoint;
   Member? member;
   Interest? interest;
 
@@ -29,6 +30,7 @@ class Post{
     this.result,
     this.qtyMax,
     this.qtyMin,
+    this.avgPoint,
     this.member,
     this.interest
   });
@@ -44,6 +46,7 @@ class Post{
     result: json["result"],
     qtyMax: json["qtyMax"],
     qtyMin: json["qtyMin"],
+    avgPoint: json["avgPoint"],
     member: json["member"] == null?null: Member.fromJsonToMember(json["member"]),
     interest: json["interest"] == null?null: Interest.fromJsonToInterest(json["interest"])
   );
@@ -60,6 +63,7 @@ class Post{
       'result' : result,
       'qtyMax' : qtyMax,
       'qtyMin' : qtyMin,
+      'avgPoint' : avgPoint,
       'member' : member?.username,
       'interest': interest?.interestId
     };
