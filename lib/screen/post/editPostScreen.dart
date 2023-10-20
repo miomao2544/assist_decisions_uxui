@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:assist_decisions_app/constant/constant_value.dart';
@@ -114,11 +115,27 @@ class _EditPostScreenState extends State<EditPostScreen> {
 
   void _removeChoice(int index) {
     setState(() {
+      if(choices[index].choiceId != null && choices[index].choiceId != ""){
+                 choiceController.editChoice(
+                                    "false",
+                                    choices[index].choiceId ?? "",
+                                    choices[index].choiceName ?? "",
+                                    choices[index].choiceImage ?? "",
+                                    posts!.postId?? "");
+                                                                            Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EditPostScreen(
+                                                    username: widget.username,
+                                                    postId:
+                                                        widget.postId.toString(),
+                                                  )),
+                                        );
+      
+      }
       if (index >= 0 && index < choices.length) {
         choices.removeAt(index);
-        for (int i = 0; i < choices.length; i++) {
-          choices[i].choiceName;
-        }
       }
       if (
           index >= 0 &&
@@ -265,7 +282,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
             icon: Icon(Icons.arrow_back),
             color: Colors.white,
           )),
-      body: SingleChildScrollView(
+      body:isDataLoaded == true? SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Form(
@@ -593,15 +610,16 @@ class _EditPostScreenState extends State<EditPostScreen> {
                                 ),
                               ),
                               SizedBox(width: 10),
-                              choices[index].choiceId == null
-                                  ? InkWell(
+                              // choices[index].choiceId == null
+                              //     ?
+                                   InkWell(
                                       onTap: () => _removeChoice(index),
                                       child: Icon(Icons.cancel,
                                           size: 30, color: Colors.red),
                                     )
-                                  : SizedBox(
-                                      width: 30,
-                                    )
+                                  // : SizedBox(
+                                  //     width: 30,
+                                  //   )
                             ],
                           ),
                         );
@@ -731,6 +749,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
 
                               if (fromKey.currentState!.validate()) {
                                 await choiceController.editChoice(
+                                    "true",
                                     choices[i].choiceId ?? "",
                                     choices[i].choiceName ?? "",
                                     choices[i].choiceImage ?? "",
@@ -749,7 +768,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
             ),
           ),
         ),
-      ),
+      ):Center(child: CircularProgressIndicator())
     );
   }
 }

@@ -27,9 +27,10 @@ class ChoiceController{
     return  jsonResponse;
   }
 
-    Future editChoice(String choiceId,String choiceName,String choiceImages,String postId)async{
+    Future editChoice(String status,String choiceId,String choiceName,String choiceImages,String postId)async{
    
     Map data = {
+      "status":status,
       "choiceId": choiceId,
       "choiceName" : choiceName,
       "choiceImage" : choiceImages,

@@ -4,6 +4,7 @@ import 'package:assist_decisions_app/controller/reportController.dart';
 import 'package:assist_decisions_app/model/choice.dart';
 import 'package:assist_decisions_app/model/report.dart';
 import 'package:assist_decisions_app/screen/admin/changeBannedStatusScreen.dart';
+import 'package:assist_decisions_app/screen/admin/listReportPostScreen.dart';
 import 'package:assist_decisions_app/screen/admin/listReportScreen.dart';
 import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:flutter/material.dart';
@@ -260,7 +261,7 @@ class _ViewReportPostDetailState extends State<ViewReportPostDetail> {
                                         ],
                                       ),
                                                              Container(
-                            width: 400,
+              
                             child: ListView.builder(
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
@@ -311,44 +312,9 @@ class _ViewReportPostDetailState extends State<ViewReportPostDetail> {
                           ),
                                       Column(
                                         children: [
-                                          Row(
-                                            children: [
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  border: Border.all(
-                                                    color: SecondColor,
-                                                    width: 2.0,
-                                                  ),
-                                                ),
-                                                child: ClipOval(
-                                                  child: Image.network(
-                                                    baseURL +
-                                                        '/members/downloadimg/${reports!.member!.image}',
-                                                    fit: BoxFit.cover,
-                                                    width: 36,
-                                                    height: 36,
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 20,
-                                              ),
-                                              Text(
-                                                  reports!.member!.nickname
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                      color: MainColor,
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.bold)),
-                                            ],
-                                          ),
                                           SizedBox(
                                             height: 10,
                                           ),
-                                          Row(
-                                            children: [
                                               Text(
                                                 "เหตุผลที่รายงาน",
                                                 style: TextStyle(
@@ -356,63 +322,8 @@ class _ViewReportPostDetailState extends State<ViewReportPostDetail> {
                                                     fontWeight:
                                                         FontWeight.bold),
                                               ),
-                                              SizedBox(
-                                                width: 20,
-                                              ),
-                                              Text(formatDate(reports!
-                                                  .reportDate
-                                                  .toString())),
-                                            ],
-                                          ),
-                                          // Row(
-                                          //   children: [
-                                          //   //  reports!.reportComment!.isNotEmpty
-                                          //   //       ? Text(reports!.reportComment
-                                          //   //           .toString())
-                                          //   //       : Text(
-                                          //   //           "ไม่มีเหตุผลที่รายงาน"),
-                                          //   ],
-                                          // ),
-                                           Container(
-                                                  child:
-                                                      FutureBuilder<List<Text>>(
-                                                    future: getReportComments(
-                                                        reports!),
-                                                    // ต้องกำหนด report ให้กับตัวแปรนี้
-                                                    builder:
-                                                        (context, snapshot) {
-                                                      if (snapshot
-                                                              .connectionState ==
-                                                          ConnectionState
-                                                              .waiting) {
-                                                        return CircularProgressIndicator(); // หรือใดๆ ก็ได้เพื่อแสดงว่าข้อมูลกำลังโหลด
-                                                      } else if (snapshot
-                                                          .hasError) {
-                                                        return Text(
-                                                            'Error: ${snapshot.error}');
-                                                      } else if (snapshot
-                                                          .hasData) {
-                                                        List<Text>
-                                                            commentTexts =
-                                                            snapshot.data!;
-                                                        return ListView.builder(
-                                                          shrinkWrap: true,
-                                                          itemCount:
-                                                              commentTexts
-                                                                  .length,
-                                                          itemBuilder:
-                                                              (context, index) {
-                                                            return commentTexts[
-                                                                index];
-                                                          },
-                                                        );
-                                                      } else {
-                                                        return Text(
-                                                            'No data available');
-                                                      }
-                                                    },
-                                                  ),
-                                                ),
+
+                                            ListReportPostScreen(postId: reports!.post!.postId.toString()),
                                           Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,

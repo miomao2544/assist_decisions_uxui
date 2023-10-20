@@ -66,14 +66,14 @@ class _ChangeBannedStatusScreenState extends State<ChangeBannedStatusScreen> {
     List<BanType?> banType;
     banType = await banTypeController.listAllBanTypes();
     for (int i = 0; i < banType.length; i++) {
-      banTypes.add(banType[i]!.typeName.toString());
+      banTypes.add(banType[i]!.numberOfDay.toString());
     }
-    banTypeId = banType[0]!.typeName.toString();
+    banTypeId = banType[0]!.numberOfDay.toString();
     print(
         "object-----------------${report!.reportDate.toString()}---------------------");
     setState(() {
       reports = report;
-      banCommentController.text = reports!.reportComment ?? "";
+      banCommentController.text = "คุณถูกรายงานเนื่องจากโพสต์ ${report!.post!.title} ของคุณไม่เหมาะสม";
       isDataLoaded = true;
     });
   }
@@ -263,8 +263,8 @@ class _ChangeBannedStatusScreenState extends State<ChangeBannedStatusScreen> {
                                             width: 15,
                                           ),
                                           Text(
-                                              reports!.post!.member!.nickname
-                                                  .toString(),
+                                              "รายงานคุณ ${reports!.post!.member!.nickname
+                                                  .toString()}",
                                               style: TextStyle(
                                                   color: MainColor,
                                                   fontSize: 20,
@@ -414,10 +414,15 @@ class _ChangeBannedStatusScreenState extends State<ChangeBannedStatusScreen> {
                             ),
                           ),
                         ),
+                         SizedBox(
+                          height: 20,
+                        ),
                       ],
                     ),
                   ),
+                  
                 ),
+                
               )
             : Center(child: CircularProgressIndicator()));
   }
