@@ -105,7 +105,23 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             appBar: AppBar(
               backgroundColor: MainColor,
-              title: Text("หน้าหลัก"),
+              title: Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Assist Decisions',
+                      style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+            ),
               centerTitle: true,
               actions: <Widget>[
                 ClipOval(
@@ -121,18 +137,19 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                     child: Container(
                       width: 50,
-                      height: 50,
+                      height: 40,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: SecondColor, // สีกรอบ
-                          width: 2, // ความกว้างของกรอบ
+                          color: SecondColor,
+                          width: 2,
                         ),
                       ),
                       child: ClipOval(
                         child: Image.network(
                           baseURL + '/members/downloadimg/${imageUser}',
                           fit: BoxFit.cover,
+                          
                         ),
                       ),
                     ),

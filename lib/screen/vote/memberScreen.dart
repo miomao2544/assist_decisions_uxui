@@ -62,9 +62,8 @@ void fetchPost() async {
         child: Column(
           children: [
             SizedBox(
-              height: 20.0,
+              height: 15.0,
             ),
-            Text("Username is : ${widget.username}"),
             CarouselSlider(
               items: movies.map((movie) {
                 return Container(
@@ -75,19 +74,19 @@ void fetchPost() async {
                 );
               }).toList(),
               options: CarouselOptions(
-                height: 200.0,
+                height: 170.0,
                 autoPlay: true,
                 enlargeCenterPage: true,
               ),
             ),
             Text(
               "กำลังทำการโหวต",
-              style: TextStyle(fontSize: 25),
+              style: TextStyle(fontSize: 25,fontFamily: 'Light'),
               textAlign: TextAlign.left,
             ),
            isDataLoaded == true ? Container(
               padding: EdgeInsets.all(10.0),
-              height: MediaQuery.of(context).size.height / 3.8,
+              height: MediaQuery.of(context).size.height / 4.3,
               child: ListView.builder(
                 itemCount: openPosts?.length,
                 scrollDirection: Axis.horizontal,
@@ -106,12 +105,12 @@ void fetchPost() async {
             ):SizedBox(height: 200,),
             Text(
               "ปิดทำการโหวต",
-              style: TextStyle(fontSize: 25),
+              style: TextStyle(fontSize: 25,fontFamily: 'Light'),
               textAlign: TextAlign.left,
             ),
            isDataLoaded == true ? Container(
               padding: EdgeInsets.all(10.0),
-              height: MediaQuery.of(context).size.height / 3.8,
+              height: MediaQuery.of(context).size.height / 4.3,
               child: ListView.builder(
                 itemCount: closedPosts?.length,
                 scrollDirection: Axis.horizontal,

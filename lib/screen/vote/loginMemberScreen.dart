@@ -4,6 +4,7 @@ import 'package:assist_decisions_app/screen/vote/registerScreen.dart';
 import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:flutter/material.dart';
 import '../validators/validatorLogin.dart';
+
 class LoginMemberScreen extends StatefulWidget {
   const LoginMemberScreen({super.key});
 
@@ -32,18 +33,28 @@ class _LoginMemberScreenState extends State<LoginMemberScreen> {
             key: fromKey,
             child: Column(
               children: [
+                SizedBox(height: 40),
                 Image.asset(
                   "assets/images/logo.png",
-                  width: 250,
+                  width: 150,
                 ),
                 Align(
                   alignment: Alignment.center,
                   child: Text(
-                    'แพลตฟอร์มสนับสนุนการตัดสินใจ',
-                    style: TextStyle(fontSize: 22.0),
+                    'Assist Decisions',
+                    style:
+                        TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold,color: MainColor),
                   ),
                 ),
                 SizedBox(height: 10.0),
+                Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'แอปพลิเคชันสนับสนุนการตัดสินใจ',
+                    style: TextStyle(fontSize: 22.0, fontFamily: 'Light'),
+                  ),
+                ),
+                SizedBox(height: 40.0),
                 Align(
                   alignment: Alignment.center,
                   child: Text(
@@ -51,18 +62,23 @@ class _LoginMemberScreenState extends State<LoginMemberScreen> {
                     style: TextStyle(
                         fontSize: 30.0,
                         color: MainColor,
-                        fontWeight: FontWeight.bold),
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Light'),
                   ),
                 ),
                 SizedBox(height: 16.0),
                 Container(
-                  width: 300,
+                  width: 350,
+                  height: 60,
+                  color: Colors.blueGrey[50],
                   child: TextFormField(
                     style: TextStyle(color: MainColor, fontSize: 20.0),
                     decoration: InputDecoration(
                       labelText: 'ชื่อผู้ใช้งาน',
-                      labelStyle: TextStyle(color: MainColor),
+                      labelStyle:
+                          TextStyle(color: Colors.black, fontFamily: 'Light'),
                       prefixIcon: Icon(Icons.person, color: MainColor),
+                      border: InputBorder.none,
                     ),
                     onChanged: (value) {
                       setState(() {
@@ -70,19 +86,23 @@ class _LoginMemberScreenState extends State<LoginMemberScreen> {
                         doLoginMember();
                       });
                     },
-                    validator:(value) => validateUsername(value,result),
+                    validator: (value) => validateUsername(value, result),
                   ),
                 ),
                 SizedBox(height: 16.0),
                 Container(
-                  width: 300,
+                  width: 350,
+                  height: 60,
+                  color: Colors.blueGrey[50],
                   child: TextFormField(
                     obscureText: true,
                     style: TextStyle(color: MainColor, fontSize: 20.0),
                     decoration: InputDecoration(
                       labelText: 'รหัสผ่าน',
-                      labelStyle: TextStyle(color: MainColor),
+                      labelStyle:
+                          TextStyle(color: Colors.black, fontFamily: 'Light'),
                       prefixIcon: Icon(Icons.key, color: MainColor),
+                      border: InputBorder.none,
                     ),
                     onChanged: (value) {
                       setState(() {
@@ -90,7 +110,7 @@ class _LoginMemberScreenState extends State<LoginMemberScreen> {
                         doLoginMember();
                       });
                     },
-                    validator:(value) => validatePassword(value ,result),
+                    validator: (value) => validatePassword(value, result),
                   ),
                 ),
                 SizedBox(height: 16.0),
@@ -99,14 +119,7 @@ class _LoginMemberScreenState extends State<LoginMemberScreen> {
                   child: SizedBox(
                     width: 250,
                     height: 60,
-                    child: ElevatedButton.icon(
-                      icon: Icon(Icons.login),
-                      label:
-                          Text("เข้าสู่ระบบ", style: TextStyle(fontSize: 20)),
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            MainColor), // กำหนดสีพื้นหลังของปุ่ม
-                      ),
+                    child: ElevatedButton(
                       onPressed: () async {
                         if (fromKey.currentState!.validate()) {
                           doLoginMember();
@@ -137,6 +150,13 @@ class _LoginMemberScreenState extends State<LoginMemberScreen> {
                           print("-------$result----------");
                         }
                       },
+                      child: Text("เข้าสู่ระบบ",
+                          style: TextStyle(fontSize: 22, fontFamily: 'Light')),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(MainColor),
+                        // กำหนดสีพื้นหลังของปุ่ม
+                      ),
                     ),
                   ),
                 ),
@@ -145,20 +165,31 @@ class _LoginMemberScreenState extends State<LoginMemberScreen> {
                   child: SizedBox(
                     width: 250,
                     height: 60,
-                    child: ElevatedButton.icon(
-                      icon: Icon(Icons.add),
-                      label:
-                          Text("สมัครสมาชิก", style: TextStyle(fontSize: 20)),
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            SecondColor), // กำหนดสีพื้นหลังของปุ่ม
-                      ),
+                    child: OutlinedButton(
                       onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return RegisterScreen();
-                        }));
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return RegisterScreen();
+                            },
+                          ),
+                        );
                       },
+                      style: ButtonStyle(
+                        side: MaterialStateProperty.resolveWith<BorderSide>(
+                          (Set<MaterialState> states) {
+                            Color borderColor = MainColor; // กำหนดสีขอบ
+                            return BorderSide(
+                                color: borderColor,
+                                width: 2); // กำหนดความกว้างของขอบ
+                          },
+                        ),
+                      ),
+                      child: Text(
+                        "สมัครสมาชิก",
+                        style: TextStyle(fontSize: 22, fontFamily: 'Light',color: MainColor),
+                      ),
                     ),
                   ),
                 ),

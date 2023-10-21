@@ -23,6 +23,22 @@ dev_dependencies:
   flutter_lints: ^2.0.0
 
 flutter:
+  fonts:
+    - family: ExtraLight
+      fonts:
+        - asset: assets/fonts/Kanit-ExtraLight.ttf
+    - family: Light
+      fonts:
+        - asset: assets/fonts/Kanit-Light.ttf
+    - family: Medium
+      fonts:
+        - asset: assets/fonts/Kanit-Medium.ttf
+    - family: Kanit
+      fonts:
+        - asset: assets/fonts/Kanit-Regular.ttf
+    - family: SemiBold
+      fonts:
+        - asset: assets/fonts/Kanit-SemiBold.ttf
   uses-material-design: true
   assets:
       - assets/images/

@@ -22,24 +22,23 @@ class _PreviewPostScreenState extends State<PreviewPostScreen> {
 
   List<Post>? posts = [];
   bool? isDataLoaded = false;
-  
+
   List<Post>? openPosts = [];
   List<Post>? closedPosts = [];
   final PostController postController = PostController();
   void fetchPost() async {
     posts = await postController.listAllPosts();
-      for(int i=0;i< posts!.length;i++){
-        if(posts![i].result.toString() == "r"){
-          openPosts!.add(posts![i]);
-        }else{
-          closedPosts!.add(posts![i]);
-        }
-      }    
+    for (int i = 0; i < posts!.length; i++) {
+      if (posts![i].result.toString() == "r") {
+        openPosts!.add(posts![i]);
+      } else {
+        closedPosts!.add(posts![i]);
+      }
+    }
     setState(() {
       isDataLoaded = true;
     });
   }
-
 
   @override
   void initState() {
@@ -51,19 +50,39 @@ class _PreviewPostScreenState extends State<PreviewPostScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: MainColor,
-        toolbarHeight: 80,
-        title: Center(
-          child: Image.asset(
-            "assets/images/logo.png",
-            width: 80,
-          ),
-        ),
-      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
+            SizedBox(
+              height: 20.0,
+            ),
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    "assets/images/logo.png",
+                    width: 60,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Assist Decisions',
+                      style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                          color: MainColor),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 40,
+                  ),
+                ],
+              ),
+            ),
             SizedBox(
               height: 20.0,
             ),
@@ -84,47 +103,45 @@ class _PreviewPostScreenState extends State<PreviewPostScreen> {
             ),
             Text(
               "กำลังทำการโหวต",
-              style: TextStyle(fontSize: 25),
+              style: TextStyle(fontSize: 25,fontFamily: 'Light'),
               textAlign: TextAlign.left,
             ),
             Container(
               padding: EdgeInsets.all(10.0),
-              height: MediaQuery.of(context).size.height / 3.8,
+              height: MediaQuery.of(context).size.height / 4.3,
               child: ListView.builder(
                 itemCount: openPosts?.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
                   return CustomNewCard(
-                    postImage: openPosts?[index].postImage ?? '',
-                    interestName:
-                        openPosts?[index].interest?.interestName ?? '',
-                    title: openPosts?[index].title ?? '',
-                    description: openPosts?[index].description ?? '',
-                    screen: LoginMemberScreen()
-                  );
+                      postImage: openPosts?[index].postImage ?? '',
+                      interestName:
+                          openPosts?[index].interest?.interestName ?? '',
+                      title: openPosts?[index].title ?? '',
+                      description: openPosts?[index].description ?? '',
+                      screen: LoginMemberScreen());
                 },
               ),
             ),
             Text(
               "ปิดทำการโหวต",
-              style: TextStyle(fontSize: 25),
+              style: TextStyle(fontSize: 25,fontFamily: 'Light'),
               textAlign: TextAlign.left,
             ),
             Container(
               padding: EdgeInsets.all(10.0),
-              height: MediaQuery.of(context).size.height / 3.8,
+              height: MediaQuery.of(context).size.height / 4.3,
               child: ListView.builder(
                 itemCount: closedPosts?.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
                   return CustomNewCard(
-                    postImage: closedPosts?[index].postImage ?? '',
-                    interestName:
-                        closedPosts?[index].interest?.interestName ?? '',
-                    title: closedPosts?[index].title ?? '',
-                    description: closedPosts?[index].description ?? '',
-                    screen: LoginMemberScreen()
-                  );
+                      postImage: closedPosts?[index].postImage ?? '',
+                      interestName:
+                          closedPosts?[index].interest?.interestName ?? '',
+                      title: closedPosts?[index].title ?? '',
+                      description: closedPosts?[index].description ?? '',
+                      screen: LoginMemberScreen());
                 },
               ),
             ),
@@ -134,35 +151,38 @@ class _PreviewPostScreenState extends State<PreviewPostScreen> {
           ],
         ),
       ),
-bottomNavigationBar: BottomAppBar(
-  height: 70,
-  color: MainColor, // สีพื้นหลังของ BottomAppBar
-  child: IconButton(
-    onPressed: () {
-      Navigator.push(context, MaterialPageRoute(
-        builder: (context) {
-          return LoginMemberScreen();
-        },
-      ));
-    },
-    icon: Container(
-  width: 100,
-  height: 100,
-  decoration: BoxDecoration(
-    shape: BoxShape.circle, // กำหนดให้รูปร่างเป็นวงกลม
-    color: MainColor2, // สีพื้นหลังของวงกลม
-  ),
-  child: Icon(
-    Icons.login, // ใส่ไอคอนที่คุณต้องการแสดง
-    color: Colors.white, // สีไอคอน
-    size: 30, // กำหนดขนาดไอคอน
-  ),
-),
-  ),
-),
-
-
-
+      bottomNavigationBar: BottomAppBar(
+        height: 70,
+        color: MainColor, // สีพื้นหลังของ BottomAppBar
+        child: IconButton(
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(
+              builder: (context) {
+                return LoginMemberScreen();
+              },
+            ));
+          },
+          icon: Container(
+            width: 100,
+            height: 100,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle, // กำหนดให้รูปร่างเป็นวงกลม
+              color: MainColor2, // สีพื้นหลังของวงกลม
+               boxShadow: [
+          BoxShadow(
+            color: Colors.white.withOpacity(0.05),
+            spreadRadius: 6,
+          ),
+        ],
+            ),
+            child: Icon(
+              Icons.login, // ใส่ไอคอนที่คุณต้องการแสดง
+              color: Colors.white, // สีไอคอน
+              size: 30, // กำหนดขนาดไอคอน
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

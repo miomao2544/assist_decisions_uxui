@@ -2,6 +2,9 @@
 import 'package:assist_decisions_app/screen/admin/listReportScreen.dart';
 import 'package:assist_decisions_app/screen/admin/loginAdminScreen.dart';
 import 'package:assist_decisions_app/screen/admin/viewReportPostDetailScreen.dart';
+import 'package:assist_decisions_app/screen/user/previewPostScreen.dart';
+import 'package:assist_decisions_app/screen/vote/homeScreen.dart';
+import 'package:assist_decisions_app/screen/vote/loginMemberScreen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -15,10 +18,10 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return  MaterialApp(
       // home: PreviewPostScreen(),
-      // home: LoginAdminScreen(),
-      // home: HomeScreen(username: 'postmember'),
+      // home: LoginMemberScreen(),
+      home: HomeScreen(username: 'postmember'),
       // home: ListReportScreen(username: 'adminmember'),
-      home: ViewReportPostDetail(username: 'adminmember',reportId: 'R00000000002',),
+      // home: ViewReportPostDetail(username: 'adminmember',reportId: 'R00000000002',),
       debugShowCheckedModeBanner: false,
     );
   }
