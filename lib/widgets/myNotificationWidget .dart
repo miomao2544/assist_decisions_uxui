@@ -1,3 +1,4 @@
+import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:flutter/material.dart';
 
 class MyNotificationWidget extends StatelessWidget {
@@ -14,7 +15,8 @@ class MyNotificationWidget extends StatelessWidget {
           Icon(
             Icons.notifications,
             size: 30,
-            color: (selectedChoice == 3) ? Colors.amber : Colors.white,
+            color: (selectedChoice == 3) ?    MainColor
+                              : Colors.blueGrey.withOpacity(0.6),
           ),
           if (notificationCount > 0)
             Positioned(

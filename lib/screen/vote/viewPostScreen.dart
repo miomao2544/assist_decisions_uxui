@@ -151,7 +151,7 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
                               height: 20,
                             ),
                             Text('${post?.title ?? ""}',
-                                style: TextStyle(fontSize: 30)),
+                                style: TextStyle(fontSize: 30,fontFamily: 'Light')),
                             SizedBox(
                               height: 25,
                             ),
@@ -164,7 +164,7 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
                             SizedBox(
                               height: 15,
                             ),
-                            Text(' ${post?.description ?? ""}'),
+                            Text(' ${post?.description ?? ""}',style: TextStyle(fontFamily: 'Light'),),
                             SizedBox(
                               height: 15,
                             ),
@@ -222,7 +222,7 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
                                                 height: 50,
                                               )
                                             : SizedBox(width: 2, height: 50),
-                                        Text(choices![index].choiceName ?? ""),
+                                        Text(choices![index].choiceName ?? "",style: TextStyle(fontFamily: 'Light'),),
                                       ],
                                     ),
                                   ),
@@ -278,7 +278,7 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
                                                       );
                                                     }));
                                                   },
-                                                  child: Text("ยืนยัน"),
+                                                  child: Text("ยืนยัน",style: TextStyle(fontFamily: 'Light'),),
                                                 ),
                                               ],
                                             );
@@ -289,7 +289,7 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
                                         primary:
                                             MainColor, // Change this to your desired color
                                       ),
-                                      child: Text("ยืนยันคำตอบ"),
+                                      child: Text("ยืนยันคำตอบ",style: TextStyle(fontFamily: 'Light'),),
                                     ),
                                   )
                                 : SizedBox(

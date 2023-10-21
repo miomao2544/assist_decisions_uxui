@@ -42,15 +42,16 @@ class _HomeScreenState extends State<HomeScreen> {
     member = await memberController.getMemberById(widget.username);
     posts = await postController.listPostsInterest(widget.username.toString());
     imageUser = member?.image.toString();
-      int i = 0;
-  while (i < posts!.length) {
-    String ifvote = await voteController.getIFVoteChoice(widget.username, posts![i].postId.toString());
-    if (ifvote != "0") {
-      posts!.removeAt(i);
-    } else {
-      i++;
+    int i = 0;
+    while (i < posts!.length) {
+      String ifvote = await voteController.getIFVoteChoice(
+          widget.username, posts![i].postId.toString());
+      if (ifvote != "0") {
+        posts!.removeAt(i);
+      } else {
+        i++;
+      }
     }
-  }
     setState(() {
       isDataLoaded = true;
     });
@@ -80,6 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return isDataLoaded == true
         ? Scaffold(
             drawer: Drawer(
+            backgroundColor: MainColor,
               child: IconButton(
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(
@@ -92,36 +94,38 @@ class _HomeScreenState extends State<HomeScreen> {
                   width: 60,
                   height: 60,
                   decoration: BoxDecoration(
-                    shape: BoxShape.circle, 
-                    color: MainColor2, 
+                    shape: BoxShape.circle,
+                    color: MainColor2,
                   ),
                   child: Icon(
                     Icons.login,
                     color: Colors.white,
-                    size: 30, 
+                    size: 30,
                   ),
                 ),
               ),
+          
             ),
+            
             appBar: AppBar(
               backgroundColor: MainColor,
               title: Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Assist Decisions',
-                      style: TextStyle(
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        'Assist Decisions',
+                        style: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                            color: MainColor),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
               centerTitle: true,
               actions: <Widget>[
                 ClipOval(
@@ -149,7 +153,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Image.network(
                           baseURL + '/members/downloadimg/${imageUser}',
                           fit: BoxFit.cover,
-                          
                         ),
                       ),
                     ),
@@ -179,7 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Icon(Icons.add),
             ),
             bottomNavigationBar: BottomAppBar(
-              color: MainColor,
+              color: Colors.white,
               shape: CircularNotchedRectangle(),
               notchMargin: 12,
               child: Container(
@@ -198,8 +201,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           icon: Icon(Icons.home),
                           iconSize: 30,
                           color: (selectedChoice == 0)
-                              ? Colors.amber
-                              : Colors.white,
+                              ? MainColor
+                              : Colors.blueGrey.withOpacity(0.6),
                         ),
                         IconButton(
                           onPressed: () {
@@ -210,8 +213,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           icon: Icon(Icons.search),
                           iconSize: 30,
                           color: (selectedChoice == 1)
-                              ? Colors.amber
-                              : Colors.white,
+                              ? MainColor
+                              : Colors.blueGrey.withOpacity(0.6),
                         ),
                         SizedBox(width: 60.0),
                         IconButton(
@@ -223,8 +226,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           icon: Icon(Icons.list_alt),
                           iconSize: 30,
                           color: (selectedChoice == 2)
-                              ? Colors.amber
-                              : Colors.white,
+                              ? MainColor
+                              : Colors.blueGrey.withOpacity(0.6),
                         ),
                         IconButton(
                           onPressed: () {

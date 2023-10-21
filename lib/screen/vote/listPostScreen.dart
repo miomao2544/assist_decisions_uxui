@@ -21,7 +21,7 @@ class _ListPostScreenState extends State<ListPostScreen> {
   final PostController postController = PostController();
 
 Future fetchPost() async {
-    posts = await postController.listPostsMember(widget.username.toString());
+    posts = await postController.listPostsForMe(widget.username.toString());
     counts = List<int>.filled(posts!.length, 0);
     for (int i = 0; i < posts!.length; i++) {
       int count = await postController.getListCountMember(posts![i].postId.toString());
@@ -71,8 +71,10 @@ Future fetchPost() async {
                             // ตรงนี้คือส่วนที่แสดงข้อมูลของโพสต์
                             leading: Container(
                               width: 100,
-                              height: 100,
+                              height: 400,
+                          
                               child: Column(
+                                mainAxisSize: MainAxisSize.max,
                                 children: [
                                                               Container(
                               decoration: BoxDecoration(
@@ -87,14 +89,14 @@ Future fetchPost() async {
                                       baseURL +
                                           '/posts/downloadimg/${posts![index].postImage}',
                                       fit: BoxFit.cover,
-                                      width: 33,
-                                      height: 33,
+                                      width: 34,
+                                      height: 34,
                                     ),
                                   ),
                             ),
                                   Text(
                                     " ${counts![index]} คน",
-                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                    style: TextStyle(fontSize: 12,fontFamily: 'Light'),
                                   ),
                                 ],
                               ),
@@ -106,7 +108,7 @@ Future fetchPost() async {
                                 Text(
                                   "สิ้นสุด : ${formatDate(posts![index].dateStop)}",
                                   style: const TextStyle(
-                                    fontFamily: 'Itim',
+                                    fontFamily: 'Light',
                                     fontSize: 10,
                                   ),
                                 ),
@@ -115,19 +117,19 @@ Future fetchPost() async {
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style:  TextStyle(
-                                      fontFamily: 'Itim', fontSize: 20,color: MainColor,fontWeight: FontWeight.bold),
+                                      fontFamily: 'Light', fontSize: 20,color: MainColor,fontWeight: FontWeight.bold),
                                 ),
                                 Text(
                                   "คะแนน : ${posts![index].postPoint?.toInt()}",
                                   style:  TextStyle(
-                                      fontFamily: 'Itim', fontSize: 16,fontWeight: FontWeight.bold),
+                                     fontFamily: 'Light', fontSize: 16,fontWeight: FontWeight.bold),
                                 ),
                                 Text(
                                   "${posts![index].description}",
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
-                                      fontFamily: 'Itim', fontSize: 16),
+                                      fontFamily: 'Light', fontSize: 16),
                                 ),
                               ],
                             ),
@@ -153,7 +155,7 @@ Future fetchPost() async {
                       },
                     ),
                   )
-                : Center(child: Text("ไม่มีโพสต์ของคุณ"))
+                : Center(child: Text("ไม่มีโพสต์ของคุณ",style: TextStyle(fontFamily: 'Light'),))
             : Center(child: CircularProgressIndicator()),
       ),
     );

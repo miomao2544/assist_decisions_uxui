@@ -26,7 +26,6 @@ class _NotifyPostScreenState extends State<NotifyPostScreen> {
 
   void fetchPost() async {
   posts = await postController.listPostsInterest(widget.username.toString());
-  print(posts?[0].member?.username);
   int i = 0;
   while (i < posts!.length) {
     String ifvote = await voteController.getIFVoteChoice(widget.username, posts![i].postId.toString());
@@ -69,7 +68,7 @@ class _NotifyPostScreenState extends State<NotifyPostScreen> {
             scrollDirection: Axis.vertical,
             itemBuilder: (context, index) {
               if (posts == null || posts!.isEmpty) {
-                return Center(child: Text("ไม่มีโพสต์ของคุณ"));
+                return Center(child: Text("ไม่มีโพสต์ของคุณ",style: TextStyle(fontFamily: 'Light'),));
               } else {
                 return Container(
                   height: 115,
@@ -106,8 +105,8 @@ class _NotifyPostScreenState extends State<NotifyPostScreen> {
                             Text(
                               "${posts?[index].member?.nickname}",
                               style: TextStyle(
-                                fontFamily: 'Itim',
-                                fontSize: 13,
+                                fontFamily: 'Light',
+                                fontSize: 12,
                                 color: Colors.black,
                               ),
                             ),
@@ -123,7 +122,7 @@ class _NotifyPostScreenState extends State<NotifyPostScreen> {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                                fontFamily: 'Itim',
+                                fontFamily: 'Light',
                                 fontSize: 20,
                                 color: MainColor,
                                 fontWeight: FontWeight.bold),
@@ -131,7 +130,7 @@ class _NotifyPostScreenState extends State<NotifyPostScreen> {
                           Text(
                             "คะแนน : ${posts?[index].postPoint?.toInt()}",
                             style: TextStyle(
-                                fontFamily: 'Itim',
+                                fontFamily: 'Light',
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold),
                           ),
@@ -140,12 +139,12 @@ class _NotifyPostScreenState extends State<NotifyPostScreen> {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style:
-                                const TextStyle(fontFamily: 'Itim', fontSize: 16),
+                                const TextStyle(fontFamily: 'Itim', fontSize: 15),
                           ),
                           Text(
                             "สิ้นสุด : ${formatDate(posts?[index].dateStop)}",
                             style: const TextStyle(
-                              fontFamily: 'Itim',
+                              fontFamily: 'Light',
                               fontSize: 10,
                             ),
                           ),
@@ -173,7 +172,7 @@ class _NotifyPostScreenState extends State<NotifyPostScreen> {
               }
             },
           ),
-        ):Center(child: CircularProgressIndicator()):Center(child: Text("ไม่มีโพสต์ตามความสนใจของคุณ"))
+        ):Center(child: CircularProgressIndicator()):Center(child: Text("ไม่มีโพสต์ตามความสนใจของคุณ",style: TextStyle(fontFamily: 'Light'),))
       ),
     );
   }

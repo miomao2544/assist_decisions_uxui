@@ -30,9 +30,10 @@ class _MemberScreenState extends State<MemberScreen> {
   final PostController postController = PostController();
 
 void fetchPost() async {
-  posts = await postController.listAllPosts();
+  posts = await postController.listPostsMember(widget.username);
   openPosts = [];
   closedPosts = [];
+
 
   for (int i = 0; i < posts!.length; i++) {
     if (posts![i].result.toString() == "r") {
@@ -56,9 +57,15 @@ void fetchPost() async {
 
   @override
   Widget build(BuildContext context) {
-    return   Scaffold(
-      backgroundColor: Colors.white,
-      body: SingleChildScrollView(
+    return   Container(
+  decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.blueGrey, Colors.white],
+          ),
+        ),
+      child: SingleChildScrollView(
         child: Column(
           children: [
             SizedBox(

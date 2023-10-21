@@ -89,6 +89,19 @@ class PostController {
     return list;
   }
 
+
+  Future listPosts(String username) async {
+    var url = Uri.parse(baseURL + '/posts/listpost/${username}');
+    http.Response response = await http.post(url, headers: headers, body: null);
+    List<Post>? list;
+    print(response.body);
+    final utf8body = utf8.decode(response.bodyBytes);
+    List<dynamic> jsonList = json.decode(utf8body);
+    list = jsonList.map((e) => Post.fromJsonToPost(e)).toList();
+    print("--------------------------${list[0].postId}----------------------------------");
+    return list;
+  }
+
   Future listSearchPostsAll(
       String title, String interests, String point, String daterequest) async {
     var url = Uri.parse(baseURL +
@@ -175,6 +188,20 @@ class PostController {
 
   Future listPostsMember(String username) async {
     var url = Uri.parse(baseURL + '/posts/listpost/${username}');
+
+    http.Response response = await http.post(url, headers: headers, body: null);
+    List<Post>? list;
+
+    final utf8body = utf8.decode(response.bodyBytes);
+    List<dynamic> jsonList = json.decode(utf8body);
+    list = jsonList.map((e) => Post.fromJsonToPost(e)).toList();
+    print("-------------------------------post-----------------");
+    return list;
+  }
+
+
+  Future listPostsForMe(String username) async {
+    var url = Uri.parse(baseURL + '/posts/listme/${username}');
 
     http.Response response = await http.post(url, headers: headers, body: null);
     List<Post>? list;

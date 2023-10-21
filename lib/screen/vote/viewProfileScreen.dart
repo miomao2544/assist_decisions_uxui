@@ -60,7 +60,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
         child: Scaffold(
       appBar: AppBar(
         backgroundColor: MainColor,
-        title: Text('ข้อมูลส่วนตัว'),
+        title: Text('ข้อมูลส่วนตัว',style: TextStyle(fontFamily: 'Light'),),
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
@@ -103,7 +103,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                     Text(
                       "${member?.nickname}",
                       style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold,fontFamily: 'Light'),
                     ),
                     Row(
                       children: [
@@ -114,7 +114,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                               Text(
                                 "คะแนน",
                                 style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                                    fontSize: 18, fontWeight: FontWeight.bold,fontFamily: 'Light'),
                               ),
                               InkWell(
                                 onTap: () {
@@ -132,8 +132,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
-                                    // decoration: TextDecoration
-                                    //     .underline, // เพิ่มขีดเส้นใต้เพื่อแสดงให้ใช้งานได้ง่ายขึ้น
+fontFamily: 'Light'
                                   ),
                                 ),
                               )
@@ -147,11 +146,11 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                               Text("สถานะ",
                                   style: TextStyle(
                                       fontSize: 18,
-                                      fontWeight: FontWeight.bold)),
+                                      fontWeight: FontWeight.bold,fontFamily: 'Light')),
                               Text("${member?.status}",
                                   style: TextStyle(
                                       fontSize: 20,
-                                      fontWeight: FontWeight.bold)),
+                                      fontWeight: FontWeight.bold,fontFamily: 'Light')),
                             ],
                           ),
                         ),
@@ -197,7 +196,8 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                                   interest.interestName ?? "",
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontWeight: FontWeight.bold),
+                               
+                                      fontFamily: 'Light'),
                                 ),
                               ),
                             ),
@@ -227,10 +227,11 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                         style: ElevatedButton.styleFrom(
                           primary: MainColor, // เปลี่ยนสีปุ่มเป็นสีฟ้า
                         ),
-                        child: Text("แก้ไขข้อมูล",
+                        child: Text("แก้ไข",
                             style: TextStyle(
                                 color: Colors.white,
-                                fontWeight: FontWeight.bold)),
+                                fontSize: 20,
+                                fontFamily: 'Light')),
                       ),
                     ),
                   ]),

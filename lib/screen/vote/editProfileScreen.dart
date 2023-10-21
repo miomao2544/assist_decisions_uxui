@@ -143,7 +143,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MainColor,
-        title: Text('แก้ไข ข้อมูลส่วนตัว'),
+        title: Text('แก้ไข',style: TextStyle(fontFamily: 'Light'),),
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
@@ -172,11 +172,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           Align(
                             alignment: Alignment.center,
                             child: Text(
-                              'แพลตฟอร์มสนับสนุนการตัดสินใจ',
+                              'แอปพลิเคชันสนับสนุนการตัดสินใจ',
                               style: TextStyle(
                                   fontSize: 22.0,
                                   fontWeight: FontWeight.bold,
-                                  color: MainColor),
+                                  color: MainColor,fontFamily: 'Light'),
                             ),
                           ),
                           SizedBox(height: 12.0),
@@ -185,15 +185,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             child: Text(
                               'ส่วนของข้อมูลส่วนตัว',
                               style: TextStyle(
-                                  fontSize: 18.0, fontWeight: FontWeight.bold),
+                                  fontSize: 20.0, fontWeight: FontWeight.bold,fontFamily: 'Light'),
                             ),
                           ),
                           Text(
                             'เพศ',
                             style: TextStyle(
                                 color: MainColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16),
+    
+                                fontSize: 16,fontFamily: 'Light'),
                           ),
                           Row(
                             children: [
@@ -207,7 +207,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   primary:
                                       gender == 'M' ? SecondColor : MainColor,
                                 ),
-                                child: Text('ชาย'),
+                                child: Text('ชาย',style: TextStyle(fontFamily: 'Light'),),
                               ),
                               SizedBox(width: 16.0),
                               ElevatedButton(
@@ -220,118 +220,135 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   primary:
                                       gender == 'F' ? SecondColor : MainColor,
                                 ),
-                                child: Text('หญิง'),
+                                child: Text('หญิง',style: TextStyle(fontFamily: 'Light'),),
                               ),
                             ],
                           ),
-                          TextFormField(
-                            initialValue: firstname,
-                            decoration: InputDecoration(
-                              labelText: 'ชื่อ',
-                              prefixIcon: Icon(Icons.person, color: MainColor),
-                              labelStyle: TextStyle(color: MainColor),
+                          Container(
+                            color: Colors.blueGrey[50],
+                            child: TextFormField(
+                              initialValue: firstname,
+                              decoration: InputDecoration(
+                                labelText: 'ชื่อ',
+                                prefixIcon: Icon(Icons.person, color: MainColor),
+                                labelStyle: TextStyle(color: MainColor,fontFamily: 'Light'),
+                                border: InputBorder.none
+                              ),
+                              onChanged: (value) {
+                                setState(() {
+                                  firstname = value;
+                                });
+                              },
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'กรุณากรอกชื่อ';
+                                } else if (!isThaiOrEnglish(value)) {
+                                  return 'กรุณาเขียนเป็นภาษาไทย หรือ อังกฤษเท่านั้น';
+                                } else if (value.length < 2 ||
+                                    value.length > 100) {
+                                  return 'อักษรของคุณควรอยู่ระหว่าง 2 และ 100 ตัวอักษร';
+                                }
+                                return null;
+                              },
                             ),
-                            onChanged: (value) {
-                              setState(() {
-                                firstname = value;
-                              });
-                            },
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'กรุณากรอกชื่อ';
-                              } else if (!isThaiOrEnglish(value)) {
-                                return 'กรุณาเขียนเป็นภาษาไทย หรือ อังกฤษเท่านั้น';
-                              } else if (value.length < 2 ||
-                                  value.length > 100) {
-                                return 'อักษรของคุณควรอยู่ระหว่าง 2 และ 100 ตัวอักษร';
-                              }
-                              return null;
-                            },
                           ),
-                          TextFormField(
-                            initialValue: lastname,
-                            decoration: InputDecoration(
-                              labelText: 'นามสกุล',
-                              prefixIcon: Icon(Icons.person, color: MainColor),
-                              labelStyle: TextStyle(color: MainColor),
+                              SizedBox(height: 16.0),
+                          Container(
+                            color: Colors.blueGrey[50],
+                            child: TextFormField(
+                              initialValue: lastname,
+                              decoration: InputDecoration(
+                                labelText: 'นามสกุล',
+                                prefixIcon: Icon(Icons.person, color: MainColor),
+                                labelStyle: TextStyle(color: MainColor,fontFamily: 'Light'),
+                                border: InputBorder.none
+                              ),
+                              onChanged: (value) {
+                                setState(() {
+                                  lastname = value;
+                                });
+                              },
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'กรุณากรอกนามสกุล';
+                                } else if (!isThaiOrEnglish(value)) {
+                                  return 'กรุณาเขียนเป็นภาษาไทย หรือ อังกฤษเท่านั้น';
+                                } else if (value.length < 2 ||
+                                    value.length > 100) {
+                                  return 'อักษรของคุณควรอยู่ระหว่าง 2 และ 100 ตัวอักษร';
+                                }
+                                return null;
+                              },
                             ),
-                            onChanged: (value) {
-                              setState(() {
-                                lastname = value;
-                              });
-                            },
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'กรุณากรอกนามสกุล';
-                              } else if (!isThaiOrEnglish(value)) {
-                                return 'กรุณาเขียนเป็นภาษาไทย หรือ อังกฤษเท่านั้น';
-                              } else if (value.length < 2 ||
-                                  value.length > 100) {
-                                return 'อักษรของคุณควรอยู่ระหว่าง 2 และ 100 ตัวอักษร';
-                              }
-                              return null;
-                            },
-                          ),
-                          SizedBox(height: 16.0),
-                          TextFormField(
-                            initialValue: email,
-                            decoration: InputDecoration(
-                              labelText: 'อีเมล์',
-                              prefixIcon: Icon(Icons.email, color: MainColor),
-                              labelStyle: TextStyle(color: MainColor),
-                            ),
-                            onChanged: (value) {
-                              setState(() {
-                                email = value;
-                              });
-                            },
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'กรุณากรอกอีเมล์';
-                              } else if (!isValidEmail(value)) {
-                                return 'รูปแบบของคุณอีเมล์ไม่ถูกต้อง';
-                              } else if (value.length < 5 ||
-                                  value.length > 60) {
-                                return 'อักษรของคุณควรอยู่ระหว่าง 5 และ 60 ตัวอักษร';
-                              } else if (value.contains(' ')) {
-                                return 'ไม่อนุญาตให้มีช่องว่างในข้อมูล';
-                              }
-                              return null;
-                            },
                           ),
                           SizedBox(height: 16.0),
-                          TextFormField(
-                            initialValue: tel,
-                            decoration: InputDecoration(
-                              labelText: 'หมายเลขโทรศัพท์',
-                              prefixIcon: Icon(Icons.phone, color: MainColor),
-                              labelStyle: TextStyle(color: MainColor),
+                          Container(
+                            color: Colors.blueGrey[50],
+                            child: TextFormField(
+                              initialValue: email,
+                              decoration: InputDecoration(
+                                labelText: 'อีเมล์',
+                                prefixIcon: Icon(Icons.email, color: MainColor),
+                                labelStyle: TextStyle(color: MainColor,fontFamily: 'Light'),
+                                border:  InputBorder.none
+                              ),
+                              onChanged: (value) {
+                                setState(() {
+                                  email = value;
+                                });
+                              },
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'กรุณากรอกอีเมล์';
+                                } else if (!isValidEmail(value)) {
+                                  return 'รูปแบบของคุณอีเมล์ไม่ถูกต้อง';
+                                } else if (value.length < 5 ||
+                                    value.length > 60) {
+                                  return 'อักษรของคุณควรอยู่ระหว่าง 5 และ 60 ตัวอักษร';
+                                } else if (value.contains(' ')) {
+                                  return 'ไม่อนุญาตให้มีช่องว่างในข้อมูล';
+                                }
+                                return null;
+                              },
                             ),
-                            onChanged: (value) {
-                              setState(() {
-                                tel = value;
-                              });
-                            },
-                            validator: (value) {
-                              final validDigits = RegExp(r'^[0-9]{10}$');
-
-                              if (value == null || value.isEmpty) {
-                                return 'กรุณากรอกหมายเลขโทรศัพท์';
-                              } else if (!value.startsWith('06') &&
-                                  !value.startsWith('08') &&
-                                  !value.startsWith('09')) {
-                                return 'หมายเลขโทรศัพท์ต้องขึ้นต้นด้วย 06, 08, หรือ 09';
-                              }
-                              if (!validDigits.hasMatch(value.toString())) {
-                                return 'หมายเลขโทรศัพท์ต้องประกอบด้วยตัวเลข 0-9';
-                              } else if (value.length != 10) {
-                                return 'หมายเลขโทรศัพท์ต้องมี 10 ตัวเท่านั้น';
-                              }
-                              return null;
-                            },
                           ),
                           SizedBox(height: 16.0),
-                          Text('ความสนใจ'),
+                          Container(
+                            color: Colors.blueGrey[50],
+                            child: TextFormField(
+                              initialValue: tel,
+                              decoration: InputDecoration(
+                                labelText: 'หมายเลขโทรศัพท์',
+                                prefixIcon: Icon(Icons.phone, color: MainColor),
+                                labelStyle: TextStyle(color: MainColor,fontFamily: 'Light'),
+                                border: InputBorder.none
+                              ),
+                              onChanged: (value) {
+                                setState(() {
+                                  tel = value;
+                                });
+                              },
+                              validator: (value) {
+                                final validDigits = RegExp(r'^[0-9]{10}$');
+                          
+                                if (value == null || value.isEmpty) {
+                                  return 'กรุณากรอกหมายเลขโทรศัพท์';
+                                } else if (!value.startsWith('06') &&
+                                    !value.startsWith('08') &&
+                                    !value.startsWith('09')) {
+                                  return 'หมายเลขโทรศัพท์ต้องขึ้นต้นด้วย 06, 08, หรือ 09';
+                                }
+                                if (!validDigits.hasMatch(value.toString())) {
+                                  return 'หมายเลขโทรศัพท์ต้องประกอบด้วยตัวเลข 0-9';
+                                } else if (value.length != 10) {
+                                  return 'หมายเลขโทรศัพท์ต้องมี 10 ตัวเท่านั้น';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          SizedBox(height: 16.0),
+                          Text('ความสนใจ',style: TextStyle(fontFamily: 'Light'),),
                           Container(
                             height: 30.0,
                             child: ListView.builder(
@@ -368,7 +385,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                       primary:
                                           isSelected ? SecondColor : MainColor,
                                     ),
-                                    child: Text(interest.interestName ?? ""),
+                                    child: Text(interest.interestName ?? "",style: TextStyle(fontFamily: 'Light'),),
                                   ),
                                 );
                               },
@@ -377,7 +394,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           SizedBox(height: 12.0),
                           Text(
                             'สามารถเลือกได้มากกว่า 1 ตัวเลือก',
-                            style: TextStyle(fontSize: 16.0, color: MainColor),
+                            style: TextStyle(fontSize: 16.0, color: MainColor,fontFamily: 'Light'),
                           ),
                           SizedBox(height: 20.0),
                           Align(
@@ -385,9 +402,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             child: Text(
                               'ส่วนของข้อมูลทั่วไป',
                               style: TextStyle(
-                                  fontSize: 22.0,
-                                  color: MainColor,
-                                  fontWeight: FontWeight.bold),
+                                  fontSize: 20.0,
+                    
+                                  fontWeight: FontWeight.bold,fontFamily: 'Light'),
                             ),
                           ),
                           SizedBox(height: 12.0),
@@ -414,7 +431,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 _pickFile();
                               },
                               icon: Icon(Icons.image),
-                              label: Text("เลือกรูปภาพ"),
+                              label: Text("เลือกรูปภาพ",style: TextStyle(fontFamily: 'Light'),),
                               style: ButtonStyle(
                                 backgroundColor:
                                     MaterialStateProperty.all<Color>(
@@ -424,89 +441,105 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             ),
                           ),
                           SizedBox(height: 12.0),
-                          TextFormField(
-                            initialValue: nickname,
-                            decoration: InputDecoration(
-                              labelText: 'ชื่อบัญชี',
-                              prefixIcon:
-                                  Icon(Icons.account_circle, color: MainColor),
-                              labelStyle: TextStyle(color: MainColor),
+                          Container(
+                            color: Colors.blueGrey[50],
+                            child: TextFormField(
+                              initialValue: nickname,
+                              decoration: InputDecoration(
+                                labelText: 'ชื่อบัญชี',
+                                prefixIcon:
+                                    Icon(Icons.account_circle, color: MainColor),
+                                labelStyle: TextStyle(color: MainColor,fontFamily: 'Light'),
+                                border: InputBorder.none
+                              ),
+                              onChanged: (value) {
+                                setState(() {
+                                  nickname = value;
+                                });
+                              },
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'กรุณากรอกชื่อ';
+                                } else if (!isThaiOrEnglish(value)) {
+                                  return 'กรุณาเขียนเป็นภาษาไทย หรือ อังกฤษเท่านั้น';
+                                } else if (value.length < 2 ||
+                                    value.length > 100) {
+                                  return 'อักษรของคุณควรอยู่ระหว่าง 2 และ 100 ตัวอักษร';
+                                }
+                                return null;
+                              },
                             ),
-                            onChanged: (value) {
-                              setState(() {
-                                nickname = value;
-                              });
-                            },
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'กรุณากรอกชื่อ';
-                              } else if (!isThaiOrEnglish(value)) {
-                                return 'กรุณาเขียนเป็นภาษาไทย หรือ อังกฤษเท่านั้น';
-                              } else if (value.length < 2 ||
-                                  value.length > 100) {
-                                return 'อักษรของคุณควรอยู่ระหว่าง 2 และ 100 ตัวอักษร';
-                              }
-                              return null;
-                            },
                           ),
                           SizedBox(height: 16.0),
-                          TextFormField(
-                            initialValue: username,
-                            decoration: InputDecoration(
-                              labelText: 'ชื่อผู้ใช้งาน (ห้ามซ้ำ)',
-                              prefixIcon:
-                                  Icon(Icons.account_box, color: MainColor),
-                              labelStyle: TextStyle(color: MainColor),
+                          Container(
+                            color: Colors.blueGrey[50],
+                            child: TextFormField(
+                              initialValue: username,
+                              decoration: InputDecoration(
+                                labelText: 'ชื่อผู้ใช้งาน (ห้ามซ้ำ)',
+                                prefixIcon:
+                                    Icon(Icons.account_box, color: MainColor),
+                                labelStyle: TextStyle(color: MainColor,fontFamily: 'Light'),
+                                border: InputBorder.none
+                              ),
+                              enabled: false,
                             ),
-                            enabled: false,
                           ),
                           SizedBox(height: 16.0),
-                          TextFormField(
-                            decoration: InputDecoration(
-                              labelText: 'รหัสผ่าน',
-                              prefixIcon: Icon(Icons.key, color: MainColor),
-                              labelStyle: TextStyle(color: MainColor),
+                          Container(
+                            color: Colors.blueGrey[50],
+                            child: TextFormField(
+                              decoration: InputDecoration(
+                                labelText: 'รหัสผ่าน',
+                                prefixIcon: Icon(Icons.key, color: MainColor),
+                                labelStyle: TextStyle(color: MainColor,fontFamily: 'Light'),
+                                border: InputBorder.none
+                              ),
+                              obscureText: true,
+                              onChanged: (value) {
+                                setState(() {
+                                  password = value;
+                                });
+                              },
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'กรุณากรอกรหัสผ่าน';
+                                } else if (value.length < 8 ||
+                                    value.length > 16) {
+                                  return 'รหัสผ่านควรมีความยาวระหว่าง 8 และ 16 ตัวอักษร';
+                                } else if (!RegExp(r'^[a-zA-Z0-9@_\-\.]+$')
+                                    .hasMatch(value)) {
+                                  return 'รหัสผ่านควรประกอบด้วยตัวอักษรภาษาอังกฤษ, ตัวเลข, @, _, -, หรือ . เท่านั้น';
+                                }
+                                return null;
+                              },
                             ),
-                            obscureText: true,
-                            onChanged: (value) {
-                              setState(() {
-                                password = value;
-                              });
-                            },
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'กรุณากรอกรหัสผ่าน';
-                              } else if (value.length < 8 ||
-                                  value.length > 16) {
-                                return 'รหัสผ่านควรมีความยาวระหว่าง 8 และ 16 ตัวอักษร';
-                              } else if (!RegExp(r'^[a-zA-Z0-9@_\-\.]+$')
-                                  .hasMatch(value)) {
-                                return 'รหัสผ่านควรประกอบด้วยตัวอักษรภาษาอังกฤษ, ตัวเลข, @, _, -, หรือ . เท่านั้น';
-                              }
-                              return null;
-                            },
                           ),
                           SizedBox(height: 16.0),
-                          TextFormField(
-                            decoration: InputDecoration(
-                              labelText: 'ยืนยันรหัสผ่าน',
-                              prefixIcon: Icon(Icons.key, color: MainColor),
-                              labelStyle: TextStyle(color: MainColor),
+                          Container(
+                            color: Colors.blueGrey[50],
+                            child: TextFormField(
+                              decoration: InputDecoration(
+                                labelText: 'ยืนยันรหัสผ่าน',
+                                prefixIcon: Icon(Icons.key, color: MainColor),
+                                labelStyle: TextStyle(color: MainColor,fontFamily: 'Light'),
+                                border: InputBorder.none
+                              ),
+                              obscureText: true,
+                              onChanged: (value) {
+                                setState(() {
+                                  confirmPassword = value;
+                                });
+                              },
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'กรุณารหัสผ่านอีกครั้งเพื่อยืนยัน';
+                                } else if (value.toString() != password) {
+                                  return 'รหัสผ่านของคุณไม่เหมือนเดิม กรุณากรอกใหม่อีกครั้ง';
+                                }
+                                return null;
+                              },
                             ),
-                            obscureText: true,
-                            onChanged: (value) {
-                              setState(() {
-                                confirmPassword = value;
-                              });
-                            },
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'กรุณารหัสผ่านอีกครั้งเพื่อยืนยัน';
-                              } else if (value.toString() != password) {
-                                return 'รหัสผ่านของคุณไม่เหมือนเดิม กรุณากรอกใหม่อีกครั้ง';
-                              }
-                              return null;
-                            },
                           ),
                           SizedBox(height: 16.0),
                           Padding(
@@ -517,7 +550,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               child: ElevatedButton.icon(
                                   icon: Icon(Icons.add),
                                   label: Text("บันทึกข้อมูล",
-                                      style: TextStyle(fontSize: 20)),
+                                      style: TextStyle(fontSize: 20,fontFamily: 'Light')),
                                   style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all<
                                             Color>(

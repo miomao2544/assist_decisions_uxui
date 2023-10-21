@@ -14,14 +14,14 @@ class InfoRow extends StatelessWidget {
         Expanded(
           child: Text(
             label,
-            style: TextStyle(fontSize: 17,color: MainColor,fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 17,color: MainColor,fontWeight: FontWeight.bold,fontFamily: 'Light'),
             textAlign: TextAlign.left,
           ),
         ),
         Expanded(
           child: Text(
             value,
-            style: TextStyle(fontSize: 16),
+            style: TextStyle(fontSize: 16,fontFamily: 'Light'),
             textAlign: TextAlign.right,
           ),
         ),

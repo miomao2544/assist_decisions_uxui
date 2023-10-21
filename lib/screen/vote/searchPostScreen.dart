@@ -106,7 +106,7 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: MainColor2,
+          backgroundColor: Colors.white,
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(50.0), // ปรับความสูงตามที่คุณต้องการ
             child: Padding(
@@ -115,26 +115,6 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
                 children: [
                   Row(
                     children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius:
-                              BorderRadius.circular(12.0), // กำหนดมุมโค้ง
-                        ),
-                        child: DropdownButton<String>(
-                          value: point,
-                          onChanged: (String? newValue) {
-                            updatePoint(newValue!);
-                          },
-                          items: numbers
-                              .map<DropdownMenuItem<String>>((String point) {
-                            return DropdownMenuItem<String>(
-                              value: point,
-                              child: Text(point),
-                            );
-                          }).toList(),
-                        ),
-                      ),
                       SizedBox(
                         height: 50,
                         width: 10,
@@ -143,17 +123,18 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
                         child: Container(
                           width: 200.0,
                           height: 50.0,
+                          color: Colors.blueGrey[50],
                           child: TextField(
                             onChanged: (value) {
                               search = value;
                             },
                             decoration: InputDecoration(
                               hintText: "ค้นหาโพสต์...",
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12.0),
-                              ),
                               filled: true,
-                              fillColor: Colors.white,
+                              hintStyle: TextStyle(
+                                fontFamily: 'Light',
+                              ),
+                              border: InputBorder.none,
                             ),
                           ),
                         ),
@@ -171,12 +152,12 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
                           height: 48.0,
                           decoration: BoxDecoration(
                             shape: BoxShape.rectangle,
-                            color: Colors.white,
+                            color: MainColor,
                             borderRadius: BorderRadius.circular(8.0),
                           ),
                           child: Icon(
                             Icons.search,
-                            color: Colors.black,
+                            color: Colors.white,
                           ),
                         ),
                       ),
@@ -216,7 +197,7 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
                             style: ElevatedButton.styleFrom(
                               primary: isSelected ? SecondColor : MainColor,
                             ),
-                            child: Text(interest.interestName ?? ""),
+                            child: Text(interest.interestName ?? "",style: TextStyle( fontFamily: 'Light')),
                           ),
                         );
                       },
@@ -267,8 +248,8 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
                                   Text(
                                     "${posts?[index].member?.nickname}",
                                     style: TextStyle(
-                                      fontFamily: 'Itim',
-                                      fontSize: 13,
+                                      fontFamily: 'Light',
+                                      fontSize: 12,
                                       color: Colors.black,
                                     ),
                                   ),
@@ -284,7 +265,7 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                      fontFamily: 'Itim',
+                                      fontFamily: 'Light',
                                       fontSize: 20,
                                       color: MainColor,
                                       fontWeight: FontWeight.bold),
@@ -292,7 +273,7 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
                                 Text(
                                   "คะแนน : ${posts?[index].postPoint?.toInt()}",
                                   style: TextStyle(
-                                      fontFamily: 'Itim',
+                                      fontFamily: 'Light',
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold),
                                 ),
@@ -301,12 +282,12 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
-                                      fontFamily: 'Itim', fontSize: 16),
+                                      fontFamily: 'Light', fontSize: 15),
                                 ),
                                 Text(
                                   "สิ้นสุด : ${formatDate(posts?[index].dateStop)}",
                                   style: const TextStyle(
-                                    fontFamily: 'Itim',
+                                    fontFamily: 'Light',
                                     fontSize: 10,
                                   ),
                                 ),

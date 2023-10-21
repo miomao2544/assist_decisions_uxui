@@ -63,16 +63,16 @@ class _CommentScreenState extends State<CommentScreen> {
                                 "${widget.member!.nickname}",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 16.0,
+                                  fontSize: 16.0,fontFamily: 'Light'
                                 ),
                               ),
                               SizedBox(height: 8.0),
                               TextFormField(
                                 decoration: InputDecoration(
                                     labelText: 'คอมเม้น',
-                                    labelStyle: TextStyle(color: MainColor),
+                                    labelStyle: TextStyle(color: MainColor,fontFamily: 'Light'),
                                     prefixIconColor: MainColor,
-                                    prefixStyle: TextStyle(color: MainColor)),
+                                    prefixStyle: TextStyle(color: MainColor,fontFamily: 'Light')),
                                 maxLines: null,
                                 onChanged: (value) {
                                   setState(() {

@@ -6,7 +6,7 @@ class DividerBoxBlack extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Divider(
-      color: Colors.black, 
+      color: Color.fromARGB(255, 185, 185, 185), 
     );
   }
 }

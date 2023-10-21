@@ -97,7 +97,7 @@ class _ReportPostScreenState extends State<ReportPostScreen> {
                               height: 20,
                             ),
                             Text('${post?.title ?? ""}',
-                                style: TextStyle(fontSize: 30)),
+                                style: TextStyle(fontSize: 30,fontFamily: 'Light')),
                             SizedBox(
                               height: 20,
                             ),
@@ -110,7 +110,7 @@ class _ReportPostScreenState extends State<ReportPostScreen> {
                             SizedBox(
                               height: 15,
                             ),
-                            Text(' ${post?.description ?? ""}'),
+                            Text(' ${post?.description ?? ""}',style: TextStyle(fontFamily: 'Light'),),
                             SizedBox(
                               height: 20,
                             ),
@@ -168,7 +168,7 @@ class _ReportPostScreenState extends State<ReportPostScreen> {
                                                 height: 50,
                                               )
                                             : SizedBox(width: 2, height: 50),
-                                        Text(choices![index].choiceName ?? ""),
+                                        Text(choices![index].choiceName ?? "",style: TextStyle(fontFamily: 'Light'),),
                                       ],
                                     ),
                                   ),
@@ -214,23 +214,29 @@ class _ReportPostScreenState extends State<ReportPostScreen> {
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 16.0,
+                                                  fontFamily: 'Light'
                                                 ),
                                               ),
                                               SizedBox(height: 8.0),
                                               Container(
                                                 width: 300,
-                                                child: TextFormField(
-                                                  decoration: InputDecoration(
-                                                    labelText: 'รายงาน',
-                                                    labelStyle: TextStyle(
-                                                        color: MainColor),
+                                                color: Colors.blueGrey[50],
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: TextFormField(
+                                                    decoration: InputDecoration(
+                                                      labelText: 'รายงาน',
+                                                      labelStyle: TextStyle(
+                                                          color: MainColor,fontFamily: 'Light'),
+                                                          border:  InputBorder.none
+                                                    ),
+                                                    maxLines: null,
+                                                    onChanged: (value) {
+                                                      setState(() {
+                                                        reportComment = value;
+                                                      });
+                                                    },
                                                   ),
-                                                  maxLines: null,
-                                                  onChanged: (value) {
-                                                    setState(() {
-                                                      reportComment = value;
-                                                    });
-                                                  },
                                                 ),
                                               ),
                                               SizedBox(
@@ -267,7 +273,7 @@ class _ReportPostScreenState extends State<ReportPostScreen> {
                                                           Icons.report_problem,
                                                           color: Colors.white),
                                                           SizedBox(width: 5,),
-                                                          Text("รายงาน",style: TextStyle(fontWeight: FontWeight.bold),)
+                                                          Text("รายงาน",style: TextStyle(fontWeight: FontWeight.bold,fontFamily: 'Light'),)
                                                     ],
                                                   ),
                                                 ),

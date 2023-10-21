@@ -51,63 +51,67 @@ class _ListCommentScreenState extends State<ListCommentScreen> {
         children: [
           SizedBox(height: 16),
           isDataLoaded
-              ? commentList!.length > 0? ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: commentList!.length >= 5 ? 5 : commentList!.length,
-                  itemBuilder: (context, index) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Card(
-                          elevation: 2,
-                          margin:
-                              EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                          child: ListTile(
-                            contentPadding: EdgeInsets.all(
-                                16), // Padding inside the ListTile.
-                            leading: 
-                                            Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: SecondColor,
-                      width: 4.0,
-                    ),
-                  ),
-                  child: ClipOval(
-                    child: Image.network(
-                      baseURL +
-                                    '/members/downloadimg/${commentList![index].member!.image.toString()}',
-                      fit: BoxFit.cover,
-                      width: 50,
-                      height: 50,
-                    ),
-                  ),
-                ),
-                            title: Text(
-                              "${commentList![index].member!.nickname.toString()}",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16.0,
+              ? commentList!.length > 0
+                  ? ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount:
+                          commentList!.length >= 5 ? 5 : commentList!.length,
+                      itemBuilder: (context, index) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Card(
+                              elevation: 2,
+                              margin: EdgeInsets.symmetric(
+                                  vertical: 8, horizontal: 16),
+                              child: ListTile(
+                                contentPadding: EdgeInsets.all(
+                                    16), // Padding inside the ListTile.
+                                leading: Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: SecondColor,
+                                      width: 4.0,
+                                    ),
+                                  ),
+                                  child: ClipOval(
+                                    child: Image.network(
+                                      baseURL +
+                                          '/members/downloadimg/${commentList![index].member!.image.toString()}',
+                                      fit: BoxFit.cover,
+                                      width: 50,
+                                      height: 50,
+                                    ),
+                                  ),
+                                ),
+                                title: Text(
+                                  "${commentList![index].member!.nickname.toString()}",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16.0,
+                                    fontFamily: 'Light'
+                                  ),
+                                ),
+                                subtitle: Text(
+                                  commentList![index].comment.toString(),
+                                  style: TextStyle(fontSize: 16,fontFamily: 'Light'),
+                                  
+                                ),
+                                isThreeLine:
+                                    true, // Makes the subtitle take up the full width.
+                                trailing: Text(
+                                  formatDate(commentList![index].commentDate),
+                                  style: TextStyle(color: Colors.grey),
+                                ),
                               ),
-                            ),
-                            subtitle: Text(
-                              commentList![index].comment.toString(),
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            isThreeLine:
-                                true, // Makes the subtitle take up the full width.
-                            trailing: Text(
-                              formatDate(commentList![index].commentDate),
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ),
-                        )
-                      ],
-                    );
-                  },
-                ):Text("ไม่มีคอมเม้น")
+                            )
+                          ],
+                        );
+                      },
+                    )
+                  : Text("ไม่มีคอมเม้น")
               : Center(child: CircularProgressIndicator()),
         ],
       ),
