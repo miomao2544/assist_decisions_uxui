@@ -19,7 +19,7 @@ class MainApp extends StatelessWidget {
     return  MaterialApp(
       // home: PreviewPostScreen(),
       // home: LoginMemberScreen(),
-      home: HomeScreen(username: 'postmember'),
+      home: HomeScreen(username: 'sandee2544'),
       // home: ListReportScreen(username: 'adminmember'),
       // home: ViewReportPostDetail(username: 'adminmember',reportId: 'R00000000002',),
       debugShowCheckedModeBanner: false,

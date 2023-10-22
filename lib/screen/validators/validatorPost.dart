@@ -1,9 +1,9 @@
 String? validateTitle(String? value) {
-  final RegExp validCharacters = RegExp(r'^[A-Za-zก-๏\s]+$');
+  final RegExp validCharacters = RegExp(r'^[A-Za-zก-๏0-9\s]+$');
   if (value == null || value.isEmpty) {
     return 'กรุณากรอกหัวข้อ';
   } else if (!validCharacters.hasMatch(value)) {
-    return 'หัวข้อต้องประกอบด้วยอักษรภาษาไทยหรือภาษาอังกฤษเท่านั้น';
+    return 'หัวข้อต้องประกอบด้วยอักษรภาษาไทยหรือภาษาอังกฤษหรือตัวเลขเท่านั้น';
   } else if (value.length < 2 || value.length > 50) {
     return 'หัวข้อต้องมีจำนวนอักษรระหว่าง 2 และ 50 ตัวอักษร';
   }

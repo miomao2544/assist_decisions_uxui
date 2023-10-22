@@ -111,7 +111,7 @@ class _ListCommentScreenState extends State<ListCommentScreen> {
                         );
                       },
                     )
-                  : Text("ไม่มีคอมเม้น")
+                  : Text("ไม่มีคอมเม้น",style: TextStyle(fontFamily: 'Light'),)
               : Center(child: CircularProgressIndicator()),
         ],
       ),

@@ -1,23 +1,24 @@
 import 'package:assist_decisions_app/controller/postController.dart';
 import 'package:assist_decisions_app/screen/vote/homeScreen.dart';
+import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:flutter/material.dart';
 
 class ChackDeletePostScreen extends StatefulWidget {
   final String postId;
   final String username;
-  const ChackDeletePostScreen({required this.postId ,required this.username});
+  const ChackDeletePostScreen({required this.postId, required this.username});
 
   @override
   State<ChackDeletePostScreen> createState() => _ChackDeletePostScreenState();
 }
 
 class _ChackDeletePostScreenState extends State<ChackDeletePostScreen> {
-   PostController postController = PostController();
+  PostController postController = PostController();
   @override
   Widget build(BuildContext context) {
     return Container(
-                                          width: 100,
-                                    height: 45,
+      width: 100,
+      height: 45,
       child: ElevatedButton(
         onPressed: () {
           showDialog(
@@ -38,28 +39,35 @@ class _ChackDeletePostScreenState extends State<ChackDeletePostScreen> {
                         child: Text(
                           "คุณแน่ใจหรือไม่ว่าจะลบโพสต์นี้",
                           style: TextStyle(
-                              fontSize: 25.0, fontWeight: FontWeight.bold),
+                              fontSize: 25.0,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Light'),
                           textAlign: TextAlign.center,
                         ),
                       ),
-                      SizedBox(height: 20),
+                      SizedBox(height: 16),
                       Center(
                         child: Container(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               ElevatedButton(
-                                onPressed: ()async{
-                                await postController.doDeletePost(widget.postId.toString());
-                                 Navigator.push(context,
-                                              MaterialPageRoute(
-                                                  builder: (context) {
-                                            return HomeScreen(username:widget.username.toString(),);
-                                          }));
+                                onPressed: () async {
+                                  await postController
+                                      .doDeletePost(widget.postId.toString());
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) {
+                                    return HomeScreen(
+                                      username: widget.username.toString(),
+                                    );
+                                  }));
                                 },
-                                child: Text("ตกลง"),
+                                child: Text(
+                                  "ตกลง",
+                                  style: TextStyle(fontFamily: 'Light'),
+                                ),
                                 style: ElevatedButton.styleFrom(
-                                  primary: Colors.amber,
+                                  primary: MainColor2,
                                 ),
                               ),
                               SizedBox(width: 20),
@@ -67,9 +75,12 @@ class _ChackDeletePostScreenState extends State<ChackDeletePostScreen> {
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                child: Text("ยกเลิก"),
+                                child: Text(
+                                  "ยกเลิก",
+                                  style: TextStyle(fontFamily: 'Light'),
+                                ),
                                 style: ElevatedButton.styleFrom(
-                                  primary: Colors.amber,
+                                  primary: MainColor,
                                 ),
                               ),
                             ],
@@ -83,9 +94,11 @@ class _ChackDeletePostScreenState extends State<ChackDeletePostScreen> {
             },
           );
         },
-        child: Text('ลบ',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 18)),
+        child: Text('ลบ',
+            style: TextStyle(
+                color: Colors.white, fontSize: 18, fontFamily: 'Light')),
         style: ElevatedButton.styleFrom(
-          primary: Color.fromARGB(255, 255, 191, 0),
+          primary: Colors.red,
         ),
       ),
     );

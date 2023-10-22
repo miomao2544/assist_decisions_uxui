@@ -1,3 +1,4 @@
+import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:flutter/material.dart';
 
 class PostInfoWidget extends StatelessWidget {
@@ -24,7 +25,7 @@ class PostInfoWidget extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: TextStyle(fontSize: 16, fontFamily: 'Kanit'),
+                  style: TextStyle(fontSize: 15, fontFamily: 'Kanit',color: MainColor),
                 ),
                 Text(
                   value,

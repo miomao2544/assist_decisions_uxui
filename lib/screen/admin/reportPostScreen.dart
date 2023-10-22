@@ -85,210 +85,213 @@ class _ReportPostScreenState extends State<ReportPostScreen> {
         ),
         body: isDataLoaded == true
             ? SizedBox(
-                child: Container(
-                  height: double.infinity,
-                  child: Center(
-                    child: SingleChildScrollView(
-                      child: Container(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Text('${post?.title ?? ""}',
-                                style: TextStyle(fontSize: 30,fontFamily: 'Light')),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Image.network(
-                              baseURL + '/posts/downloadimg/${post?.postImage}',
-                              fit: BoxFit.cover,
-                              width: 250,
-                              height: 250,
-                            ),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            Text(' ${post?.description ?? ""}',style: TextStyle(fontFamily: 'Light'),),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Row(
-                              children: [
-                                PostInfoWidget(
-                                  title: "คะแนน",
-                                  value: "${post?.postPoint?.toInt()}",
-                                ),
-                                PostInfoWidget(
-                                  title: "จำนวนต่ำสุด",
-                                  value: "${post?.qtyMin}",
-                                ),
-                                PostInfoWidget(
-                                  title: "จำนวนสูงสุด",
-                                  value: "${post?.qtyMax}",
-                                ),
-                                PostInfoWidget(
-                                  title: "จำนวนผู้โหวต",
-                                  value: counts.toString(),
-                                ),
-                              ],
-                            ),
-                            DividerBoxBlack(),
-                            ListView.builder(
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              itemCount: choices?.length ?? 0,
-                              itemBuilder: (context, index) {
-                                return Card(
-                                  elevation: 2,
-                                  shape: Border.all(
-                                    color: selectedChoiceIndex == index
-                                        ? SecondColor
-                                        : MainColor,
-                                    width: 2,
-                                  ),
-                                  child: RadioListTile<int>(
-                                    value: index,
-                                    groupValue: selectedChoiceIndex,
-                                    onChanged: (int? value) {
-                                      setState(() {
-                                        selectedChoiceIndex = value;
-                                      });
-                                    },
-                                    activeColor: SecondColor,
-                                    title: Row(
-                                      children: [
-                                        choices![index].choiceImage != ""
-                                            ? Image.network(
-                                                baseURL +
-                                                    '/choices/downloadimg/${choices![index].choiceImage}',
-                                                fit: BoxFit.cover,
-                                                width: 50,
-                                                height: 50,
-                                              )
-                                            : SizedBox(width: 2, height: 50),
-                                        Text(choices![index].choiceName ?? "",style: TextStyle(fontFamily: 'Light'),),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                            Container(
-                              padding: EdgeInsets.all(16.0),
-                              child: Column(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    height: double.infinity,
+                    child: Center(
+                      child: SingleChildScrollView(
+                        child: Container(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Text('${post?.title ?? ""}',
+                                  style: TextStyle(fontSize: 30,fontFamily: 'Light')),
+                              SizedBox(
+                                height: 15,
+                              ),
+                              Image.network(
+                                baseURL + '/posts/downloadimg/${post?.postImage}',
+                                fit: BoxFit.cover,
+                                width: 250,
+                                height: 250,
+                              ),
+                              SizedBox(
+                                height: 15,
+                              ),
+                              Text(' ${post?.description ?? ""}',style: TextStyle(fontFamily: 'Light'),),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Row(
                                 children: [
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Expanded(
-                                        child: Form(
-                                          key: fromKey,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  border: Border.all(
-                                                    color: SecondColor,
-                                                    width: 4.0,
-                                                  ),
-                                                ),
-                                                child: ClipOval(
-                                                  child: Image.network(
-                                                    baseURL +
-                                                        '/members/downloadimg/${post?.member?.image}',
-                                                    fit: BoxFit.cover,
-                                                    width: 50,
-                                                    height: 50,
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(width: 16.0),
-                                              Text(
-                                                "รายงานคุณ ${post!.member!.nickname}",
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16.0,
-                                                  fontFamily: 'Light'
-                                                ),
-                                              ),
-                                              SizedBox(height: 8.0),
-                                              Container(
-                                                width: 300,
-                                                color: Colors.blueGrey[50],
-                                                child: Padding(
-                                                  padding: const EdgeInsets.all(8.0),
-                                                  child: TextFormField(
-                                                    decoration: InputDecoration(
-                                                      labelText: 'รายงาน',
-                                                      labelStyle: TextStyle(
-                                                          color: MainColor,fontFamily: 'Light'),
-                                                          border:  InputBorder.none
-                                                    ),
-                                                    maxLines: null,
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        reportComment = value;
-                                                      });
-                                                    },
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                              Container(
-                                                width: 120,
-                                                height: 50,
-                                                child: ElevatedButton(
-                                                  onPressed: () async {
-                                                    await reportController
-                                                        .doReportPost(
-                                                      reportComment.toString(),
-                                                      widget.postId.toString(),
-                                                      widget.username.toString(),
-                                                    );
-                                                    Navigator.push(context,
-                                                        MaterialPageRoute(
-                                                            builder: (context) {
-                                                      return ViewPostScreen(
-                                                        postId: widget.postId
-                                                            .toString(),
-                                                        username: widget.username
-                                                            .toString(),
-                                                      );
-                                                    }));
-                                                  },
-                                                  style: ElevatedButton.styleFrom(
-                                                    primary: MainColor
-                                                  ),
-                                                  child: Row(
-                                                    children: [
-                                                      Icon(
-                                                          Icons.report_problem,
-                                                          color: Colors.white),
-                                                          SizedBox(width: 5,),
-                                                          Text("รายงาน",style: TextStyle(fontWeight: FontWeight.bold,fontFamily: 'Light'),)
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                  PostInfoWidget(
+                                    title: "คะแนน",
+                                    value: "${post?.postPoint?.toInt()}",
+                                  ),
+                                  PostInfoWidget(
+                                    title: "จำนวนต่ำสุด",
+                                    value: "${post?.qtyMin}",
+                                  ),
+                                  PostInfoWidget(
+                                    title: "จำนวนสูงสุด",
+                                    value: "${post?.qtyMax}",
+                                  ),
+                                  PostInfoWidget(
+                                    title: "จำนวนผู้โหวต",
+                                    value: counts.toString(),
                                   ),
                                 ],
                               ),
-                            ),
-                            SizedBox(height: 16.0),
-                          ],
+                              DividerBoxBlack(),
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: choices?.length ?? 0,
+                                itemBuilder: (context, index) {
+                                  return Card(
+                                    elevation: 2,
+                                    shape: Border.all(
+                                      color: selectedChoiceIndex == index
+                                          ? SecondColor
+                                          : MainColor,
+                                      width: 2,
+                                    ),
+                                    child: RadioListTile<int>(
+                                      value: index,
+                                      groupValue: selectedChoiceIndex,
+                                      onChanged: (int? value) {
+                                        setState(() {
+                                          selectedChoiceIndex = value;
+                                        });
+                                      },
+                                      activeColor: SecondColor,
+                                      title: Row(
+                                        children: [
+                                          choices![index].choiceImage != ""
+                                              ? Image.network(
+                                                  baseURL +
+                                                      '/choices/downloadimg/${choices![index].choiceImage}',
+                                                  fit: BoxFit.cover,
+                                                  width: 50,
+                                                  height: 50,
+                                                )
+                                              : SizedBox(width: 2, height: 50),
+                                          Text(choices![index].choiceName ?? "",style: TextStyle(fontFamily: 'Light'),),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(16.0),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                          child: Form(
+                                            key: fromKey,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Container(
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    border: Border.all(
+                                                      color: SecondColor,
+                                                      width: 4.0,
+                                                    ),
+                                                  ),
+                                                  child: ClipOval(
+                                                    child: Image.network(
+                                                      baseURL +
+                                                          '/members/downloadimg/${post?.member?.image}',
+                                                      fit: BoxFit.cover,
+                                                      width: 50,
+                                                      height: 50,
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(width: 16.0),
+                                                Text(
+                                                  "รายงานคุณ ${post!.member!.nickname}",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16.0,
+                                                    fontFamily: 'Light'
+                                                  ),
+                                                ),
+                                                SizedBox(height: 8.0),
+                                                Container(
+                                                  width: 300,
+                                                  color: Colors.blueGrey[50],
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.all(8.0),
+                                                    child: TextFormField(
+                                                      decoration: InputDecoration(
+                                                        labelText: 'รายงาน',
+                                                        labelStyle: TextStyle(
+                                                            color: MainColor,fontFamily: 'Light'),
+                                                            border:  InputBorder.none
+                                                      ),
+                                                      maxLines: null,
+                                                      onChanged: (value) {
+                                                        setState(() {
+                                                          reportComment = value;
+                                                        });
+                                                      },
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Container(
+                                                  width: 120,
+                                                  height: 50,
+                                                  child: ElevatedButton(
+                                                    onPressed: () async {
+                                                      await reportController
+                                                          .doReportPost(
+                                                        reportComment.toString(),
+                                                        widget.postId.toString(),
+                                                        widget.username.toString(),
+                                                      );
+                                                      Navigator.push(context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) {
+                                                        return ViewPostScreen(
+                                                          postId: widget.postId
+                                                              .toString(),
+                                                          username: widget.username
+                                                              .toString(),
+                                                        );
+                                                      }));
+                                                    },
+                                                    style: ElevatedButton.styleFrom(
+                                                      primary: MainColor
+                                                    ),
+                                                    child: Row(
+                                                      children: [
+                                                        Icon(
+                                                            Icons.report_problem,
+                                                            color: Colors.white),
+                                                            SizedBox(width: 5,),
+                                                            Text("รายงาน",style: TextStyle(fontWeight: FontWeight.bold,fontFamily: 'Light'),)
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 16.0),
+                            ],
+                          ),
                         ),
                       ),
                     ),

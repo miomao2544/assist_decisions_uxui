@@ -104,7 +104,7 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
         appBar: AppBar(
           backgroundColor: MainColor,
           title: Text(
-              "${formatDate(post?.dateStart)} - ${formatDate(post?.dateStop)}"),
+              "สิ้นสุดการโหวตวันที่ ${formatDate(post?.dateStop)}",style: TextStyle(fontFamily: 'Light')),
           leading: IconButton(
             onPressed: () {
               Navigator.of(context).pushReplacement(
@@ -137,176 +137,183 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
           ],
         ),
         body: isDataLoaded == true
-            ? Container(
-                height: double.infinity,
-                child: Center(
-                  child: SingleChildScrollView(
-                    child: Container(
-                      height: MediaQuery.of(context).size.height,
-                      child: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Text('${post?.title ?? ""}',
-                                style: TextStyle(fontSize: 30,fontFamily: 'Light')),
-                            SizedBox(
-                              height: 25,
-                            ),
-                            Image.network(
-                              baseURL + '/posts/downloadimg/${post?.postImage}',
-                              fit: BoxFit.cover,
-                              width: 250,
-                              height: 250,
-                            ),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            Text(' ${post?.description ?? ""}',style: TextStyle(fontFamily: 'Light'),),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            Row(
-                              children: [
-                                PostInfoWidget(
-                                  title: "คะแนน",
-                                  value: "${post?.postPoint?.toInt()}",
-                                ),
-                                PostInfoWidget(
-                                  title: "จำนวนต่ำสุด",
-                                  value: "${post?.qtyMin}",
-                                ),
-                                PostInfoWidget(
-                                  title: "จำนวนสูงสุด",
-                                  value: "${post?.qtyMax}",
-                                ),
-                                PostInfoWidget(
-                                  title: "จำนวนผู้โหวต",
-                                  value: counts.toString(),
-                                ),
-                              ],
-                            ),
-                            DividerBoxBlack(),
-                            ListView.builder(
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              itemCount: choices?.length ?? 0,
-                              itemBuilder: (context, index) {
-                                return Card(
-                                  elevation: 2,
-                                  shape: Border.all(
-                                    color: selectedChoiceIndex == index
-                                        ? SecondColor
-                                        : Color.fromARGB(255, 255, 249, 196),
-                                    width: 2,
+            ? Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                  height: double.infinity,
+                  child: Center(
+                    child: SingleChildScrollView(
+                      child: Container(
+                        height: MediaQuery.of(context).size.height,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Text('${post?.title ?? ""}',
+                                  style: TextStyle(fontSize: 24,color: MainColor,fontWeight: FontWeight.bold,fontFamily: 'Light')),
+                              SizedBox(
+                                height: 25,
+                              ),
+                                                          ClipRRect(
+                              borderRadius: BorderRadius.circular(
+                                  15), // แก้ไขค่าตรงนี้เพื่อปรับรูปแบบการโค้งตามที่คุณต้องการ
+                              child:
+                              Image.network(
+                                baseURL + '/posts/downloadimg/${post?.postImage}',
+                                fit: BoxFit.cover,
+                                width: 250,
+                                height: 250,
+                              )),
+                              SizedBox(
+                                height: 15,
+                              ),
+                              Text(' ${post?.description ?? ""}',style: TextStyle(fontFamily: 'Light'),),
+                              SizedBox(
+                                height: 15,
+                              ),
+                              Row(
+                                children: [
+                                  PostInfoWidget(
+                                    title: "คะแนน",
+                                    value: "${post?.postPoint?.toInt()}",
                                   ),
-                                  child: RadioListTile<int>(
-                                    value: index,
-                                    groupValue: selectedChoiceIndex,
-                                    onChanged: (int? value) {
-                                      setState(() {
-                                        selectedChoiceIndex = value;
-                                      });
-                                    },
-                                    activeColor: SecondColor,
-                                    title: Row(
-                                      children: [
-                                        choices![index].choiceImage != ""
-                                            ? Image.network(
-                                                baseURL +
-                                                    '/choices/downloadimg/${choices![index].choiceImage}',
-                                                fit: BoxFit.cover,
-                                                width: 50,
-                                                height: 50,
-                                              )
-                                            : SizedBox(width: 2, height: 50),
-                                        Text(choices![index].choiceName ?? "",style: TextStyle(fontFamily: 'Light'),),
-                                      ],
+                                  PostInfoWidget(
+                                    title: "จำนวนต่ำสุด",
+                                    value: "${post?.qtyMin}",
+                                  ),
+                                  PostInfoWidget(
+                                    title: "จำนวนสูงสุด",
+                                    value: "${post?.qtyMax}",
+                                  ),
+                                  PostInfoWidget(
+                                    title: "จำนวนผู้โหวต",
+                                    value: counts.toString(),
+                                  ),
+                                ],
+                              ),
+                              DividerBoxBlack(),
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: choices?.length ?? 0,
+                                itemBuilder: (context, index) {
+                                  return Card(
+                                    elevation: 2,
+                                    shape: Border.all(
+                                      color: selectedChoiceIndex == index
+                                          ? SecondColor
+                                          : Color.fromARGB(255, 255, 249, 196),
+                                      width: 2,
                                     ),
-                                  ),
-                                );
-                              },
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            ifvote == "0"
-                                ? Container(
-                                    width: 120,
-                                    height: 45,
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              title: Text("ยืนยันคำตอบ"),
-                                              content: Text(
-                                                  "คุณแน่ใจหรือไม่ที่ต้องการยืนยันคำตอบนี้?"),
-                                              actions: [
-                                                TextButton(
-                                                  onPressed: () async {
-                                                    Navigator.of(context)
-                                                        .pop(); // ปิด Alert Dialog
-                                                  },
-                                                  child: Text("ยกเลิก"),
-                                                ),
-                                                TextButton(
-                                                  onPressed: () async {
-                                                    await voteController.doVotePost(
-                                                        widget.username
-                                                            .toString(),
-                                                        choices![
-                                                                selectedChoiceIndex!]
-                                                            .choiceId
-                                                            .toString());
-                                                    await voteController
-                                                        .getIFVoteChoice(
-                                                            widget.username,
-                                                            widget.postId);
-                                                    Navigator.of(context).pop();
-                                                    Navigator.push(context,
-                                                        MaterialPageRoute(
-                                                            builder: (context) {
-                                                      return ViewPostScreen(
-                                                        username:
-                                                            widget.username,
-                                                        postId: post!.postId
-                                                            .toString(),
-                                                      );
-                                                    }));
-                                                  },
-                                                  child: Text("ยืนยัน",style: TextStyle(fontFamily: 'Light'),),
-                                                ),
-                                              ],
-                                            );
-                                          },
-                                        );
+                                    child: RadioListTile<int>(
+                                      value: index,
+                                      groupValue: selectedChoiceIndex,
+                                      onChanged: (int? value) {
+                                        setState(() {
+                                          selectedChoiceIndex = value;
+                                        });
                                       },
-                                      style: ElevatedButton.styleFrom(
-                                        primary:
-                                            MainColor, // Change this to your desired color
+                                      activeColor: SecondColor,
+                                      title: Row(
+                                        children: [
+                                          choices![index].choiceImage != ""
+                                              ? Image.network(
+                                                  baseURL +
+                                                      '/choices/downloadimg/${choices![index].choiceImage}',
+                                                  fit: BoxFit.cover,
+                                                  width: 50,
+                                                  height: 50,
+                                                )
+                                              : SizedBox(width: 2, height: 50),
+                                          Text(choices![index].choiceName ?? "",style: TextStyle(fontFamily: 'Light'),),
+                                        ],
                                       ),
-                                      child: Text("ยืนยันคำตอบ",style: TextStyle(fontFamily: 'Light'),),
                                     ),
-                                  )
-                                : SizedBox(
-                                    height: 10,
-                                  ),
-                            SizedBox(height: 16.0),
-                            CommentScreen(
-                              member: member,
-                              postId: post!.postId.toString(),
-                            ),
-                          ],
+                                  );
+                                },
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              ifvote == "0"
+                                  ? Container(
+                                      width: 120,
+                                      height: 45,
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                title: Text("ยืนยันคำตอบ"),
+                                                content: Text(
+                                                    "คุณแน่ใจหรือไม่ที่ต้องการยืนยันคำตอบนี้?"),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () async {
+                                                      Navigator.of(context)
+                                                          .pop(); // ปิด Alert Dialog
+                                                    },
+                                                    child: Text("ยกเลิก"),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () async {
+                                                      await voteController.doVotePost(
+                                                          widget.username
+                                                              .toString(),
+                                                          choices![
+                                                                  selectedChoiceIndex!]
+                                                              .choiceId
+                                                              .toString());
+                                                      await voteController
+                                                          .getIFVoteChoice(
+                                                              widget.username,
+                                                              widget.postId);
+                                                      Navigator.of(context).pop();
+                                                      Navigator.push(context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) {
+                                                        return ViewPostScreen(
+                                                          username:
+                                                              widget.username,
+                                                          postId: post!.postId
+                                                              .toString(),
+                                                        );
+                                                      }));
+                                                    },
+                                                    child: Text("ยืนยัน",style: TextStyle(fontFamily: 'Light'),),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          primary:
+                                              MainColor, // Change this to your desired color
+                                        ),
+                                        child: Text("ยืนยันคำตอบ",style: TextStyle(fontFamily: 'Light'),),
+                                      ),
+                                    )
+                                  : SizedBox(
+                                      height: 10,
+                                    ),
+                              SizedBox(height: 16.0),
+                              CommentScreen(
+                                member: member,
+                                postId: post!.postId.toString(),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              )
+            )
             : Center(child: CircularProgressIndicator()),
       ),
     );

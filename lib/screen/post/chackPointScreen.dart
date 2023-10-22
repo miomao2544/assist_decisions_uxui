@@ -1,3 +1,4 @@
+import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:flutter/material.dart';
 
 import '../../controller/memberController.dart';
@@ -41,22 +42,21 @@ class _ChackPointScreenState extends State<ChackPointScreen> {
                 child: Column(
                   children: [
                     Image.asset("assets/images/logo.png",width: 250,),
-                    Text("คะแนนไม่เพียงพอ", style: TextStyle(fontSize: 25.0),),
+                    Text("คะแนนไม่เพียงพอ", style: TextStyle(fontSize: 25.0,fontFamily: 'Light'),),
                     SizedBox(height: 10,),
-                    Text("คะแนนของคุณคือ"),
+                    Text("คะแนนของคุณคือ",style: TextStyle(fontFamily: 'Light'),),
                     SizedBox(height: 10,),
                     Text("${member?.point.toString()}", style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold)),
                     SizedBox(height: 10,),
-                    Text("ต้องการคะแนนอีก ${remainingPoints} คะแนน \n จึงจะสามารถสร้างโพสต์ได้", textAlign: TextAlign.center,),
+                    Text("ต้องการคะแนนอีก ${remainingPoints} คะแนน \n จึงจะสามารถสร้างโพสต์ได้", textAlign: TextAlign.center,style: TextStyle(fontFamily: 'Light',),),
                     SizedBox(height: 10,),
                     ElevatedButton(
                       onPressed: () {
-                        // Add logic for the "ตกลง" button here
-                        Navigator.of(context).pop(); // Close the dialog
+                        Navigator.of(context).pop();
                       },
-                      child: Text("ตกลง"),
+                      child: Text("ตกลง",style: TextStyle(fontFamily: 'Light'),),
                        style: ElevatedButton.styleFrom(
-                      primary: Colors.amber, // Set the button color
+                      primary: MainColor,
                     ),
                     ),
                     

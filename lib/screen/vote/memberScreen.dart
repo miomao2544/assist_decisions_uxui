@@ -2,6 +2,7 @@ import 'package:assist_decisions_app/controller/postController.dart';
 import 'package:assist_decisions_app/model/post.dart';
 import 'package:assist_decisions_app/screen/post/postDetailScreen.dart';
 import 'package:assist_decisions_app/screen/vote/viewPostScreen.dart';
+import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:assist_decisions_app/widgets/customNewCard.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -16,12 +17,11 @@ class MemberScreen extends StatefulWidget {
 
 class _MemberScreenState extends State<MemberScreen> {
   final List<String> movies = [
-    "assets/images/page1.png",
-    "assets/images/page2.png",
-    "assets/images/page3.png",
+    "assets/images/bg01.png",
+    "assets/images/bg02.png",
   ];
 
- List<Post>? posts = [];
+  List<Post>? posts = [];
   bool? isDataLoaded = false;
 
   List<Post>? openPosts = [];
@@ -29,25 +29,23 @@ class _MemberScreenState extends State<MemberScreen> {
 
   final PostController postController = PostController();
 
-void fetchPost() async {
-  posts = await postController.listPostsMember(widget.username);
-  openPosts = [];
-  closedPosts = [];
+  void fetchPost() async {
+    posts = await postController.listPostsMember(widget.username);
+    openPosts = [];
+    closedPosts = [];
 
-
-  for (int i = 0; i < posts!.length; i++) {
-    if (posts![i].result.toString() == "r") {
-      openPosts!.add(posts![i]);
-    } else {
-      closedPosts!.add(posts![i]);
+    for (int i = 0; i < posts!.length; i++) {
+      if (posts![i].result.toString() == "r") {
+        openPosts!.add(posts![i]);
+      } else {
+        closedPosts!.add(posts![i]);
+      }
     }
+
+    setState(() {
+      isDataLoaded = true;
+    });
   }
-
-  setState(() {
-    isDataLoaded = true;
-  });
-}
-
 
   @override
   void initState() {
@@ -57,14 +55,14 @@ void fetchPost() async {
 
   @override
   Widget build(BuildContext context) {
-    return   Container(
-  decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Colors.blueGrey, Colors.white],
-          ),
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [MainColor, Colors.white],
         ),
+      ),
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -73,7 +71,8 @@ void fetchPost() async {
             ),
             CarouselSlider(
               items: movies.map((movie) {
-                return Container(
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(15.0),
                   child: Image.asset(
                     movie,
                     fit: BoxFit.cover,
@@ -86,53 +85,103 @@ void fetchPost() async {
                 enlargeCenterPage: true,
               ),
             ),
-            Text(
-              "กำลังทำการโหวต",
-              style: TextStyle(fontSize: 25,fontFamily: 'Light'),
-              textAlign: TextAlign.left,
-            ),
-           isDataLoaded == true ? Container(
-              padding: EdgeInsets.all(10.0),
-              height: MediaQuery.of(context).size.height / 4.3,
-              child: ListView.builder(
-                itemCount: openPosts?.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  return CustomNewCard(
-                    postImage: openPosts?[index].postImage ?? '',
-                    interestName:
-                        openPosts?[index].interest?.interestName ?? '',
-                    title: openPosts?[index].title ?? '',
-                    description: openPosts?[index].description ?? '',
-                    screen: widget.username ==  openPosts?[index].member?.username? PostDetailScreen(postId:
-                                              openPosts![index].postId.toString(),username: widget.username.toString(),):ViewPostScreen(postId: openPosts![index].postId.toString(),username: widget.username.toString()),
-                  );
-                },
+      Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text(
+                    "กำลังดำเนินการ",
+                    style: TextStyle(
+                        fontSize: 25, fontFamily: 'Kanit', color: MainColor2),
+                    textAlign: TextAlign.left,
+                  ),
+                  SizedBox(width: 10,),
+                  Text(
+                    "โพสต์ทั้งหมด",
+                    style: TextStyle(
+                        fontSize: 16, fontFamily: 'Kanit', color: MainColor2),
+                    textAlign: TextAlign.end,
+                  ),
+                ],
               ),
-            ):SizedBox(height: 200,),
-            Text(
-              "ปิดทำการโหวต",
-              style: TextStyle(fontSize: 25,fontFamily: 'Light'),
-              textAlign: TextAlign.left,
+      
+            isDataLoaded == true
+                ? Container(
+                    padding: EdgeInsets.all(10.0),
+                    height: MediaQuery.of(context).size.height / 4.3,
+                    child: ListView.builder(
+                      itemCount: openPosts?.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        return CustomNewCard(
+                          postImage: openPosts?[index].postImage ?? '',
+                          interestName:
+                              openPosts?[index].interest?.interestName ?? '',
+                          title: openPosts?[index].title ?? '',
+                          description: openPosts?[index].description ?? '',
+                          screen: widget.username ==
+                                  openPosts?[index].member?.username
+                              ? PostDetailScreen(
+                                  postId: openPosts![index].postId.toString(),
+                                  username: widget.username.toString(),
+                                )
+                              : ViewPostScreen(
+                                  postId: openPosts![index].postId.toString(),
+                                  username: widget.username.toString()),
+                        );
+                      },
+                    ),
+                  )
+                : SizedBox(
+                    height: 200,
+                  ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  "ดำเนินการเสร็จสิ้น",
+                  style: TextStyle(
+                      fontSize: 25, fontFamily: 'Kanit', color: MainColor2),
+                  textAlign: TextAlign.left,
+                ),
+                SizedBox(width: 10,),
+                Text(
+                  "โพสต์ทั้งหมด",
+                  style: TextStyle(
+                      fontSize: 16, fontFamily: 'Kanit', color: MainColor2),
+                  textAlign: TextAlign.end,
+                ),
+              ],
             ),
-           isDataLoaded == true ? Container(
-              padding: EdgeInsets.all(10.0),
-              height: MediaQuery.of(context).size.height / 4.3,
-              child: ListView.builder(
-                itemCount: closedPosts?.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  return CustomNewCard(
-                    postImage: closedPosts?[index].postImage ?? '',
-                    interestName:
-                        closedPosts?[index].interest?.interestName ?? '',
-                    title: closedPosts?[index].title ?? '',
-                    description: closedPosts?[index].description ?? '',
-                    screen: widget.username ==  closedPosts?[index].member?.username? PostDetailScreen(postId: closedPosts![index].postId.toString(),username: widget.username.toString(),):ViewPostScreen(postId: closedPosts![index].postId.toString(),username: widget.username.toString()),
-                  );
-                },
-              ),
-            ):SizedBox(height: 200,),
+            isDataLoaded == true
+                ? Container(
+                    padding: EdgeInsets.all(10.0),
+                    height: MediaQuery.of(context).size.height / 4.3,
+                    child: ListView.builder(
+                      itemCount: closedPosts?.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        return CustomNewCard(
+                          postImage: closedPosts?[index].postImage ?? '',
+                          interestName:
+                              closedPosts?[index].interest?.interestName ?? '',
+                          title: closedPosts?[index].title ?? '',
+                          description: closedPosts?[index].description ?? '',
+                          screen: widget.username ==
+                                  closedPosts?[index].member?.username
+                              ? PostDetailScreen(
+                                  postId: closedPosts![index].postId.toString(),
+                                  username: widget.username.toString(),
+                                )
+                              : ViewPostScreen(
+                                  postId: closedPosts![index].postId.toString(),
+                                  username: widget.username.toString()),
+                        );
+                      },
+                    ),
+                  )
+                : SizedBox(
+                    height: 200,
+                  ),
             SizedBox(
               height: 20.0,
             ),
