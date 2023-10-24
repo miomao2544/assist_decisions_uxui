@@ -68,7 +68,7 @@ class ChoiceController{
   }
 
 
-    Future ViewPostHistory(String username) async {
+    Future viewVoteHistory(String username) async {
     var url = Uri.parse(baseURL + '/choices/listpoint/${username}');
 
     http.Response response = await http.post(url, headers: headers, body: null);

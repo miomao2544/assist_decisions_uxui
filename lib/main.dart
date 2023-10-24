@@ -1,6 +1,6 @@
 
 import 'package:assist_decisions_app/screen/admin/listReportScreen.dart';
-import 'package:assist_decisions_app/screen/admin/loginAdminScreen.dart';
+import 'package:assist_decisions_app/screen/admin/LoginAdminScreen.dart';
 import 'package:assist_decisions_app/screen/admin/viewReportPostDetailScreen.dart';
 import 'package:assist_decisions_app/screen/user/previewPostScreen.dart';
 import 'package:assist_decisions_app/screen/vote/homeScreen.dart';
@@ -19,7 +19,8 @@ class MainApp extends StatelessWidget {
     return  MaterialApp(
       // home: PreviewPostScreen(),
       // home: LoginMemberScreen(),
-      home: HomeScreen(username: 'sandee2544'),
+      // home: LoginAdminScreen(),
+      home: HomeScreen(username: 'miomao2544'),
       // home: ListReportScreen(username: 'adminmember'),
       // home: ViewReportPostDetail(username: 'adminmember',reportId: 'R00000000002',),
       debugShowCheckedModeBanner: false,

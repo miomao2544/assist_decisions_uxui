@@ -2,7 +2,7 @@ import 'package:assist_decisions_app/controller/choiceController.dart';
 import 'package:assist_decisions_app/controller/postController.dart';
 import 'package:assist_decisions_app/model/choice.dart';
 import 'package:assist_decisions_app/model/post.dart';
-import 'package:assist_decisions_app/screen/vote/viewProfileScreen.dart';
+import 'package:assist_decisions_app/screen/vote/ViewProfileScreen.dart';
 import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -25,8 +25,7 @@ class _ViewPostHistoryState extends State<ViewPostHistoryScreen> {
   final ChoiceController choiceController = ChoiceController();
   Future fetchPost() async {
     posts = await postController.ViewPostHistory(widget.username.toString());
-    choices =
-        await choiceController.ViewPostHistory(widget.username.toString());
+    choices = await choiceController.viewVoteHistory(widget.username.toString());
     setState(() {
       isDataLoaded = true;
     });

@@ -3,8 +3,8 @@ import 'package:assist_decisions_app/controller/choiceController.dart';
 import 'package:assist_decisions_app/controller/reportController.dart';
 import 'package:assist_decisions_app/model/choice.dart';
 import 'package:assist_decisions_app/model/report.dart';
-import 'package:assist_decisions_app/screen/admin/changeBannedStatusScreen.dart';
-import 'package:assist_decisions_app/screen/admin/listReportPostScreen.dart';
+import 'package:assist_decisions_app/screen/admin/ChangeBannedStatusScreen.dart';
+import 'package:assist_decisions_app/screen/admin/ListReportPostScreen.dart';
 import 'package:assist_decisions_app/screen/admin/listReportScreen.dart';
 import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:flutter/material.dart';
@@ -68,7 +68,10 @@ class _ViewReportPostDetailState extends State<ViewReportPostDetail> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: MainColor,
-          title: Text("Logo"),
+          title:                   Image.asset(
+                    "assets/images/logo.png",
+                    width: 60,
+                  ),
         ),
         body: isDataLoaded == true
             ? SingleChildScrollView(

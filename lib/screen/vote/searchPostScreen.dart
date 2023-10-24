@@ -2,7 +2,7 @@ import 'package:assist_decisions_app/controller/interestController.dart';
 import 'package:assist_decisions_app/controller/postController.dart';
 import 'package:assist_decisions_app/model/interest.dart';
 import 'package:assist_decisions_app/model/post.dart';
-import 'package:assist_decisions_app/screen/post/postDetailScreen.dart';
+import 'package:assist_decisions_app/screen/post/ViewPostDetailScreen.dart';
 import 'package:assist_decisions_app/screen/vote/viewPostScreen.dart';
 import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:flutter/material.dart';
@@ -36,22 +36,25 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
     List<Interest>? interest = await interestController
         .listInterestsByUser(widget.username.toString());
     List<String>? interestList = [];
+    if(interestListSelect == ''){
     for (int i = 0; i < interest!.length; i++) {
-      if (interest[i].interestId != null) {
+        if (interestListSelect != null) {
         interestList.add(interest[i].interestId.toString());
       }
     }
-    interestListSelect = interestList.where((item) => item != true).join(',');
+        interestListSelect = interestList.where((item) => item != true).join(',');
+    }
+
+print("---------------------------interests-----is ${interestListSelect}----------------------");
     posts = await postController.listSearchPostsAll(search.toString(),
-        interestListSelect.toString(), point.toString(), dateStops.toString());
+        interestListSelect.toString(),"", "");
     setState(() {});
   }
 
   Future loadInterests() async {
-    List<Interest> interestList = await interestController.listAllInterests();
+    List<Interest> interestList = await interestController.listInterestsByUser(widget.username.toString());
     setState(() {
-      print(
-          "---------------------------interests-----is ${interestList[0].interestName}----------------------");
+
       interests = interestList;
       isDataLoaded = true;
     });
@@ -310,7 +313,7 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
                                   ? Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => PostDetailScreen(
+                                        builder: (context) => ViewPostDetailScreen(
                                           postId:
                                               posts![index].postId.toString(),
                                           username: widget.username.toString(),

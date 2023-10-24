@@ -89,7 +89,10 @@ class _ChangeBannedStatusScreenState extends State<ChangeBannedStatusScreen> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: MainColor,
-          title: Text("Logo"),
+          title:     Image.asset(
+                    "assets/images/logo.png",
+                    width: 60,
+                  ),
         ),
         body: isDataLoaded == true
             ? SingleChildScrollView(

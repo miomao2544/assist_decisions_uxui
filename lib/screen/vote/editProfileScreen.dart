@@ -1,7 +1,7 @@
 import 'package:assist_decisions_app/constant/constant_value.dart';
 import 'package:assist_decisions_app/controller/memberController.dart';
 import 'package:assist_decisions_app/model/member.dart';
-import 'package:assist_decisions_app/screen/vote/viewProfileScreen.dart';
+import 'package:assist_decisions_app/screen/vote/ViewProfileScreen.dart';
 import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';

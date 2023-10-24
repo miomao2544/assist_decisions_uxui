@@ -1,6 +1,6 @@
 import 'package:assist_decisions_app/controller/postController.dart';
 import 'package:assist_decisions_app/model/post.dart';
-import 'package:assist_decisions_app/screen/post/postDetailScreen.dart';
+import 'package:assist_decisions_app/screen/post/ViewPostDetailScreen.dart';
 import 'package:assist_decisions_app/screen/vote/viewPostScreen.dart';
 import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:assist_decisions_app/widgets/customNewCard.dart';
@@ -120,7 +120,7 @@ class _MemberScreenState extends State<MemberScreen> {
                           description: openPosts?[index].description ?? '',
                           screen: widget.username ==
                                   openPosts?[index].member?.username
-                              ? PostDetailScreen(
+                              ? ViewPostDetailScreen(
                                   postId: openPosts![index].postId.toString(),
                                   username: widget.username.toString(),
                                 )
@@ -168,7 +168,7 @@ class _MemberScreenState extends State<MemberScreen> {
                           description: closedPosts?[index].description ?? '',
                           screen: widget.username ==
                                   closedPosts?[index].member?.username
-                              ? PostDetailScreen(
+                              ? ViewPostDetailScreen(
                                   postId: closedPosts![index].postId.toString(),
                                   username: widget.username.toString(),
                                 )

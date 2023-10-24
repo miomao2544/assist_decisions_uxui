@@ -3,16 +3,16 @@ import 'package:assist_decisions_app/screen/vote/homeScreen.dart';
 import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:flutter/material.dart';
 
-class ChackDeletePostScreen extends StatefulWidget {
+class CancelPostScreen extends StatefulWidget {
   final String postId;
   final String username;
-  const ChackDeletePostScreen({required this.postId, required this.username});
+  const CancelPostScreen({required this.postId, required this.username});
 
   @override
-  State<ChackDeletePostScreen> createState() => _ChackDeletePostScreenState();
+  State<CancelPostScreen> createState() => _ChackDeletePostScreenState();
 }
 
-class _ChackDeletePostScreenState extends State<ChackDeletePostScreen> {
+class _ChackDeletePostScreenState extends State<CancelPostScreen> {
   PostController postController = PostController();
   @override
   Widget build(BuildContext context) {

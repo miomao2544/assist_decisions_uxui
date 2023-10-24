@@ -9,13 +9,13 @@ class Post{
   String? postImage;
   String? title;
   String? description;
-  double? postPoint;
+  int? postPoint;
   String? dateStart;
   String? dateStop;
   String? result;
   int? qtyMax;
   int? qtyMin;
-  double? avgPoint;
+  int? avgPoint;
   Member? member;
   Interest? interest;
 

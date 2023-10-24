@@ -25,7 +25,7 @@ class _NotifyPostScreenState extends State<NotifyPostScreen> {
   List<String> ifvotes = [];
 
   void fetchPost() async {
-    posts = await postController.listPostsInterest(widget.username.toString());
+    posts = await postController.getListPostsInterest(widget.username.toString());
     int i = 0;
     while (i < posts!.length) {
       String ifvote = await voteController.getIFVoteChoice(

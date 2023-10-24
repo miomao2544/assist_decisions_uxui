@@ -3,7 +3,6 @@ import 'package:assist_decisions_app/controller/interestController.dart';
 import 'package:assist_decisions_app/controller/memberController.dart';
 import 'package:assist_decisions_app/controller/postController.dart';
 import 'package:assist_decisions_app/model/choice.dart';
-import 'package:assist_decisions_app/model/choiceDto.dart';
 import 'package:assist_decisions_app/model/interest.dart';
 import 'package:assist_decisions_app/model/member.dart';
 import 'package:assist_decisions_app/screen/vote/homeScreen.dart';
@@ -36,7 +35,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
   String? dateStart;
   String? dateStop;
 
-  List<ChoiceDto>? choiceDtoList = [];
+
   List<String>? images = [];
   ChoiceController choiceController = ChoiceController();
   PostController postController = PostController();

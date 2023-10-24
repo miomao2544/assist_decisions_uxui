@@ -132,7 +132,10 @@ class _ListReportScreenState extends State<ListReportScreen> {
         ? Scaffold(
             appBar: AppBar(
               backgroundColor: MainColor,
-              title: Text("Logo"),
+              title:                   Image.asset(
+                    "assets/images/logo.png",
+                    width: 60,
+                  ),
               actions: [
                 Container(
                   decoration: BoxDecoration(
@@ -196,7 +199,7 @@ class _ListReportScreenState extends State<ListReportScreen> {
                 )
               ],
             ),
-            body: SingleChildScrollView(
+            body:  SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(10, 50, 10, 0),
                 child: Column(
@@ -255,34 +258,34 @@ class _ListReportScreenState extends State<ListReportScreen> {
                                   height: 50,
                                   width: 10,
                                 ),
-                                SizedBox(
-                                  width: 160,
-                                  height: 50,
-                                  child: TextFormField(
-                                    controller: postDateStopController,
-                                    readOnly: true,
-                                    onTap: () async {
-                                      await _selectDateStop(context);
-                                      String selectedDate =
-                                          postDateStopController.text;
-                                      postDateStopController.text =
-                                          selectedDate;
-                                      searchReportsByDate(selectedDate);
-                                    },
-                                    decoration: InputDecoration(
-                                      counterText: "",
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      prefixIcon: Icon(Icons.calendar_today),
-                                      prefixIconColor: MainColor,
-                                    ),
-                                    style: TextStyle(
-                                      fontFamily: 'Itim',
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                ),
+                                // SizedBox(
+                                //   width: 160,
+                                //   height: 50,
+                                //   child: TextFormField(
+                                //     controller: postDateStopController,
+                                //     readOnly: true,
+                                //     onTap: () async {
+                                //       await _selectDateStop(context);
+                                //       String selectedDate =
+                                //           postDateStopController.text;
+                                //       postDateStopController.text =
+                                //           selectedDate;
+                                //       searchReportsByDate(selectedDate);
+                                //     },
+                                //     decoration: InputDecoration(
+                                //       counterText: "",
+                                //       border: OutlineInputBorder(
+                                //         borderRadius: BorderRadius.circular(10),
+                                //       ),
+                                //       prefixIcon: Icon(Icons.calendar_today),
+                                //       prefixIconColor: MainColor,
+                                //     ),
+                                //     style: TextStyle(
+                                //       fontFamily: 'Itim',
+                                //       fontSize: 18,
+                                //     ),
+                                //   ),
+                                // ),
                               ],
                             ),
                           ],
@@ -292,7 +295,7 @@ class _ListReportScreenState extends State<ListReportScreen> {
                     SizedBox(
                       height: 20,
                     ),
-                    Container(
+                    reports!.length != 0 ?Container(
                       width: 1270,
                       child: Center(
                         child: Stack(
@@ -338,28 +341,22 @@ class _ListReportScreenState extends State<ListReportScreen> {
                                                     Text(
                                                         '${formatDate(report.reportDate)}'),
                                                     SizedBox(
-                                                      width: 40,
+                                                      width: 60,
                                                     ),
-                                                    Container(
-                                                      decoration: BoxDecoration(
-                                                        shape: BoxShape.circle,
-                                                        border: Border.all(
-                                                          color: SecondColor,
-                                                          width: 2.0,
-                                                        ),
-                                                      ),
-                                                      child: Text("${counts[index]}"),
-                                                      
-                                                      // child: ClipOval(
-                                                      //   child: Image.network(
-                                                      //     baseURL +
-                                                      //         '/members/downloadimg/${report.member!.image}',
-                                                      //     fit: BoxFit.cover,
-                                                      //     width: 36,
-                                                      //     height: 36,
-                                                      //   ),
-                                                      // ),
-                                                    )
+Container(
+  width: 30,
+  height: 30,
+  decoration: BoxDecoration(
+    color: SecondColor, // สีที่ต้องการ
+    borderRadius: BorderRadius.circular(15.0), // ความโค้งของวงกลม (15.0 คือความกว้างของ Container และความสูงของ Container หาร 2)
+  ),
+  child: Center(
+    child: Text(
+      "${counts[index]}",
+      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: Colors.white),
+    ),
+  ),
+)
                                                   ],
                                                 ),
                                                 Text(
@@ -404,46 +401,46 @@ class _ListReportScreenState extends State<ListReportScreen> {
                                                   ),
                                                 ),
 
-                                                // Container(
-                                                //   child:
-                                                //       FutureBuilder<List<Text>>(
-                                                //     future: getReportComments(
-                                                //         report),
-                                                //     // ต้องกำหนด report ให้กับตัวแปรนี้
-                                                //     builder:
-                                                //         (context, snapshot) {
-                                                //       if (snapshot
-                                                //               .connectionState ==
-                                                //           ConnectionState
-                                                //               .waiting) {
-                                                //         return CircularProgressIndicator(); // หรือใดๆ ก็ได้เพื่อแสดงว่าข้อมูลกำลังโหลด
-                                                //       } else if (snapshot
-                                                //           .hasError) {
-                                                //         return Text(
-                                                //             'Error: ${snapshot.error}');
-                                                //       } else if (snapshot
-                                                //           .hasData) {
-                                                //         List<Text>
-                                                //             commentTexts =
-                                                //             snapshot.data!;
-                                                //         return ListView.builder(
-                                                //           shrinkWrap: true,
-                                                //           itemCount:
-                                                //               commentTexts
-                                                //                   .length,
-                                                //           itemBuilder:
-                                                //               (context, index) {
-                                                //             return commentTexts[
-                                                //                 index];
-                                                //           },
-                                                //         );
-                                                //       } else {
-                                                //         return Text(
-                                                //             'No data available');
-                                                //       }
-                                                //     },
-                                                //   ),
-                                                // ),
+                                                Container(
+                                                  child:
+                                                      FutureBuilder<List<Text>>(
+                                                    future: getReportComments(
+                                                        report),
+                                                    // ต้องกำหนด report ให้กับตัวแปรนี้
+                                                    builder:
+                                                        (context, snapshot) {
+                                                      if (snapshot
+                                                              .connectionState ==
+                                                          ConnectionState
+                                                              .waiting) {
+                                                        return CircularProgressIndicator(); // หรือใดๆ ก็ได้เพื่อแสดงว่าข้อมูลกำลังโหลด
+                                                      } else if (snapshot
+                                                          .hasError) {
+                                                        return Text(
+                                                            'Error: ${snapshot.error}');
+                                                      } else if (snapshot
+                                                          .hasData) {
+                                                        List<Text>
+                                                            commentTexts =
+                                                            snapshot.data!;
+                                                        return ListView.builder(
+                                                          shrinkWrap: true,
+                                                          itemCount:
+                                                              commentTexts
+                                                                  .length,
+                                                          itemBuilder:
+                                                              (context, index) {
+                                                            return commentTexts[
+                                                                index];
+                                                          },
+                                                        );
+                                                      } else {
+                                                        return Text(
+                                                            'No data available');
+                                                      }
+                                                    },
+                                                  ),
+                                                ),
                                                 Padding(
                                                   padding:
                                                       const EdgeInsets.all(8.0),
@@ -494,11 +491,12 @@ class _ListReportScreenState extends State<ListReportScreen> {
                           ],
                         ),
                       ),
-                    ),
+                    ):Text("ยังไม่มีรายงาน"),
                   ],
                 ),
               ),
-            ))
+            ),
+            )
         : CircularProgressIndicator();
   }
 }

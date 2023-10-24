@@ -15,9 +15,8 @@ class PreviewPostScreen extends StatefulWidget {
 
 class _PreviewPostScreenState extends State<PreviewPostScreen> {
   final List<String> movies = [
-    "assets/images/page1.png",
-    "assets/images/page2.png",
-    "assets/images/page3.png",
+    "assets/images/bg01.png",
+    "assets/images/bg02.png",
   ];
 
   List<Post>? posts = [];
@@ -96,7 +95,7 @@ class _PreviewPostScreenState extends State<PreviewPostScreen> {
                 );
               }).toList(),
               options: CarouselOptions(
-                height: 200.0,
+                height: 150.0,
                 autoPlay: true,
                 enlargeCenterPage: true,
               ),

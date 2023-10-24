@@ -1,9 +1,9 @@
 import 'package:assist_decisions_app/controller/memberController.dart';
 import 'package:assist_decisions_app/controller/postController.dart';
 import 'package:assist_decisions_app/controller/voteController.dart';
-import 'package:assist_decisions_app/screen/post/chackDeletePostScreen.dart';
-import 'package:assist_decisions_app/screen/post/editPostScreen.dart';
-import 'package:assist_decisions_app/screen/post/listCommentScreen.dart';
+import 'package:assist_decisions_app/screen/post/CancelPostScreen.dart';
+import 'package:assist_decisions_app/screen/post/EditPostScreen.dart';
+import 'package:assist_decisions_app/screen/vote/ListCommentScreen.dart';
 import 'package:assist_decisions_app/screen/vote/homeScreen.dart';
 import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:flutter/material.dart';
@@ -17,16 +17,16 @@ import 'package:intl/intl.dart';
 import '../../widgets/PostInfoWidget.dart';
 import '../../widgets/divider_box.dart';
 
-class PostDetailScreen extends StatefulWidget {
+class ViewPostDetailScreen extends StatefulWidget {
   final String postId;
   final String username;
-  const PostDetailScreen({required this.postId, required this.username});
+  const ViewPostDetailScreen({required this.postId, required this.username});
 
   @override
-  State<PostDetailScreen> createState() => _PostDetailScreenState();
+  State<ViewPostDetailScreen> createState() => _PostDetailScreenState();
 }
 
-class _PostDetailScreenState extends State<PostDetailScreen> {
+class _PostDetailScreenState extends State<ViewPostDetailScreen> {
   Post? post;
   List<Choice>? choices = [];
   int counts = 0;
@@ -303,7 +303,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                                         ? SizedBox(width: 20)
                                         : SizedBox(),
                                     counts == 0
-                                        ? ChackDeletePostScreen(
+                                        ? CancelPostScreen(
                                             postId: post!.postId.toString(),
                                             username: widget.username,
                                           )

@@ -18,7 +18,7 @@ class _LoginAdminScreenState extends State<LoginAdminScreen> {
   String result = "";
   final GlobalKey<FormState> fromKey = GlobalKey<FormState>();
   MemberController memberController = MemberController();
-  
+
   Future doLoginAdmin() async {
     result = await memberController.doLoginAdmin(username, password);
     print("-----------$result------------");
@@ -70,14 +70,18 @@ class _LoginAdminScreenState extends State<LoginAdminScreen> {
                           SizedBox(height: 16.0),
                           Container(
                             width: 300,
+                            color: Colors.blueGrey[50],
                             child: TextFormField(
                               style:
                                   TextStyle(color: MainColor, fontSize: 20.0),
                               decoration: InputDecoration(
                                 labelText: 'ชื่อผู้ใช้งาน',
-                                labelStyle: TextStyle(color: MainColor),
+                        
+                                labelStyle: TextStyle(
+                                    color: Colors.black, fontFamily: 'Light'),
                                 prefixIcon:
                                     Icon(Icons.person, color: MainColor),
+                                border: InputBorder.none,
                               ),
                               onChanged: (value) {
                                 setState(() {
@@ -92,14 +96,18 @@ class _LoginAdminScreenState extends State<LoginAdminScreen> {
                           SizedBox(height: 16.0),
                           Container(
                             width: 300,
+                            color: Colors.blueGrey[50],
                             child: TextFormField(
                               obscureText: true,
                               style:
                                   TextStyle(color: MainColor, fontSize: 20.0),
                               decoration: InputDecoration(
                                 labelText: 'รหัสผ่าน',
-                                labelStyle: TextStyle(color: MainColor),
-                                prefixIcon: Icon(Icons.key, color: MainColor),
+                                labelStyle: TextStyle(
+                                    color: Colors.black, fontFamily: 'Light'),
+                                prefixIcon:
+                                    Icon(Icons.person, color: MainColor),
+                                border: InputBorder.none,
                               ),
                               onChanged: (value) {
                                 setState(() {
@@ -174,7 +182,11 @@ class _LoginAdminScreenState extends State<LoginAdminScreen> {
                 // ฝั่งขวา: Container ที่มีสีพื้นหลัง (แสดงเฉพาะเว็บ)
                 Expanded(
                   child: Container(
-                    color: SecondColor, // สีพื้นหลังที่คุณต้องการใช้
+                    color: Color.fromARGB(255, 250, 176, 10),
+                    child: Image.asset(
+                      "assets/images/bg01.png",
+                      height: 1000,
+                    ), // สีพื้นหลังที่คุณต้องการใช้
                   ),
                 ),
             ],

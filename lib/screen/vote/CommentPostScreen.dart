@@ -2,21 +2,21 @@ import 'package:assist_decisions_app/constant/constant_value.dart';
 import 'package:assist_decisions_app/controller/commentController.dart';
 
 import 'package:assist_decisions_app/model/member.dart';
-import 'package:assist_decisions_app/screen/post/listCommentScreen.dart';
+import 'package:assist_decisions_app/screen/vote/ListCommentScreen.dart';
 import 'package:assist_decisions_app/screen/vote/viewPostScreen.dart';
 import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:flutter/material.dart';
 
-class CommentScreen extends StatefulWidget {
+class CommentPostScreen extends StatefulWidget {
   final Member? member;
   final String? postId;
-  const CommentScreen({required this.member, required this.postId});
+  const CommentPostScreen({required this.member, required this.postId});
 
   @override
-  State<CommentScreen> createState() => _CommentScreenState();
+  State<CommentPostScreen> createState() => _CommentScreenState();
 }
 
-class _CommentScreenState extends State<CommentScreen> {
+class _CommentScreenState extends State<CommentPostScreen> {
   String comment = "";
   final GlobalKey<FormState> fromKey = GlobalKey<FormState>();
   CommentController commentController = CommentController();
