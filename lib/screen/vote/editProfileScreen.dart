@@ -1,4 +1,5 @@
 import 'package:assist_decisions_app/constant/constant_value.dart';
+import 'package:assist_decisions_app/controller/EditProfileController.dart';
 import 'package:assist_decisions_app/controller/LoginMemberController.dart';
 import 'package:assist_decisions_app/classcontroller/memberController.dart';
 import 'package:assist_decisions_app/model/member.dart';
@@ -20,7 +21,8 @@ class EditProfileScreen extends StatefulWidget {
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
    LoginMemberController loginMemberController = LoginMemberController();
-   MemberController memberController = MemberController();
+   EditProfileController editProfileController = EditProfileController();
+      MemberController memberController = MemberController();
   InterestController interestController = InterestController();
 
   List<Interest> interests = [];
@@ -110,7 +112,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Future<void> initializeData() async {
-    member = await memberController.getMemberById(widget.username.toString());
+    member = await editProfileController.doProfileDetail(widget.username.toString());
     if (member != null) {
       firstname = member?.firstname.toString();
       username = member?.username.toString();
@@ -616,7 +618,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                         print(fileToSend);
                                         print(formattedInterestSelect);
                                         var result =
-                                            await memberController.updateMember(
+                                            await editProfileController.doEditProfile(
                                                 username ?? "",
                                                 password ?? "",
                                                 nickname ?? "",

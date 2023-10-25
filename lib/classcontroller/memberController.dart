@@ -24,44 +24,6 @@ class MemberController {
     }
   }
 
-
-
-Future updateMember(
-      String username,
-      String password,
-      String nickname,
-      String gender,
-      String firstname,
-      String lastname,
-      String email,
-      String tel,
-      String point,
-      String status,
-      String imageName,
-      String interestId) async {
-    Map<String, String> data = {
-    "username" : username,
-    "adminstatus" : "false",
-    "email" : email,
-    "firstname" : firstname,
-    "gender" : gender,
-    "image" : imageName,
-    "lastname" : lastname,
-    "nickname" : nickname,
-    "password" : password,
-    "point" : point,
-    "status" : status,
-    "tel" : tel,
-    "interests" : interestId
-    };
-    var body = json.encode(data);
-    var url = Uri.parse(baseURL + '/members/update');
-    print("----------------Resister add------------");
-    http.Response response = await http.post(url, headers: headers, body: body);
-    var jsonResponse = jsonDecode(response.body);
-    return jsonResponse;
-  }
-
    Future<Member?> getMemberById(String username) async {
     try {
       var url = Uri.parse(baseURL + '/members/getProfile/$username');

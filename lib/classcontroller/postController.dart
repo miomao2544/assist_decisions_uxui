@@ -129,18 +129,7 @@ class PostController {
     return list;
   }
 
-    Future ViewPostHistory(String username) async {
-    var url = Uri.parse(baseURL + '/posts/listpoint/${username}');
 
-    http.Response response = await http.post(url, headers: headers, body: null);
-    List<Post>? list;
-
-    final utf8body = utf8.decode(response.bodyBytes);
-    List<dynamic> jsonList = json.decode(utf8body);
-    list = jsonList.map((e) => Post.fromJsonToPost(e)).toList();
-    print("-------------------------------post-----------------");
-    return list;
-  }
 
 
   Future doDeletePost(String postId) async {
