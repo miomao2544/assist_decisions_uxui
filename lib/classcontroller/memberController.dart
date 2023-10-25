@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-import '../model/interest.dart';
+import 'package:assist_decisions_app/model/interest.dart';
+
 import '../model/member.dart';
 import 'package:http/http.dart' as http;
 import '../constant/constant_value.dart';
@@ -61,29 +62,7 @@ Future updateMember(
     return jsonResponse;
   }
 
-  Future upload(File file) async {
-    if (file == false) return;
-    var uri = Uri.parse(baseURL + "/members/uploadimg");
-    var length = await file.length();
-    print(length);
-    http.MultipartRequest request = new http.MultipartRequest('POST', uri)
-      ..headers.addAll(headers)
-      ..files.add(
-        http.MultipartFile('image', file.openRead(), length,
-            filename: 'test.png'),
-      );
-    var response = await http.Response.fromStream(await request.send());
-    return response.body;
-  }
-
-
-  Future doLoginAdmin(String username,String password) async {
-    var url = Uri.parse(baseURL + "/members/loginmember/${username}/${password}");
-     http.Response response = await http.post(url, headers: headers, body: null);
-    return response.body;
-  }
-
-  Future<Member?> getMemberById(String username) async {
+   Future<Member?> getMemberById(String username) async {
     try {
       var url = Uri.parse(baseURL + '/members/getProfile/$username');
 
@@ -114,6 +93,30 @@ Future updateMember(
       return null;
     }
   }
+
+  Future upload(File file) async {
+    if (file == false) return;
+    var uri = Uri.parse(baseURL + "/members/uploadimg");
+    var length = await file.length();
+    print(length);
+    http.MultipartRequest request = new http.MultipartRequest('POST', uri)
+      ..headers.addAll(headers)
+      ..files.add(
+        http.MultipartFile('image', file.openRead(), length,
+            filename: 'test.png'),
+      );
+    var response = await http.Response.fromStream(await request.send());
+    return response.body;
+  }
+
+
+  Future doLoginAdmin(String username,String password) async {
+    var url = Uri.parse(baseURL + "/members/loginmember/${username}/${password}");
+     http.Response response = await http.post(url, headers: headers, body: null);
+    return response.body;
+  }
+
+
 
 
     Future doUpdatePoint(String username,String point) async {

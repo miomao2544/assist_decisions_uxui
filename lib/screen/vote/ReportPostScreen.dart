@@ -1,4 +1,4 @@
-import 'package:assist_decisions_app/classcontroller/reportController.dart';
+import 'package:assist_decisions_app/controller/ReportPostComtroller.dart';
 import 'package:assist_decisions_app/screen/vote/viewPostScreen.dart';
 import 'package:assist_decisions_app/widgets/PostInfoWidget.dart';
 import 'package:assist_decisions_app/widgets/colors.dart';
@@ -33,7 +33,7 @@ class _ReportPostScreenState extends State<ReportPostScreen> {
   ChoiceController choiceController = ChoiceController();
   PostController postController = PostController();
   MemberController memberController = MemberController();
-  ReportController reportController = ReportController();
+  ReportPostController reportPostController = ReportPostController();
   String formatDate(String? inputDate) {
     if (inputDate != null) {
       final DateTime date = DateTime.parse(inputDate);
@@ -249,7 +249,7 @@ class _ReportPostScreenState extends State<ReportPostScreen> {
                                                   height: 50,
                                                   child: ElevatedButton(
                                                     onPressed: () async {
-                                                      await reportController
+                                                      await reportPostController
                                                           .doReportPost(
                                                         reportComment.toString(),
                                                         widget.postId.toString(),

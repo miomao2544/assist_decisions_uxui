@@ -1,5 +1,5 @@
 import 'package:assist_decisions_app/constant/constant_value.dart';
-import 'package:assist_decisions_app/classcontroller/commentController.dart';
+import 'package:assist_decisions_app/controller/CommentPostController.dart';
 
 import 'package:assist_decisions_app/model/member.dart';
 import 'package:assist_decisions_app/screen/vote/ListCommentScreen.dart';
@@ -19,7 +19,7 @@ class CommentPostScreen extends StatefulWidget {
 class _CommentScreenState extends State<CommentPostScreen> {
   String comment = "";
   final GlobalKey<FormState> fromKey = GlobalKey<FormState>();
-  CommentController commentController = CommentController();
+  CommentPostController commentController = CommentPostController();
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +97,7 @@ class _CommentScreenState extends State<CommentPostScreen> {
                               ElevatedButton(
                                 onPressed: () async {
                                   if (fromKey.currentState!.validate()) {
-                                    await commentController.addChoice(
+                                    await commentController.doCommentPost(
                                         comment.toString(),
                                         widget.member!.username.toString(),
                                         widget.postId.toString());

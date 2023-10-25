@@ -1,4 +1,4 @@
-import 'package:assist_decisions_app/classcontroller/memberController.dart';
+import 'package:assist_decisions_app/controller/ViewProfileController.dart';
 import 'package:assist_decisions_app/screen/vote/editProfileScreen.dart';
 import 'package:assist_decisions_app/screen/vote/homeScreen.dart';
 import 'package:assist_decisions_app/screen/vote/viewVoteHistoryScreen.dart';
@@ -25,11 +25,11 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
   bool? isDataLoaded = false;
   List<Interest> interests = [];
   List<String?> interestSelect = [];
-  final MemberController memberController = MemberController();
+  final ViewProfileController viewProfileController = ViewProfileController();
   final InterestController interestController = InterestController();
 
   void fetchMember() async {
-    member = await memberController.getMemberById(widget.username);
+    member = await viewProfileController.getProfile(widget.username);
     if (member != null) {
       if (member!.interests != null) {
         interestSelect = member!.interests!

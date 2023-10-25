@@ -1,6 +1,8 @@
 import 'package:assist_decisions_app/classcontroller/choiceController.dart';
 import 'package:assist_decisions_app/classcontroller/memberController.dart';
 import 'package:assist_decisions_app/classcontroller/postController.dart';
+import 'package:assist_decisions_app/controller/VotePostController.dart';
+import 'package:assist_decisions_app/controller/viewPostController.dart';
 import 'package:assist_decisions_app/classcontroller/voteController.dart';
 import 'package:assist_decisions_app/model/choice.dart';
 import 'package:assist_decisions_app/model/member.dart';
@@ -32,8 +34,10 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
   bool? isDataLoaded = false;
   ChoiceController choiceController = ChoiceController();
   PostController postController = PostController();
+  ViewPostController viewPostController = ViewPostController();
   MemberController memberController = MemberController();
   VoteController voteController = VoteController();
+  VotePostController votePostController =VotePostController();
   String formatDate(String? inputDate) {
     if (inputDate != null) {
       final DateTime date = DateTime.parse(inputDate);
@@ -53,7 +57,7 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
     Member? memberRequired;
     List<String> username = [];
     String voteChoice;
-    postRequired = await postController.getPostById(widget.postId);
+    postRequired = await viewPostController.getPostById(widget.postId);
     choiceRequired = await choiceController.listAllChoicesById(widget.postId);
     memberRequired = await memberController.getMemberById(widget.username);
     counts = await postController.getListCountMember(widget.postId);
@@ -173,7 +177,7 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
                   ),
                   ElevatedButton(
                     onPressed: () async {
-                      await voteController.doVotePost(
+                      await votePostController.doVotePost(
                           widget.username.toString(),
                           choices![selectedChoiceIndex!].choiceId.toString());
                       await voteController.getIFVoteChoice(
