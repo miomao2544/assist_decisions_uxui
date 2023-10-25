@@ -1,3 +1,4 @@
+import 'package:assist_decisions_app/controller/RegisterController.dart';
 import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  RegisterController registerController = RegisterController();
   MemberController memberController = MemberController();
   InterestController interestController = InterestController();
 
@@ -479,7 +481,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         }
                                         if (isUsernameTaken == false) {
                                           var result =
-                                              await memberController.addMember(
+                                              await registerController.doRegister(
                                                   username ?? "",
                                                   password ?? "",
                                                   nickname ?? "",
@@ -527,7 +529,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                                 return AlertDialog(
                                                   title: Text('ข้อผิดพลาด'),
                                                   content: Text(
-                                                      'บันทึกข้อมูลไม่สำเร็จ'),
+                                                      'บันทึกการสมัครของคุณไม่สำเร็จ'),
                                                   actions: [
                                                     ElevatedButton(
                                                       onPressed: () {

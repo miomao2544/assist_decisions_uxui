@@ -1,3 +1,4 @@
+import 'package:assist_decisions_app/controller/NotifyPostController.dart';
 import 'package:assist_decisions_app/controller/postController.dart';
 import 'package:assist_decisions_app/controller/viewPostController.dart';
 import 'package:assist_decisions_app/controller/voteController.dart';
@@ -19,13 +20,14 @@ class NotifyPostScreen extends StatefulWidget {
 class _NotifyPostScreenState extends State<NotifyPostScreen> {
   List<Post>? posts;
   bool? isDataLoaded = false;
-  final PostController postController = PostController();
+  PostController postController = PostController();
+  NotifyPostController notifyPostController = NotifyPostController();
   VoteController voteController = VoteController();
   ViewPostController viewPostController = ViewPostController();
   List<String> ifvotes = [];
 
   void fetchPost() async {
-    posts = await postController.getListPostsInterest(widget.username.toString());
+    posts = await notifyPostController.getListPostsInterest(widget.username.toString());
     int i = 0;
     while (i < posts!.length) {
       String ifvote = await voteController.getIFVoteChoice(
