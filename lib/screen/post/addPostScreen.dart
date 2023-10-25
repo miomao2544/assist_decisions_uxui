@@ -2,6 +2,7 @@ import 'package:assist_decisions_app/classcontroller/choiceController.dart';
 import 'package:assist_decisions_app/classcontroller/interestController.dart';
 import 'package:assist_decisions_app/classcontroller/memberController.dart';
 import 'package:assist_decisions_app/classcontroller/postController.dart';
+import 'package:assist_decisions_app/controller/AddPostController.dart';
 import 'package:assist_decisions_app/model/choice.dart';
 import 'package:assist_decisions_app/model/interest.dart';
 import 'package:assist_decisions_app/model/member.dart';
@@ -38,6 +39,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
   List<String>? images = [];
   ChoiceController choiceController = ChoiceController();
+  AddPostController addPostController = AddPostController();
   PostController postController = PostController();
   MemberController memberController = MemberController();
   String? fileName;
@@ -702,7 +704,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                 await memberController.doUpdatePoint(
                                     widget.username,
                                     (pointmember! - pointresult).toString());
-                                var response = await postController.doAddPost(
+                                var response = await addPostController.doAddPost(
                                     title ?? "",
                                     image ?? "I00002.png",
                                     description ?? "",

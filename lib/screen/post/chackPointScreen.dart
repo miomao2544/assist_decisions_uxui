@@ -1,7 +1,6 @@
+import 'package:assist_decisions_app/controller/CheckPointController.dart';
 import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:flutter/material.dart';
-
-import '../../classcontroller/memberController.dart';
 import '../../model/member.dart';
 
 class ChackPointScreen extends StatefulWidget {
@@ -16,9 +15,9 @@ class _ChackPointScreenState extends State<ChackPointScreen> {
     Member? member;
     int? remainingPoints;
  bool? isDataLoaded = false;
-   final MemberController memberController = MemberController();
+  CheckPointController checkPointController = CheckPointController();
   void fetchMember() async {
-    member = await memberController.getMemberById(widget.username);
+    member = await checkPointController.doCheckPoint(widget.username);
     print("-------------------interest------------------${member}");
 
     setState(() {
