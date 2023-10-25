@@ -1,3 +1,4 @@
+import 'package:assist_decisions_app/controller/LoginMemberController.dart';
 import 'package:assist_decisions_app/controller/memberController.dart';
 import 'package:assist_decisions_app/screen/vote/homeScreen.dart';
 import 'package:assist_decisions_app/screen/vote/registerScreen.dart';
@@ -18,8 +19,10 @@ class _LoginMemberScreenState extends State<LoginMemberScreen> {
   String? result;
   final GlobalKey<FormState> fromKey = GlobalKey<FormState>();
   MemberController memberController = MemberController();
+
+  LoginMemberController loginMemberController = LoginMemberController();
   Future doLoginMember() async {
-    result = await memberController.doLoginMember(username, password);
+    result = await loginMemberController.doLoginMember(username, password);
     print("-----------$result------------");
   }
 
@@ -42,8 +45,10 @@ class _LoginMemberScreenState extends State<LoginMemberScreen> {
                   alignment: Alignment.center,
                   child: Text(
                     'Assist Decisions',
-                    style:
-                        TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold,color: MainColor),
+                    style: TextStyle(
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.bold,
+                        color: MainColor),
                   ),
                 ),
                 SizedBox(height: 10.0),
@@ -69,8 +74,6 @@ class _LoginMemberScreenState extends State<LoginMemberScreen> {
                 SizedBox(height: 16.0),
                 Container(
                   width: 350,
-                  height: 60,
-                  color: Colors.blueGrey[50],
                   child: TextFormField(
                     style: TextStyle(color: MainColor, fontSize: 20.0),
                     decoration: InputDecoration(
@@ -79,6 +82,8 @@ class _LoginMemberScreenState extends State<LoginMemberScreen> {
                           TextStyle(color: Colors.black, fontFamily: 'Light'),
                       prefixIcon: Icon(Icons.person, color: MainColor),
                       border: InputBorder.none,
+                      filled: true,
+                      fillColor: Colors.blueGrey[50],
                     ),
                     onChanged: (value) {
                       setState(() {
@@ -92,8 +97,6 @@ class _LoginMemberScreenState extends State<LoginMemberScreen> {
                 SizedBox(height: 16.0),
                 Container(
                   width: 350,
-                  height: 60,
-                  color: Colors.blueGrey[50],
                   child: TextFormField(
                     obscureText: true,
                     style: TextStyle(color: MainColor, fontSize: 20.0),
@@ -103,6 +106,8 @@ class _LoginMemberScreenState extends State<LoginMemberScreen> {
                           TextStyle(color: Colors.black, fontFamily: 'Light'),
                       prefixIcon: Icon(Icons.key, color: MainColor),
                       border: InputBorder.none,
+                      filled: true,
+                      fillColor: Colors.blueGrey[50],
                     ),
                     onChanged: (value) {
                       setState(() {
@@ -140,6 +145,33 @@ class _LoginMemberScreenState extends State<LoginMemberScreen> {
                                       onPressed: () {
                                         Navigator.of(context).pop();
                                       },
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all(MainColor), // สีพื้นหลังของปุ่ม
+                                      ),
+                                      child: Text('ปิด'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          } else if (result == "") {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('ไม่พบข้อมูล'),
+                                  content: Text(
+                                      'ไม่พบข้อมูลบัญชีนี้ กรุณาสมัครก่อนการเข้าสู่ระบบ'),
+                                  actions: [
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all(MainColor), // สีพื้นหลังของปุ่ม
+                                      ),
                                       child: Text('ปิด'),
                                     ),
                                   ],
@@ -188,7 +220,10 @@ class _LoginMemberScreenState extends State<LoginMemberScreen> {
                       ),
                       child: Text(
                         "สมัครสมาชิก",
-                        style: TextStyle(fontSize: 22, fontFamily: 'Light',color: MainColor),
+                        style: TextStyle(
+                            fontSize: 22,
+                            fontFamily: 'Light',
+                            color: MainColor),
                       ),
                     ),
                   ),

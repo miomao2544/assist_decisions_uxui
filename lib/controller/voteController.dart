@@ -45,4 +45,18 @@ class VoteController{
     votes = utf8body; 
     return votes;
     }
+
+    Future getVoteChoice(String postId,String username) async{
+    var url = Uri.parse(baseURL + '/votes/getvote/${postId}/${username}');
+
+    http.Response response = await http.post(
+      url,
+      headers: headers,
+      body: null
+    );  
+    String votes = "";
+    final utf8body = utf8.decode(response.bodyBytes); 
+    votes = utf8body; 
+    return votes;
+    }
 }

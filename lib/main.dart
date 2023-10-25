@@ -17,10 +17,10 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  MaterialApp(
-      // home: PreviewPostScreen(),
+      home: PreviewPostScreen(),
       // home: LoginMemberScreen(),
       // home: LoginAdminScreen(),
-      home: HomeScreen(username: 'miomao2544'),
+      // home: HomeScreen(username: 'miomao2544'),
       // home: ListReportScreen(username: 'adminmember'),
       // home: ViewReportPostDetail(username: 'adminmember',reportId: 'R00000000002',),
       debugShowCheckedModeBanner: false,

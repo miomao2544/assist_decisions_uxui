@@ -714,148 +714,151 @@ labelStyle: TextStyle(
                               _addNewChoice();
                             },
                           ),
-                          ElevatedButton(
-                              child: Text("ยืนยันการเปลี่ยนแปลง"),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: MainColor,
-                                elevation: 0,
-                              ),
-                              onPressed: () async {
-                                if (fileToDisplay != null) {
-                                  var uploadedFile = await postController
-                                      .upload(fileToDisplay!);
-                                  if (uploadedFile != null) {
-                                    image = uploadedFile;
+                          Container(
+                            height: 50,
+                            child: ElevatedButton(
+                                child: Text("ยืนยันการเปลี่ยนแปลง",style: TextStyle(fontFamily: 'Light',fontSize: 20),),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: MainColor,
+                                  elevation: 0,
+                                ),
+                                onPressed: () async {
+                                  if (fileToDisplay != null) {
+                                    var uploadedFile = await postController
+                                        .upload(fileToDisplay!);
+                                    if (uploadedFile != null) {
+                                      image = uploadedFile;
+                                    }
                                   }
-                                }
-                                if (fromKey.currentState!.validate()) {
-                                  if (postDateStartController.text.isEmpty) {
-                                    // แจ้งเตือนผู้ใช้ให้เลือกวันที่
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AlertDialog(
-                                          title: Text("แจ้งเตือน"),
-                                          content: Text("โปรดเลือกวันที่เริ่ม"),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: Text("ปิด"),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
-                                  } else if (postDateStopController
-                                      .text.isEmpty) {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AlertDialog(
-                                          title: Text("แจ้งเตือน"),
-                                          content:
-                                              Text("โปรดเลือกวันที่สิ้นสุด"),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: Text("ปิด"),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
-                                  } else if (postDateStopController.text
-                                          .compareTo(
-                                              postDateStartController.text) <
-                                      1) {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AlertDialog(
-                                          title: Text("แจ้งเตือน"),
-                                          content: Text(
-                                              "โปรดเลือกวันที่สิ้นสุดให้มากกว่าวันที่เริ่ม"),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: Text("ปิด"),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
-                                  } else {
-                                    print("------object pass------");
-                                    print("${title ?? posts!.title}");
-                                    print("${image ?? posts!.postImage}");
-                                    print(
-                                        "${description ?? posts!.description}");
-                                    print("${point ?? posts!.postPoint}");
-                                    print("${min ?? posts!.qtyMin}");
-                                    print("${max ?? posts!.qtyMax}");
-                                    print("${selectedInterest}");
-                                    print(
-                                        "${dateStart ?? formatDateNew(posts!.dateStart.toString())}");
-                                    print(
-                                        "${dateStop ?? formatDateNew(posts!.dateStop.toString())}");
-                                    postController.doEditPost(
-                                        posts!.postId.toString(),
-                                        title ?? posts!.title.toString(),
-                                        image ?? posts!.postImage.toString(),
-                                        description ??
-                                            posts!.description.toString(),
-                                        point ?? posts!.postPoint.toString(),
-                                        dateStart ??
-                                            formatDateNew(
-                                                posts!.dateStart.toString()),
-                                        dateStop ??
-                                            formatDateNew(
-                                                posts!.dateStop.toString()),
-                                        min ?? posts!.qtyMin.toString(),
-                                        max ?? posts!.qtyMax.toString(),
-                                        widget.username.toString(),
-                                        selectedInterest ??
-                                            posts!.interest!.interestId
-                                                .toString());
-                                    for (int i = 0; i < choices.length; i++) {
-                                      if (fileImagesToDisplay[i] != null) {
-                                        var uploadedFile =
-                                            await choiceController.upload(
-                                                fileImagesToDisplay[i] ??
-                                                    File(""));
-                                        if (uploadedFile != null) {
-                                          choices[i].choiceImage = uploadedFile;
+                                  if (fromKey.currentState!.validate()) {
+                                    if (postDateStartController.text.isEmpty) {
+                                      // แจ้งเตือนผู้ใช้ให้เลือกวันที่
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            title: Text("แจ้งเตือน"),
+                                            content: Text("โปรดเลือกวันที่เริ่ม"),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text("ปิด"),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    } else if (postDateStopController
+                                        .text.isEmpty) {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            title: Text("แจ้งเตือน"),
+                                            content:
+                                                Text("โปรดเลือกวันที่สิ้นสุด"),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text("ปิด"),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    } else if (postDateStopController.text
+                                            .compareTo(
+                                                postDateStartController.text) <
+                                        1) {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            title: Text("แจ้งเตือน"),
+                                            content: Text(
+                                                "โปรดเลือกวันที่สิ้นสุดให้มากกว่าวันที่เริ่ม"),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text("ปิด"),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    } else {
+                                      print("------object pass------");
+                                      print("${title ?? posts!.title}");
+                                      print("${image ?? posts!.postImage}");
+                                      print(
+                                          "${description ?? posts!.description}");
+                                      print("${point ?? posts!.postPoint}");
+                                      print("${min ?? posts!.qtyMin}");
+                                      print("${max ?? posts!.qtyMax}");
+                                      print("${selectedInterest}");
+                                      print(
+                                          "${dateStart ?? formatDateNew(posts!.dateStart.toString())}");
+                                      print(
+                                          "${dateStop ?? formatDateNew(posts!.dateStop.toString())}");
+                                      postController.doEditPost(
+                                          posts!.postId.toString(),
+                                          title ?? posts!.title.toString(),
+                                          image ?? posts!.postImage.toString(),
+                                          description ??
+                                              posts!.description.toString(),
+                                          point ?? posts!.postPoint.toString(),
+                                          dateStart ??
+                                              formatDateNew(
+                                                  posts!.dateStart.toString()),
+                                          dateStop ??
+                                              formatDateNew(
+                                                  posts!.dateStop.toString()),
+                                          min ?? posts!.qtyMin.toString(),
+                                          max ?? posts!.qtyMax.toString(),
+                                          widget.username.toString(),
+                                          selectedInterest ??
+                                              posts!.interest!.interestId
+                                                  .toString());
+                                      for (int i = 0; i < choices.length; i++) {
+                                        if (fileImagesToDisplay[i] != null) {
+                                          var uploadedFile =
+                                              await choiceController.upload(
+                                                  fileImagesToDisplay[i] ??
+                                                      File(""));
+                                          if (uploadedFile != null) {
+                                            choices[i].choiceImage = uploadedFile;
+                                          }
+                                        }
+                                        print(
+                                            "----------${choices[i].choiceImage}-----------");
+                                        print("${choices[i].choiceId}");
+                                        print("${choices[i].choiceName}");
+                                        print("${choices[i].choiceImage}");
+                          
+                                        if (fromKey.currentState!.validate()) {
+                                          await choiceController.editChoice(
+                                              "true",
+                                              choices[i].choiceId ?? "",
+                                              choices[i].choiceName ?? "",
+                                              choices[i].choiceImage ?? "",
+                                              posts!.postId ?? "");
                                         }
                                       }
-                                      print(
-                                          "----------${choices[i].choiceImage}-----------");
-                                      print("${choices[i].choiceId}");
-                                      print("${choices[i].choiceName}");
-                                      print("${choices[i].choiceImage}");
-
-                                      if (fromKey.currentState!.validate()) {
-                                        await choiceController.editChoice(
-                                            "true",
-                                            choices[i].choiceId ?? "",
-                                            choices[i].choiceName ?? "",
-                                            choices[i].choiceImage ?? "",
-                                            posts!.postId ?? "");
-                                      }
+                                      Navigator.push(context,
+                                          MaterialPageRoute(builder: (context) {
+                                        return HomeScreen(
+                                            username: widget.username);
+                                      }));
                                     }
-                                    Navigator.push(context,
-                                        MaterialPageRoute(builder: (context) {
-                                      return HomeScreen(
-                                          username: widget.username);
-                                    }));
                                   }
-                                }
-                              }),
+                                }),
+                          ),
                         ],
                       ),
                     ),

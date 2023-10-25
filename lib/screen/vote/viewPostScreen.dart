@@ -43,6 +43,7 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
     return '';
   }
 
+ String votePost = "";
   int counts = 0;
   String ifvote = "";
   List<String> usernames = [];
@@ -51,45 +52,79 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
     List<Choice> choiceRequired;
     Member? memberRequired;
     List<String> username = [];
+    String voteChoice;
     postRequired = await postController.getPostById(widget.postId);
     choiceRequired = await choiceController.listAllChoicesById(widget.postId);
     memberRequired = await memberController.getMemberById(widget.username);
     counts = await postController.getListCountMember(widget.postId);
     ifvote =
         await voteController.getIFVoteChoice(widget.username, widget.postId);
+    voteChoice = await voteController.getVoteChoice(widget.postId, widget.username);
+    int i;
+    for (i = 0; i < choiceRequired.length; i++) {
+      if (choiceRequired[i].choiceName == voteChoice) {
+        selectedChoiceIndex = i;
+      }
+    }
     print(
         "---------------${widget.postId.toString()}--------------${ifvote}----------------");
     username = await memberController.getUsernameVotePost(widget.postId);
+    print(
+        "---------------${widget.postId.toString()}--------------${voteChoice.toString()}----------------");
     setState(() {
       post = postRequired;
       choices = choiceRequired;
       member = memberRequired;
+      votePost = voteChoice;
+          print(
+        "---------------${widget.postId.toString()}--------------${votePost.toString()}----------------");
       usernames = List<String>.from(username);
       calculateScorepoint();
       isDataLoaded = true;
     });
   }
 
+  // Future calculateScorepoint() async {
+  //   if ((post!.qtyMax == counts ||
+  //           (post!.dateStop != null && DateTime.parse(post!.dateStop!).isBefore(DateTime.now())&&post!.qty == "r") &&
+  //       post!.result == "r")) {
+  //     double score = double.parse(post!.postPoint.toString());
+  //     int qtyMax = counts;
+  //     if (score % 1 == 0) {
+  //       int scorepoint = (score / qtyMax).toInt();
+  //       print("----------point--${scorepoint}-------");
+  //       for (int i = 0; i < usernames.length; i++) {
+  //         print(
+  //             "---------------${usernames[i].toString()}-------Vote<<<-------------");
+  //         await memberController.doUpdatePointVote(
+  //             usernames[i].toString(), scorepoint.toString());
+  //       }
+  //       await postController.doUpdateResult("1", post!.postId.toString());
+  //     }
+  //   }
+  // }
+
   Future calculateScorepoint() async {
-    if ((post!.qtyMax == counts ||
-            (post!.dateStop != null &&
-                DateTime.parse(post!.dateStop!).isBefore(DateTime.now()))) &&
-        post!.result == "r") {
-      double score = double.parse(post!.postPoint.toString());
-      int qtyMax = counts;
-      if (score % 1 == 0) {
-        int scorepoint = (score / qtyMax).toInt();
-        print("----------point--${scorepoint}-------");
-        for (int i = 0; i < usernames.length; i++) {
-          print(
-              "---------------${usernames[i].toString()}-------Vote<<<-------------");
-          await memberController.doUpdatePointVote(
-              usernames[i].toString(), scorepoint.toString());
-        }
-        await postController.doUpdateResult("1", post!.postId.toString());
+  if ((post!.qtyMax == counts) ||
+      (post!.qtyMin != null &&
+          post!.qtyMin! >= counts &&
+          post!.dateStop != null &&
+          DateTime.parse(post!.dateStop!).isBefore(DateTime.now()))) {
+    double score = double.parse(post!.postPoint.toString());
+    int qtyMax = counts;
+    if (score % 1 == 0) {
+      int scorepoint = (score / qtyMax).toInt();
+      print("----------point--${scorepoint}-------");
+      for (int i = 0; i < usernames.length; i++) {
+        print(
+            "---------------${usernames[i].toString()}-------Vote<<<-------------");
+        await memberController.doUpdatePointVote(
+            usernames[i].toString(), scorepoint.toString());
       }
+      await postController.doUpdateResult("1", post!.postId.toString());
     }
   }
+}
 
   Future ShowVoteDrialog() => showDialog(
         context: context,
@@ -292,40 +327,46 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
                                 physics: NeverScrollableScrollPhysics(),
                                 itemCount: choices?.length ?? 0,
                                 itemBuilder: (context, index) {
-                                  return Card(
-                                    elevation: 2,
-                                    shape: Border.all(
-                                      color: selectedChoiceIndex == index
-                                          ? SecondColor
-                                          : Color.fromARGB(255, 255, 249, 196),
-                                      width: 2,
-                                    ),
-                                    child: RadioListTile<int>(
-                                      value: index,
-                                      groupValue: selectedChoiceIndex,
-                                      onChanged: (int? value) {
-                                        setState(() {
-                                          selectedChoiceIndex = value;
-                                        });
-                                      },
-                                      activeColor: SecondColor,
-                                      title: Row(
-                                        children: [
-                                          choices![index].choiceImage != ""
-                                              ? Image.network(
-                                                  baseURL +
-                                                      '/choices/downloadimg/${choices![index].choiceImage}',
-                                                  fit: BoxFit.cover,
-                                                  width: 50,
-                                                  height: 50,
-                                                )
-                                              : SizedBox(width: 2, height: 50),
-                                          Text(
-                                            choices![index].choiceName ?? "",
-                                            style:
-                                                TextStyle(fontFamily: 'Light'),
-                                          ),
-                                        ],
+                                  return AbsorbPointer(
+                                    absorbing: votePost == ""
+                                  ? false:true,
+                                    child: Card(
+                                      elevation: 2,
+                                      shape: Border.all(
+                                        color: selectedChoiceIndex == index
+                                            ? SecondColor
+                                            : Color.fromARGB(
+                                                255, 255, 249, 196),
+                                        width: 2,
+                                      ),
+                                      child: RadioListTile<int>(
+                                        value: index,
+                                        groupValue: selectedChoiceIndex,
+                                        onChanged: (int? value) {
+                                          setState(() {
+                                            selectedChoiceIndex = value;
+                                          });
+                                        },
+                                        activeColor: SecondColor,
+                                        title: Row(
+                                          children: [
+                                            choices![index].choiceImage != ""
+                                                ? Image.network(
+                                                    baseURL +
+                                                        '/choices/downloadimg/${choices![index].choiceImage}',
+                                                    fit: BoxFit.cover,
+                                                    width: 50,
+                                                    height: 50,
+                                                  )
+                                                : SizedBox(
+                                                    width: 2, height: 50),
+                                            Text(
+                                              choices![index].choiceName ?? "",
+                                              style: TextStyle(
+                                                  fontFamily: 'Light'),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   );
@@ -334,65 +375,12 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
                               SizedBox(
                                 height: 10,
                               ),
-                              ifvote == "0"
+                              votePost == ""
                                   ? Container(
                                       width: 120,
                                       height: 45,
                                       child: ElevatedButton(
                                         onPressed: () {
-                                          // showDialog(
-                                          //   context: context,
-                                          //   builder: (BuildContext context) {
-                                          //     return AlertDialog(
-                                          //       title: Text("ยืนยันคำตอบ"),
-                                          //       content: Text(
-                                          //           "คุณแน่ใจหรือไม่ที่ต้องการยืนยันคำตอบนี้?"),
-                                          //       actions: [
-                                          //         TextButton(
-                                          //           onPressed: () async {
-                                          //             Navigator.of(context)
-                                          //                 .pop(); // ปิด Alert Dialog
-                                          //           },
-                                          //           child: Text("ยกเลิก"),
-                                          //         ),
-                                          //         TextButton(
-                                          //           onPressed: () async {
-                                          //             await voteController
-                                          //                 .doVotePost(
-                                          //                     widget.username
-                                          //                         .toString(),
-                                          //                     choices![
-                                          //                             selectedChoiceIndex!]
-                                          //                         .choiceId
-                                          //                         .toString());
-                                          //             await voteController
-                                          //                 .getIFVoteChoice(
-                                          //                     widget.username,
-                                          //                     widget.postId);
-                                          //             Navigator.of(context)
-                                          //                 .pop();
-                                          //             Navigator.push(context,
-                                          //                 MaterialPageRoute(
-                                          //                     builder:
-                                          //                         (context) {
-                                          //               return ViewPostScreen(
-                                          //                 username:
-                                          //                     widget.username,
-                                          //                 postId: post!.postId
-                                          //                     .toString(),
-                                          //               );
-                                          //             }));
-                                          //           },
-                                          //           child: Text(
-                                          //             "ยืนยัน",
-                                          //             style: TextStyle(
-                                          //                 fontFamily: 'Light'),
-                                          //           ),
-                                          //         ),
-                                          //       ],
-                                          //     );
-                                          //   },
-                                          // );
                                           ShowVoteDrialog();
                                         },
                                         style: ElevatedButton.styleFrom(

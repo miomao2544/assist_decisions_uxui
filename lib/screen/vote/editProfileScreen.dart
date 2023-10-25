@@ -1,4 +1,6 @@
 import 'package:assist_decisions_app/constant/constant_value.dart';
+import 'package:assist_decisions_app/controller/LoginMemberController.dart';
+import 'package:assist_decisions_app/controller/memberController.dart';
 import 'package:assist_decisions_app/controller/memberController.dart';
 import 'package:assist_decisions_app/model/member.dart';
 import 'package:assist_decisions_app/screen/vote/ViewProfileScreen.dart';
@@ -18,7 +20,8 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  final MemberController memberController = MemberController();
+   LoginMemberController loginMemberController = LoginMemberController();
+   MemberController memberController = MemberController();
   InterestController interestController = InterestController();
 
   List<Interest> interests = [];
@@ -73,8 +76,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   String result = "";
+  
   Future doLoginMember() async {
-    result = await memberController.doLoginMember(
+    result = await loginMemberController.doLoginMember(
         widget.username.toString(), password.toString());
     print("-----------$result------------");
   }

@@ -1,4 +1,4 @@
-import 'package:assist_decisions_app/controller/postController.dart';
+import 'package:assist_decisions_app/controller/PreviewPostController.dart';
 import 'package:assist_decisions_app/model/post.dart';
 import 'package:assist_decisions_app/screen/vote/loginMemberScreen.dart';
 import 'package:assist_decisions_app/widgets/colors.dart';
@@ -24,9 +24,9 @@ class _PreviewPostScreenState extends State<PreviewPostScreen> {
 
   List<Post>? openPosts = [];
   List<Post>? closedPosts = [];
-  final PostController postController = PostController();
+  final PreviewPostController previewPostController = PreviewPostController();
   void fetchPost() async {
-    posts = await postController.listAllPosts();
+    posts = await previewPostController.getPreviewPost();
     for (int i = 0; i < posts!.length; i++) {
       if (posts![i].result.toString() == "r") {
         openPosts!.add(posts![i]);

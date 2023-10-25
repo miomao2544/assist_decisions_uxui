@@ -38,20 +38,26 @@ DateTime now = DateTime.now();
 late Color circleColor;
 
 Color getCircleColor(Post post) {
-  DateTime now = DateTime.now();
-  if (post.result == 'r' && now.isAfter(convertToDate(post.dateStop.toString()))) {
+  DateTime Now = DateTime.now();
+  var oneDay = Duration(days: 1);
+  print('now is $Now    > ${convertToDate(post.dateStop.toString()).add(oneDay)}');
+  if (post.result == 'r' && Now.isAfter(convertToDate(post.dateStop.toString()).add(oneDay))) {
     return Colors.red;
-  } else if (post.result == 'r' && now.isBefore(convertToDate(post.dateStop.toString()))) {
+  } else if (post.result == 'r' && Now.isBefore(convertToDate(post.dateStop.toString()).add(oneDay))) {
     return Colors.yellow;
   } else {
     return Colors.green;
   }
+  
 }
 
 DateTime convertToDate(String input) {
   try {
-    var d = DateFormat('yyyy-MM-dd').parse(input);
-    return d;
+   var d = DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').parse(input);
+    var localDateTime = d.toLocal();
+    var oneDay = Duration(days: 1);
+    var newDateTime = localDateTime.add(oneDay);
+    return newDateTime;
   } catch (e) {
     throw FormatException('Invalid date format');
   }
