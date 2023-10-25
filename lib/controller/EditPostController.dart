@@ -35,8 +35,8 @@ class EditPostController{
       String postPoint,
       String dateStart,
       String dateStop,
-      String qtyMax,
       String qtyMin,
+      String qtyMax,
       String username,
       String interestId) async {
     Map data = {

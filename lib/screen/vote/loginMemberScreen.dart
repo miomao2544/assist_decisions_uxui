@@ -1,5 +1,7 @@
+import 'package:assist_decisions_app/classcontroller/historyController.dart';
 import 'package:assist_decisions_app/controller/LoginMemberController.dart';
 import 'package:assist_decisions_app/classcontroller/memberController.dart';
+import 'package:assist_decisions_app/model/historyBan.dart';
 import 'package:assist_decisions_app/screen/vote/homeScreen.dart';
 import 'package:assist_decisions_app/screen/vote/registerScreen.dart';
 import 'package:assist_decisions_app/widgets/colors.dart';
@@ -19,6 +21,7 @@ class _LoginMemberScreenState extends State<LoginMemberScreen> {
   String? result;
   final GlobalKey<FormState> fromKey = GlobalKey<FormState>();
   MemberController memberController = MemberController();
+  HistoryBanController historyBanController = HistoryBanController();
 
   LoginMemberController loginMemberController = LoginMemberController();
   Future doLoginMember() async {
@@ -134,12 +137,13 @@ class _LoginMemberScreenState extends State<LoginMemberScreen> {
                               return HomeScreen(username: username);
                             }));
                           } else if (result == "noactive") {
+                            HistoryBan historyBan = await historyBanController.getHistoryUser(username);
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertDialog(
-                                  title: Text('คุณโดนแบน'),
-                                  content: Text('คุณโดนแบน'),
+                                  title: Text('คุณโดนแบน ${historyBan.banType!.typeName.toString()}'),
+                                  content: Text('${historyBan.banComment} '),
                                   actions: [
                                     ElevatedButton(
                                       onPressed: () {

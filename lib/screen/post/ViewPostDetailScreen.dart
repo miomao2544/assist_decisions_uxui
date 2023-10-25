@@ -185,8 +185,8 @@ class _PostDetailScreenState extends State<ViewPostDetailScreen> {
 
                                 // กำหนดสีของ Border ของ Card
                                 Color borderColor = isSelected
-                                    ? Colors.white
-                                    : Color.fromARGB(255, 255, 240, 197);
+                                    ? SecondColor
+                                    : Colors.white;
 
                                 return Card(
                                   elevation: 2,

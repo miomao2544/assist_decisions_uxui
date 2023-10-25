@@ -27,29 +27,27 @@ class ChoiceController{
     return  jsonResponse;
   }
 
-    Future editChoice(String status,String choiceId,String choiceName,String choiceImages,String postId)async{
-   
+Future<dynamic> editChoice(String status, String choiceId, String choiceName, String choiceImages, String postId) async {
+  try {
     Map data = {
-      "status":status,
+      "status": status,
       "choiceId": choiceId,
-      "choiceName" : choiceName,
-      "choiceImage" : choiceImages,
-      "postId" : postId,
+      "choiceName": choiceName,
+      "choiceImage": choiceImages,
+      "postId": postId,
     };
 
-   var body = json.encode(data);
+    var body = json.encode(data);
     var url = Uri.parse(baseURL + '/choices/update');
 
-    http.Response response = await http.post(
-      url,
-      headers: headers,
-      body: body
-    );
-    // print(response.body);
-    var jsonResponse = jsonDecode(response.body);
-    // print(jsonResponse); 
-    return  jsonResponse;
+    http.Response response = await http.post(url, headers: headers, body: body);
+    print("-----choice----${response.body}");
+    return response.body.toString();
+  } catch (e) {
+    print("An error occurred: $e");
+    return 'membervote';
   }
+}
 
     Future upload(File file) async {
     if (file == false) return;

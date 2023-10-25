@@ -168,6 +168,7 @@ class _LoginAdminScreenState extends State<LoginAdminScreen> {
                                         backgroundColor:
                                             MaterialStateProperty.all(MainColor), // สีพื้นหลังของปุ่ม
                                       ),
+                                      
                                                 child: Text('ปิด'),
                                               ),
                                             ],
@@ -189,8 +190,11 @@ class _LoginAdminScreenState extends State<LoginAdminScreen> {
                                                 },
                                                                                       style: ButtonStyle(
                                         backgroundColor:
-                                            MaterialStateProperty.all(MainColor), // สีพื้นหลังของปุ่ม
+                                            MaterialStateProperty.all(MainColor), 
+                                            // สีพื้นหลังของปุ่ม
                                       ),
+                                      
+                                      
                                                 child: Text('ปิด'),
                                               ),
                                             ],

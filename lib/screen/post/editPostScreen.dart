@@ -114,16 +114,37 @@ class _EditPostScreenState extends State<EditPostScreen> {
     });
   }
 
-  void _removeChoice(int index) {
-    setState(() {
+  void _removeChoice(int index) async{
+ 
       if (choices[index].choiceId != null && choices[index].choiceId != "") {
-        choiceController.editChoice(
+        dynamic result = await choiceController.editChoice(
             "false",
             choices[index].choiceId ?? "",
             choices[index].choiceName ?? "",
             choices[index].choiceImage ?? "",
             posts!.postId ?? "");
-        Navigator.push(
+            print("object--------${result}");
+        if (result == "flase") {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text("แจ้งเตือน"),
+                content: Text("ไม่สามารถลบตัวเลือกนี้ได้ เนื่องจากมีผู้โหวตแล้ว"),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text("ปิด"),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+        else if (result == "true"){
+                  Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => EditPostScreen(
@@ -131,8 +152,8 @@ class _EditPostScreenState extends State<EditPostScreen> {
                     postId: widget.postId.toString(),
                   )),
         );
-      }
-      if (index >= 0 && index < choices.length) {
+
+              if (index >= 0 && index < choices.length) {
         choices.removeAt(index);
       }
       if (index >= 0 && index < fileImagesToDisplay.length) {
@@ -141,6 +162,11 @@ class _EditPostScreenState extends State<EditPostScreen> {
       if (index >= 0 && index < fileImageName.length) {
         fileImageName.removeAt(index);
       }
+        }
+
+      }
+
+         setState(() {
     });
   }
 
@@ -349,7 +375,8 @@ class _EditPostScreenState extends State<EditPostScreen> {
                                 _pickFile();
                               },
                               icon: Icon(Icons.image),
-                              label: Text("เลือกรูปภาพ",style: TextStyle(fontFamily: 'Light')),
+                              label: Text("เลือกรูปภาพ",
+                                  style: TextStyle(fontFamily: 'Light')),
                               style: ButtonStyle(
                                 backgroundColor:
                                     MaterialStateProperty.all<Color>(
@@ -364,10 +391,10 @@ class _EditPostScreenState extends State<EditPostScreen> {
                             decoration: InputDecoration(
                               labelText: 'รายละเอียด',
                               border: InputBorder.none,
-                        filled: true,
-                        fillColor: Colors.blueGrey[50],
-                        labelStyle:
-                            TextStyle(color: MainColor, fontFamily: 'Light'),
+                              filled: true,
+                              fillColor: Colors.blueGrey[50],
+                              labelStyle: TextStyle(
+                                  color: MainColor, fontFamily: 'Light'),
                             ),
                             maxLines: null,
                             onChanged: (value) {
@@ -386,10 +413,10 @@ class _EditPostScreenState extends State<EditPostScreen> {
                                   Text(
                                     "คะแนน",
                                     style: TextStyle(
-                                  color: MainColor,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Light'),
+                                        color: MainColor,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Light'),
                                   ),
                                   Container(
                                     width: 120.0,
@@ -403,9 +430,9 @@ class _EditPostScreenState extends State<EditPostScreen> {
                                         FilteringTextInputFormatter.digitsOnly
                                       ],
                                       decoration: InputDecoration(
-                                       border: InputBorder.none,
-                                  filled: true,
-                                  fillColor: Colors.blueGrey[50],
+                                        border: InputBorder.none,
+                                        filled: true,
+                                        fillColor: Colors.blueGrey[50],
                                       ),
                                       onChanged: (value) {
                                         setState(() {
@@ -425,10 +452,10 @@ class _EditPostScreenState extends State<EditPostScreen> {
                                   Text(
                                     "ต่ำสุด",
                                     style: TextStyle(
-                                  color: MainColor,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Light'),
+                                        color: MainColor,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Light'),
                                   ),
                                   Container(
                                     width: 120.0,
@@ -441,9 +468,9 @@ class _EditPostScreenState extends State<EditPostScreen> {
                                         FilteringTextInputFormatter.digitsOnly
                                       ],
                                       decoration: InputDecoration(
-                                       border: InputBorder.none,
-                                  filled: true,
-                                  fillColor: Colors.blueGrey[50],
+                                        border: InputBorder.none,
+                                        filled: true,
+                                        fillColor: Colors.blueGrey[50],
                                       ),
                                       onChanged: (value) {
                                         setState(() {
@@ -461,11 +488,11 @@ class _EditPostScreenState extends State<EditPostScreen> {
                                 children: [
                                   Text(
                                     "สูงสุด",
-                                     style: TextStyle(
-                                  color: MainColor,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Light'),
+                                    style: TextStyle(
+                                        color: MainColor,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Light'),
                                   ),
                                   Container(
                                     width: 120.0,
@@ -478,8 +505,8 @@ class _EditPostScreenState extends State<EditPostScreen> {
                                       ],
                                       decoration: InputDecoration(
                                         border: InputBorder.none,
-                                  filled: true,
-                                  fillColor: Colors.blueGrey[50],
+                                        filled: true,
+                                        fillColor: Colors.blueGrey[50],
                                       ),
                                       onChanged: (value) {
                                         setState(() {
@@ -493,12 +520,12 @@ class _EditPostScreenState extends State<EditPostScreen> {
                               ),
                             ],
                           ),
-                           Center(
-                        child: Text(
-                      "เมื่อทำการสร้างคะแนนของคุณจะลดลงตามคะแนนที่คุณสร้าง",
-                      style: TextStyle(fontFamily: 'Light'),
-                      textAlign: TextAlign.center,
-                    )),
+                          Center(
+                              child: Text(
+                            "เมื่อทำการสร้างคะแนนของคุณจะลดลงตามคะแนนที่คุณสร้าง",
+                            style: TextStyle(fontFamily: 'Light'),
+                            textAlign: TextAlign.center,
+                          )),
                           SizedBox(height: 16),
                           Padding(
                             padding:
@@ -507,13 +534,12 @@ class _EditPostScreenState extends State<EditPostScreen> {
                               width: 300,
                               child: DropdownButtonFormField<String>(
                                 decoration: InputDecoration(
-                                  labelText: 'สิ่งที่สนใจ',
-                                   border: InputBorder.none,
-                              filled: true,
-                              fillColor: Colors.blueGrey[50],
-                              labelStyle: TextStyle(
-                                  color: MainColor, fontFamily: 'Light')
-                                ),
+                                    labelText: 'สิ่งที่สนใจ',
+                                    border: InputBorder.none,
+                                    filled: true,
+                                    fillColor: Colors.blueGrey[50],
+                                    labelStyle: TextStyle(
+                                        color: MainColor, fontFamily: 'Light')),
                                 value: selectedInterest,
                                 onChanged: (newValue) {
                                   setState(() {
@@ -550,13 +576,13 @@ class _EditPostScreenState extends State<EditPostScreen> {
                                   decoration: InputDecoration(
                                     labelText: "วันที่เริ่ม",
                                     counterText: "",
-labelStyle: TextStyle(
-                                  color: MainColor, fontFamily: 'Light'),
-                              border: InputBorder.none,
-                              filled: true,
-                              fillColor: Colors.blueGrey[50],
-                              prefixIcon: Icon(Icons.calendar_month),
-                              prefixIconColor: MainColor,
+                                    labelStyle: TextStyle(
+                                        color: MainColor, fontFamily: 'Light'),
+                                    border: InputBorder.none,
+                                    filled: true,
+                                    fillColor: Colors.blueGrey[50],
+                                    prefixIcon: Icon(Icons.calendar_month),
+                                    prefixIconColor: MainColor,
                                   ),
                                   style: TextStyle(
                                     fontFamily: 'Itim',
@@ -575,12 +601,12 @@ labelStyle: TextStyle(
                                     labelText: "วันที่สิ้นสุด",
                                     counterText: "",
                                     labelStyle: TextStyle(
-                                  color: MainColor, fontFamily: 'Light'),
-                              border: InputBorder.none,
-                              filled: true,
-                              fillColor: Colors.blueGrey[50],
-                              prefixIcon: Icon(Icons.calendar_month),
-                              prefixIconColor: MainColor,
+                                        color: MainColor, fontFamily: 'Light'),
+                                    border: InputBorder.none,
+                                    filled: true,
+                                    fillColor: Colors.blueGrey[50],
+                                    prefixIcon: Icon(Icons.calendar_month),
+                                    prefixIconColor: MainColor,
                                   ),
                                   style: TextStyle(
                                     fontFamily: 'Itim',
@@ -591,16 +617,16 @@ labelStyle: TextStyle(
                             ],
                           ),
                           Center(
-                        child: Text(
-                      "วันที่สิ้นสุดควรหากจากวันที่เริ่มต้นอย่างน้อย 1 วัน",
-                      style: TextStyle(fontFamily: 'Light'),
-                      textAlign: TextAlign.center,
-                    )),
-                    SizedBox(height: 16),
-                    Text(
-                      "ส่วนของตัวเลือก",
-                      style: TextStyle(fontSize: 20, fontFamily: 'Light'),
-                    ),
+                              child: Text(
+                            "วันที่สิ้นสุดควรหากจากวันที่เริ่มต้นอย่างน้อย 1 วัน",
+                            style: TextStyle(fontFamily: 'Light'),
+                            textAlign: TextAlign.center,
+                          )),
+                          SizedBox(height: 16),
+                          Text(
+                            "ส่วนของตัวเลือก",
+                            style: TextStyle(fontSize: 20, fontFamily: 'Light'),
+                          ),
                           Container(
                             child: ListView.builder(
                               shrinkWrap: true,
@@ -666,14 +692,14 @@ labelStyle: TextStyle(
                                           initialValue:
                                               choices[index].choiceName,
                                           decoration: InputDecoration(
-                                            labelText:
-                                                'ตัวเลือกที่ ${index + 1}',
-                                            border: InputBorder.none,
-                                    filled: true,
-                                    fillColor: Colors.blueGrey[50],
-                                    labelStyle: TextStyle(
-                                        color: MainColor, fontFamily: 'Light')
-                                          ),
+                                              labelText:
+                                                  'ตัวเลือกที่ ${index + 1}',
+                                              border: InputBorder.none,
+                                              filled: true,
+                                              fillColor: Colors.blueGrey[50],
+                                              labelStyle: TextStyle(
+                                                  color: MainColor,
+                                                  fontFamily: 'Light')),
                                           onChanged: (value) {
                                             setState(() {
                                               choices[index].choiceName = value;
@@ -719,7 +745,11 @@ labelStyle: TextStyle(
                           Container(
                             height: 50,
                             child: ElevatedButton(
-                                child: Text("ยืนยันการเปลี่ยนแปลง",style: TextStyle(fontFamily: 'Light',fontSize: 20),),
+                                child: Text(
+                                  "ยืนยันการเปลี่ยนแปลง",
+                                  style: TextStyle(
+                                      fontFamily: 'Light', fontSize: 20),
+                                ),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: MainColor,
                                   elevation: 0,
@@ -740,7 +770,8 @@ labelStyle: TextStyle(
                                         builder: (context) {
                                           return AlertDialog(
                                             title: Text("แจ้งเตือน"),
-                                            content: Text("โปรดเลือกวันที่เริ่ม"),
+                                            content:
+                                                Text("โปรดเลือกวันที่เริ่ม"),
                                             actions: [
                                               TextButton(
                                                 onPressed: () {
@@ -794,7 +825,27 @@ labelStyle: TextStyle(
                                           );
                                         },
                                       );
-                                    } else {
+                                    } else if (int.parse(max??posts!.qtyMax.toString()) < int.parse(posts!.qtyMax.toString())) {
+                                      if (int.parse(max!) < int.parse(min??"9999")&& int.parse(max!) < int.parse(posts!.qtyMin.toString())){
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            title: Text("แจ้งเตือน"),
+                                            content: Text(
+                                                "โปรดเลือกวันที่สิ้นสุดให้มากกว่าวันที่เริ่ม"),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text("ปิด"),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                      }else {
                                       print("------object pass------");
                                       print("${title ?? posts!.title}");
                                       print("${image ?? posts!.postImage}");
@@ -834,7 +885,8 @@ labelStyle: TextStyle(
                                                   fileImagesToDisplay[i] ??
                                                       File(""));
                                           if (uploadedFile != null) {
-                                            choices[i].choiceImage = uploadedFile;
+                                            choices[i].choiceImage =
+                                                uploadedFile;
                                           }
                                         }
                                         print(
@@ -842,7 +894,73 @@ labelStyle: TextStyle(
                                         print("${choices[i].choiceId}");
                                         print("${choices[i].choiceName}");
                                         print("${choices[i].choiceImage}");
-                          
+
+                                        if (fromKey.currentState!.validate()) {
+                                          await choiceController.editChoice(
+                                              "true",
+                                              choices[i].choiceId ?? "",
+                                              choices[i].choiceName ?? "",
+                                              choices[i].choiceImage ?? "",
+                                              posts!.postId ?? "");
+                                        }
+                                      }
+                                      Navigator.push(context,
+                                          MaterialPageRoute(builder: (context) {
+                                        return HomeScreen(
+                                            username: widget.username);
+                                      }));
+                                    }
+                                    }
+                                     else {
+                                      print("------object pass------");
+                                      print("${title ?? posts!.title}");
+                                      print("${image ?? posts!.postImage}");
+                                      print(
+                                          "${description ?? posts!.description}");
+                                      print("${point ?? posts!.postPoint}");
+                                      print("${min ?? posts!.qtyMin}");
+                                      print("${max ?? posts!.qtyMax}");
+                                      print("${selectedInterest}");
+                                      print(
+                                          "${dateStart ?? formatDateNew(posts!.dateStart.toString())}");
+                                      print(
+                                          "${dateStop ?? formatDateNew(posts!.dateStop.toString())}");
+                                      editPostController.doEditPost(
+                                          posts!.postId.toString(),
+                                          title ?? posts!.title.toString(),
+                                          image ?? posts!.postImage.toString(),
+                                          description ??
+                                              posts!.description.toString(),
+                                          point ?? posts!.postPoint.toString(),
+                                          dateStart ??
+                                              formatDateNew(
+                                                  posts!.dateStart.toString()),
+                                          dateStop ??
+                                              formatDateNew(
+                                                  posts!.dateStop.toString()),
+                                          min ?? posts!.qtyMin.toString(),
+                                          max ?? posts!.qtyMax.toString(),
+                                          widget.username.toString(),
+                                          selectedInterest ??
+                                              posts!.interest!.interestId
+                                                  .toString());
+                                      for (int i = 0; i < choices.length; i++) {
+                                        if (fileImagesToDisplay[i] != null) {
+                                          var uploadedFile =
+                                              await choiceController.upload(
+                                                  fileImagesToDisplay[i] ??
+                                                      File(""));
+                                          if (uploadedFile != null) {
+                                            choices[i].choiceImage =
+                                                uploadedFile;
+                                          }
+                                        }
+                                        print(
+                                            "----------${choices[i].choiceImage}-----------");
+                                        print("${choices[i].choiceId}");
+                                        print("${choices[i].choiceName}");
+                                        print("${choices[i].choiceImage}");
+
                                         if (fromKey.currentState!.validate()) {
                                           await choiceController.editChoice(
                                               "true",

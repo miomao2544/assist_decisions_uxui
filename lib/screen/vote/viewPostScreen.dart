@@ -1,11 +1,13 @@
 import 'package:assist_decisions_app/classcontroller/choiceController.dart';
 import 'package:assist_decisions_app/classcontroller/memberController.dart';
 import 'package:assist_decisions_app/classcontroller/postController.dart';
+import 'package:assist_decisions_app/classcontroller/reportController.dart';
 import 'package:assist_decisions_app/controller/VotePostController.dart';
 import 'package:assist_decisions_app/controller/viewPostController.dart';
 import 'package:assist_decisions_app/classcontroller/voteController.dart';
 import 'package:assist_decisions_app/model/choice.dart';
 import 'package:assist_decisions_app/model/member.dart';
+import 'package:assist_decisions_app/model/report.dart';
 import 'package:assist_decisions_app/screen/vote/CommentPostScreen.dart';
 import 'package:assist_decisions_app/screen/vote/ReportPostScreen.dart';
 import 'package:assist_decisions_app/screen/vote/homeScreen.dart';
@@ -57,6 +59,9 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
     Member? memberRequired;
     List<String> username = [];
     String voteChoice;
+
+    
+
     postRequired = await viewPostController.getPostById(widget.postId);
     choiceRequired = await choiceController.listAllChoicesById(widget.postId);
     memberRequired = await memberController.getMemberById(widget.username);
@@ -84,29 +89,25 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
         "---------------${widget.postId.toString()}--------------${votePost.toString()}----------------");
       usernames = List<String>.from(username);
       calculateScorepoint();
+      ifreport();
       isDataLoaded = true;
     });
   }
+    bool isResult = true;
+ReportController reportController = ReportController();
+  Future ifreport() async {
+    List<Report> reports =await reportController.getListReport(widget.postId.toString());
 
-  // Future calculateScorepoint() async {
-  //   if ((post!.qtyMax == counts ||
-  //           (post!.dateStop != null && DateTime.parse(post!.dateStop!).isBefore(DateTime.now())&&post!.qty == "r") &&
-  //       post!.result == "r")) {
-  //     double score = double.parse(post!.postPoint.toString());
-  //     int qtyMax = counts;
-  //     if (score % 1 == 0) {
-  //       int scorepoint = (score / qtyMax).toInt();
-  //       print("----------point--${scorepoint}-------");
-  //       for (int i = 0; i < usernames.length; i++) {
-  //         print(
-  //             "---------------${usernames[i].toString()}-------Vote<<<-------------");
-  //         await memberController.doUpdatePointVote(
-  //             usernames[i].toString(), scorepoint.toString());
-  //       }
-  //       await postController.doUpdateResult("1", post!.postId.toString());
-  //     }
-  //   }
-  // }
+    print("-------------${isResult}-----------");
+    setState(() {
+          for(int i = 0;i<reports.length;i++){
+      if(reports[i].member!.username.toString() == widget.username.toString()){
+        isResult = false;
+        break;
+      }
+    }
+    });
+  }
 
   Future calculateScorepoint() async {
   if ((post!.qtyMax == counts) ||
@@ -116,17 +117,17 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
           DateTime.parse(post!.dateStop!).isBefore(DateTime.now()))) {
     double score = double.parse(post!.postPoint.toString());
     int qtyMax = counts;
-    if (score % 1 == 0) {
       int scorepoint = (score / qtyMax).toInt();
       print("----------point--${scorepoint}-------");
+      await postController.doUpdateResult("1", post!.postId.toString());
       for (int i = 0; i < usernames.length; i++) {
         print(
-            "---------------${usernames[i].toString()}-------Vote<<<-------------");
+            "---------------${scorepoint.toString()}-------Vote<<<-------------");
         await memberController.doUpdatePointVote(
-            usernames[i].toString(), scorepoint.toString());
+            usernames[i].toString(), post!.avgPoint.toString());
       }
-      await postController.doUpdateResult("1", post!.postId.toString());
-    }
+      
+
   }
 }
 
@@ -245,7 +246,8 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
             color: Colors.white,
           ),
           actions: [
-            IconButton(
+            
+            isResult  == true? IconButton(
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return ReportPostScreen(
@@ -255,6 +257,13 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
               },
               icon: Icon(
                 Icons.report,
+                size: 35,
+              ),
+            ):IconButton(
+              onPressed: () {
+              },
+              icon: Icon(
+                Icons.report_off,
                 size: 35,
               ),
             ),

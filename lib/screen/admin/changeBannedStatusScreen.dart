@@ -361,13 +361,13 @@ class _ChangeBannedStatusScreenState extends State<ChangeBannedStatusScreen> {
                                                   print(
                                                       "----------${banTypesId}------------");
                                                   print(
-                                                      "----------${reports!.member!.username}------------");
+                                                      "----------${reports!.post!.member!.username}------------");
                                                   await changeBannedStatusController
                                                       .doBanStatus(
                                                           banCommentController
                                                               .text,
                                                           banTypesId ?? "",
-                                                          reports!.member!
+                                                          reports!.post!.member!
                                                                   .username ??
                                                               "");
                                                              

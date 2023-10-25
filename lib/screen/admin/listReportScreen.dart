@@ -22,7 +22,8 @@ class _ListReportScreenState extends State<ListReportScreen> {
   bool isDataLoaded = false;
   List<Report>? reports = [];
   Member? member;
-  ListReportPostsController listReportPostsController = ListReportPostsController();
+  ListReportPostsController listReportPostsController =
+      ListReportPostsController();
   ReportController reportController = ReportController();
   TextEditingController postDateStopController = TextEditingController();
 
@@ -101,6 +102,7 @@ class _ListReportScreenState extends State<ListReportScreen> {
       });
     }
   }
+
   List<String> counts = [];
   Future fetchReport() async {
     List<Report> report;
@@ -111,8 +113,9 @@ class _ListReportScreenState extends State<ListReportScreen> {
         "object-----------------${report[0].reportComment.toString()}---------------------");
 
     print("-----------------${members!.nickname}---------------------");
-    for(int i = 0 ; i < report.length;i++){
-      String reportCounts = await reportController.getReportCountByPost(report[i].post!.postId.toString());
+    for (int i = 0; i < report.length; i++) {
+      String reportCounts = await reportController
+          .getReportCountByPost(report[i].post!.postId.toString());
       counts.add(reportCounts);
       print("object------${reportCounts}");
     }
@@ -135,10 +138,10 @@ class _ListReportScreenState extends State<ListReportScreen> {
         ? Scaffold(
             appBar: AppBar(
               backgroundColor: MainColor,
-              title:                   Image.asset(
-                    "assets/images/logo.png",
-                    width: 60,
-                  ),
+              title: Image.asset(
+                "assets/images/logo.png",
+                width: 60,
+              ),
               actions: [
                 Container(
                   decoration: BoxDecoration(
@@ -202,7 +205,7 @@ class _ListReportScreenState extends State<ListReportScreen> {
                 )
               ],
             ),
-            body:  SingleChildScrollView(
+            body: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(10, 50, 10, 0),
                 child: Column(
@@ -298,208 +301,239 @@ class _ListReportScreenState extends State<ListReportScreen> {
                     SizedBox(
                       height: 20,
                     ),
-                    reports!.length != 0 ?Container(
-                      width: 1270,
-                      child: Center(
-                        child: Stack(
-                          alignment: Alignment
-                              .center, // Center the Stack within the Container
-                          children: [
-                            Wrap(
-                              children: reports?.asMap().entries.map((entry) {
-                                final int index = entry.key;
-                                 final Report report = entry.value;
-                                    return Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(
-                                            10), // ปรับค่าตามที่คุณต้องการ
-                                        child: Container(
-                                          width: 300,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: SecondColor.withOpacity(
-                                                    0.8),
-                                                spreadRadius: 10,
-                                                blurRadius: 10,
-                                                offset: Offset(10, 3),
-                                              ),
-                                            ],
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(20.0),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    SizedBox(
-                                                      width: 80,
+                    reports!.length != 0
+                        ? Container(
+                            width: 1270,
+                            child: Center(
+                              child: Stack(
+                                alignment: Alignment
+                                    .center, // Center the Stack within the Container
+                                children: [
+                                  Wrap(
+                                    children: reports
+                                            ?.asMap()
+                                            .entries
+                                            .map((entry) {
+                                          final int index = entry.key;
+                                          final Report report = entry.value;
+                                          return Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: ClipRRect(
+                                              borderRadius: BorderRadius.circular(
+                                                  10), // ปรับค่าตามที่คุณต้องการ
+                                              child: Container(
+                                                width: 300,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: SecondColor
+                                                          .withOpacity(0.8),
+                                                      spreadRadius: 10,
+                                                      blurRadius: 10,
+                                                      offset: Offset(10, 3),
                                                     ),
-                                                    Text(
-                                                        '${formatDate(report.reportDate)}'),
-                                                    SizedBox(
-                                                      width: 60,
-                                                    ),
-Container(
-  width: 30,
-  height: 30,
-  decoration: BoxDecoration(
-    color: SecondColor, // สีที่ต้องการ
-    borderRadius: BorderRadius.circular(15.0), // ความโค้งของวงกลม (15.0 คือความกว้างของ Container และความสูงของ Container หาร 2)
-  ),
-  child: Center(
-    child: Text(
-      "${counts[index]}",
-      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: Colors.white),
-    ),
-  ),
-)
                                                   ],
                                                 ),
-                                                Text(
-                                                  '${report.post!.title}',
-                                                  style: TextStyle(
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      color: MainColor,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 20),
-                                                ),
-                                                SizedBox(height: 10),
-                                                Image.network(
-                                                  baseURL +
-                                                      '/posts/downloadimg/${report.post!.postImage}',
-                                                  fit: BoxFit.cover,
-                                                  width: 180,
-                                                  height: 180,
-                                                ),
-                                                SizedBox(height: 10),
-                                                Text(
-                                                  "เหตุผลที่รายงาน",
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 16),
-                                                ),
-                                                SizedBox(height: 10),
-                                                Text(
-                                                  report.reportComment !=
-                                                              null &&
-                                                          report.reportComment
-                                                              .toString()
-                                                              .isNotEmpty
-                                                      ? report.reportComment
-                                                          .toString()
-                                                      : "ไม่มีข้อมูล",
-                                                  style: TextStyle(
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                ),
-
-                                                Container(
-                                                  child:
-                                                      FutureBuilder<List<Text>>(
-                                                    future: getReportComments(
-                                                        report),
-                                                    // ต้องกำหนด report ให้กับตัวแปรนี้
-                                                    builder:
-                                                        (context, snapshot) {
-                                                      if (snapshot
-                                                              .connectionState ==
-                                                          ConnectionState
-                                                              .waiting) {
-                                                        return CircularProgressIndicator(); // หรือใดๆ ก็ได้เพื่อแสดงว่าข้อมูลกำลังโหลด
-                                                      } else if (snapshot
-                                                          .hasError) {
-                                                        return Text(
-                                                            'Error: ${snapshot.error}');
-                                                      } else if (snapshot
-                                                          .hasData) {
-                                                        List<Text>
-                                                            commentTexts =
-                                                            snapshot.data!;
-                                                        return ListView.builder(
-                                                          shrinkWrap: true,
-                                                          itemCount:
-                                                              commentTexts
-                                                                  .length,
-                                                          itemBuilder:
-                                                              (context, index) {
-                                                            return commentTexts[
-                                                                index];
-                                                          },
-                                                        );
-                                                      } else {
-                                                        return Text(
-                                                            'No data available');
-                                                      }
-                                                    },
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: SizedBox(
-                                                    width: 150,
-                                                    height: 40,
-                                                    child: ElevatedButton.icon(
-                                                      icon: Icon(
-                                                          Icons.other_houses),
-                                                      label: Text(
-                                                        "เพิ่มเติม",
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(
+                                                      20.0),
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          SizedBox(
+                                                            width: 80,
+                                                          ),
+                                                          Text(
+                                                              '${formatDate(report.reportDate)}'),
+                                                          SizedBox(
+                                                            width: 60,
+                                                          ),
+                                                          Container(
+                                                            width: 30,
+                                                            height: 30,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color:
+                                                                  SecondColor, // สีที่ต้องการ
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          15.0), // ความโค้งของวงกลม (15.0 คือความกว้างของ Container และความสูงของ Container หาร 2)
+                                                            ),
+                                                            child: Center(
+                                                              child: Text(
+                                                                "${counts[index]}",
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        20,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    color: Colors
+                                                                        .white),
+                                                              ),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                      Text(
+                                                        '${report.post!.title}',
                                                         style: TextStyle(
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            color: MainColor,
+                                                            fontWeight:
+                                                                FontWeight.bold,
                                                             fontSize: 20),
                                                       ),
-                                                      style: ButtonStyle(
-                                                        backgroundColor:
-                                                            MaterialStateProperty
-                                                                .all<Color>(
-                                                          SecondColor,
+                                                      SizedBox(height: 10),
+                                                      Image.network(
+                                                        baseURL +
+                                                            '/posts/downloadimg/${report.post!.postImage}',
+                                                        fit: BoxFit.cover,
+                                                        width: 180,
+                                                        height: 180,
+                                                      ),
+                                                      SizedBox(height: 10),
+                                                      Text(
+                                                        "เหตุผลที่รายงาน",
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 16),
+                                                      ),
+                                                      SizedBox(height: 10),
+                                                      Text(
+                                                        report.reportComment !=
+                                                                    null &&
+                                                                report
+                                                                    .reportComment
+                                                                    .toString()
+                                                                    .isNotEmpty
+                                                            ? report
+                                                                .reportComment
+                                                                .toString()
+                                                            : "ไม่มีข้อมูล",
+                                                        style: TextStyle(
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
                                                         ),
                                                       ),
-                                                      onPressed: () {
-                                                        Navigator.push(context,
-                                                            MaterialPageRoute(
-                                                                builder:
-                                                                    (context) {
-                                                          return ViewReportPostDetail(
-                                                            reportId: report
-                                                                .reportId
-                                                                .toString(),
-                                                            username:
-                                                                widget.username,
-                                                          );
-                                                        }));
-                                                      },
-                                                    ),
+                                                      // Container(
+                                                      //   child: FutureBuilder<
+                                                      //       List<Text>>(
+                                                      //     future:
+                                                      //         getReportComments(
+                                                      //             report),
+                                                      //     // ต้องกำหนด report ให้กับตัวแปรนี้
+                                                      //     builder: (context,
+                                                      //         snapshot) {
+                                                      //       if (snapshot
+                                                      //               .connectionState ==
+                                                      //           ConnectionState
+                                                      //               .waiting) {
+                                                      //         return CircularProgressIndicator(); // หรือใดๆ ก็ได้เพื่อแสดงว่าข้อมูลกำลังโหลด
+                                                      //       } else if (snapshot
+                                                      //           .hasError) {
+                                                      //         return Text(
+                                                      //             'Error: ${snapshot.error}');
+                                                      //       } else if (snapshot
+                                                      //           .hasData) {
+                                                      //         List<Text>
+                                                      //             commentTexts =
+                                                      //             snapshot
+                                                      //                 .data!;
+                                                      //         return ListView
+                                                      //             .builder(
+                                                      //           shrinkWrap:
+                                                      //               true,
+                                                      //           itemCount:
+                                                      //               commentTexts
+                                                      //                   .length,
+                                                      //           itemBuilder:
+                                                      //               (context,
+                                                      //                   index) {
+                                                      //             return commentTexts[
+                                                      //                 index];
+                                                      //           },
+                                                      //         );
+                                                      //       } else {
+                                                      //         return Text(
+                                                      //             'No data available');
+                                                      //       }
+                                                      //     },
+                                                      //   ),
+                                                      // ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: SizedBox(
+                                                          width: 150,
+                                                          height: 40,
+                                                          child: ElevatedButton
+                                                              .icon(
+                                                            icon: Icon(Icons
+                                                                .other_houses),
+                                                            label: Text(
+                                                              "เพิ่มเติม",
+                                                              style: TextStyle(
+                                                                  fontSize: 20),
+                                                            ),
+                                                            style: ButtonStyle(
+                                                              backgroundColor:
+                                                                  MaterialStateProperty
+                                                                      .all<
+                                                                          Color>(
+                                                                SecondColor,
+                                                              ),
+                                                            ),
+                                                            onPressed: () {
+                                                              Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder:
+                                                                          (context) {
+                                                                return ViewReportPostDetail(
+                                                                  reportId: report
+                                                                      .reportId
+                                                                      .toString(),
+                                                                  username: widget
+                                                                      .username,
+                                                                );
+                                                              }));
+                                                            },
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
-                                              ],
+                                              ),
                                             ),
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  }).toList() ??
-                                  [],
+                                          );
+                                        }).toList() ??
+                                        [],
+                                  ),
+                                ],
+                              ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ):Text("ยังไม่มีรายงาน"),
+                          )
+                        : Text("ยังไม่มีรายงาน"),
                   ],
                 ),
               ),
             ),
-            )
-        : CircularProgressIndicator();
+          )
+        : Center(child: CircularProgressIndicator());
   }
 }

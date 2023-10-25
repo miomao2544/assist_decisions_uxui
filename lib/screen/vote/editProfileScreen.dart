@@ -230,14 +230,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             ],
                           ),
                           Container(
-                            color: Colors.blueGrey[50],
+                           
                             child: TextFormField(
                               initialValue: firstname,
                               decoration: InputDecoration(
                                 labelText: 'ชื่อ',
                                 prefixIcon: Icon(Icons.person, color: MainColor),
                                 labelStyle: TextStyle(color: MainColor,fontFamily: 'Light'),
-                                border: InputBorder.none
+                                border: InputBorder.none,
+                                       filled: true,
+                      fillColor: Colors.blueGrey[50],
                               ),
                               onChanged: (value) {
                                 setState(() {
@@ -259,14 +261,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                               SizedBox(height: 16.0),
                           Container(
-                            color: Colors.blueGrey[50],
+                      
                             child: TextFormField(
                               initialValue: lastname,
                               decoration: InputDecoration(
                                 labelText: 'นามสกุล',
                                 prefixIcon: Icon(Icons.person, color: MainColor),
                                 labelStyle: TextStyle(color: MainColor,fontFamily: 'Light'),
-                                border: InputBorder.none
+                                border: InputBorder.none,
+                                       filled: true,
+                      fillColor: Colors.blueGrey[50],
                               ),
                               onChanged: (value) {
                                 setState(() {
@@ -288,14 +292,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                           SizedBox(height: 16.0),
                           Container(
-                            color: Colors.blueGrey[50],
+                        
                             child: TextFormField(
                               initialValue: email,
                               decoration: InputDecoration(
                                 labelText: 'อีเมล์',
                                 prefixIcon: Icon(Icons.email, color: MainColor),
                                 labelStyle: TextStyle(color: MainColor,fontFamily: 'Light'),
-                                border:  InputBorder.none
+                                border:  InputBorder.none,       filled: true,
+                      fillColor: Colors.blueGrey[50],
                               ),
                               onChanged: (value) {
                                 setState(() {
@@ -319,14 +324,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                           SizedBox(height: 16.0),
                           Container(
-                            color: Colors.blueGrey[50],
+            
                             child: TextFormField(
                               initialValue: tel,
                               decoration: InputDecoration(
                                 labelText: 'หมายเลขโทรศัพท์',
                                 prefixIcon: Icon(Icons.phone, color: MainColor),
                                 labelStyle: TextStyle(color: MainColor,fontFamily: 'Light'),
-                                border: InputBorder.none
+                                border: InputBorder.none,       filled: true,
+                      fillColor: Colors.blueGrey[50],
                               ),
                               onChanged: (value) {
                                 setState(() {
@@ -447,7 +453,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                           SizedBox(height: 12.0),
                           Container(
-                            color: Colors.blueGrey[50],
+                       
                             child: TextFormField(
                               initialValue: nickname,
                               decoration: InputDecoration(
@@ -455,7 +461,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 prefixIcon:
                                     Icon(Icons.account_circle, color: MainColor),
                                 labelStyle: TextStyle(color: MainColor,fontFamily: 'Light'),
-                                border: InputBorder.none
+                                border: InputBorder.none,
+                                       filled: true,
+                      fillColor: Colors.blueGrey[50],
                               ),
                               onChanged: (value) {
                                 setState(() {
@@ -477,7 +485,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                           SizedBox(height: 16.0),
                           Container(
-                            color: Colors.blueGrey[50],
+                      
                             child: TextFormField(
                               initialValue: username,
                               decoration: InputDecoration(
@@ -485,20 +493,24 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 prefixIcon:
                                     Icon(Icons.account_box, color: MainColor),
                                 labelStyle: TextStyle(color: MainColor,fontFamily: 'Light'),
-                                border: InputBorder.none
+                                border: InputBorder.none,
+                                       filled: true,
+                      fillColor: Colors.blueGrey[50],
                               ),
                               enabled: false,
                             ),
                           ),
                           SizedBox(height: 16.0),
                           Container(
-                            color: Colors.blueGrey[50],
+                        
                             child: TextFormField(
                               decoration: InputDecoration(
                                 labelText: 'รหัสผ่าน',
                                 prefixIcon: Icon(Icons.key, color: MainColor),
                                 labelStyle: TextStyle(color: MainColor,fontFamily: 'Light'),
-                                border: InputBorder.none
+                                border: InputBorder.none,
+                                       filled: true,
+                      fillColor: Colors.blueGrey[50],
                               ),
                               obscureText: true,
                               onChanged: (value) {
@@ -522,13 +534,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                           SizedBox(height: 16.0),
                           Container(
-                            color: Colors.blueGrey[50],
+                       
                             child: TextFormField(
                               decoration: InputDecoration(
                                 labelText: 'ยืนยันรหัสผ่าน',
                                 prefixIcon: Icon(Icons.key, color: MainColor),
                                 labelStyle: TextStyle(color: MainColor,fontFamily: 'Light'),
-                                border: InputBorder.none
+                                border: InputBorder.none,
+                                       filled: true,
+                      fillColor: Colors.blueGrey[50],
                               ),
                               obscureText: true,
                               onChanged: (value) {
@@ -581,6 +595,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                                   onPressed: () {
                                                     Navigator.of(context).pop();
                                                   },
+                                                                                    style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all(MainColor), // สีพื้นหลังของปุ่ม
+                                      ),
                                                   child: Text('ปิด'),
                                                 ),
                                               ],
