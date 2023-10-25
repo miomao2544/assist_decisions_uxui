@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:assist_decisions_app/constant/constant_value.dart';
-import 'package:assist_decisions_app/controller/choiceController.dart';
-import 'package:assist_decisions_app/controller/memberController.dart';
-import 'package:assist_decisions_app/controller/postController.dart';
+import 'package:assist_decisions_app/classcontroller/choiceController.dart';
+import 'package:assist_decisions_app/classcontroller/memberController.dart';
+import 'package:assist_decisions_app/classcontroller/postController.dart';
 import 'package:assist_decisions_app/model/member.dart';
 import 'package:assist_decisions_app/model/post.dart';
 import 'package:assist_decisions_app/screen/vote/homeScreen.dart';
@@ -12,7 +12,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../controller/interestController.dart';
+import '../../classcontroller/interestController.dart';
 import '../../model/choice.dart';
 import '../../model/interest.dart';
 import '../validators/validatorPost.dart';

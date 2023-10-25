@@ -1,6 +1,6 @@
-import 'package:assist_decisions_app/controller/memberController.dart';
-import 'package:assist_decisions_app/controller/postController.dart';
-import 'package:assist_decisions_app/controller/voteController.dart';
+import 'package:assist_decisions_app/classcontroller/memberController.dart';
+import 'package:assist_decisions_app/classcontroller/postController.dart';
+import 'package:assist_decisions_app/classcontroller/voteController.dart';
 import 'package:assist_decisions_app/model/member.dart';
 import 'package:assist_decisions_app/model/post.dart';
 import 'package:assist_decisions_app/screen/post/chackPointScreen.dart';

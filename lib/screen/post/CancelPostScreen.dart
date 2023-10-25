@@ -1,4 +1,4 @@
-import 'package:assist_decisions_app/controller/postController.dart';
+import 'package:assist_decisions_app/classcontroller/postController.dart';
 import 'package:assist_decisions_app/screen/vote/homeScreen.dart';
 import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:flutter/material.dart';

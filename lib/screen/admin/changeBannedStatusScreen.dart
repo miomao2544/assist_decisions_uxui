@@ -1,7 +1,7 @@
 import 'package:assist_decisions_app/constant/constant_value.dart';
-import 'package:assist_decisions_app/controller/banTypeController.dart';
-import 'package:assist_decisions_app/controller/historyController.dart';
-import 'package:assist_decisions_app/controller/reportController.dart';
+import 'package:assist_decisions_app/classcontroller/banTypeController.dart';
+import 'package:assist_decisions_app/classcontroller/historyController.dart';
+import 'package:assist_decisions_app/classcontroller/reportController.dart';
 import 'package:assist_decisions_app/model/banType.dart';
 import 'package:assist_decisions_app/model/report.dart';
 import 'package:assist_decisions_app/screen/admin/listReportScreen.dart';

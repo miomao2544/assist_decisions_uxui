@@ -1,5 +1,6 @@
-import 'package:assist_decisions_app/controller/interestController.dart';
-import 'package:assist_decisions_app/controller/postController.dart';
+import 'package:assist_decisions_app/controller/SearchPostController.dart';
+import 'package:assist_decisions_app/classcontroller/interestController.dart';
+import 'package:assist_decisions_app/classcontroller/postController.dart';
 import 'package:assist_decisions_app/model/interest.dart';
 import 'package:assist_decisions_app/model/post.dart';
 import 'package:assist_decisions_app/screen/post/ViewPostDetailScreen.dart';
@@ -29,7 +30,8 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
   List<String> numbers = ["0", "1000", "500", "200", "100", "50"];
   TextEditingController postDateStopController = TextEditingController();
   String? dateStops = "";
-  final PostController postController = PostController();
+  PostController postController = PostController();
+  SearchPostController searchPostController =SearchPostController();
   InterestController interestController = InterestController();
 
   Future fetchPost() async {
@@ -46,7 +48,7 @@ class _SearchPostScreenState extends State<SearchPostScreen> {
     }
 
 print("---------------------------interests-----is ${interestListSelect}----------------------");
-    posts = await postController.listSearchPostsAll(search.toString(),
+    posts = await searchPostController.doSearchPost(search.toString(),
         interestListSelect.toString(),"", "");
     setState(() {});
   }

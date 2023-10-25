@@ -1,4 +1,4 @@
-import 'package:assist_decisions_app/controller/postController.dart';
+import 'package:assist_decisions_app/classcontroller/postController.dart';
 import 'package:assist_decisions_app/model/post.dart';
 import 'package:assist_decisions_app/screen/post/ViewPostDetailScreen.dart';
 import 'package:assist_decisions_app/widgets/colors.dart';

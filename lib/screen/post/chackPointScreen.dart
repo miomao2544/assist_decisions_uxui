@@ -1,7 +1,7 @@
 import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:flutter/material.dart';
 
-import '../../controller/memberController.dart';
+import '../../classcontroller/memberController.dart';
 import '../../model/member.dart';
 
 class ChackPointScreen extends StatefulWidget {

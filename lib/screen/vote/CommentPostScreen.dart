@@ -1,5 +1,5 @@
 import 'package:assist_decisions_app/constant/constant_value.dart';
-import 'package:assist_decisions_app/controller/commentController.dart';
+import 'package:assist_decisions_app/classcontroller/commentController.dart';
 
 import 'package:assist_decisions_app/model/member.dart';
 import 'package:assist_decisions_app/screen/vote/ListCommentScreen.dart';

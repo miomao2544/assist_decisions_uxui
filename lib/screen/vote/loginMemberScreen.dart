@@ -1,5 +1,5 @@
 import 'package:assist_decisions_app/controller/LoginMemberController.dart';
-import 'package:assist_decisions_app/controller/memberController.dart';
+import 'package:assist_decisions_app/classcontroller/memberController.dart';
 import 'package:assist_decisions_app/screen/vote/homeScreen.dart';
 import 'package:assist_decisions_app/screen/vote/registerScreen.dart';
 import 'package:assist_decisions_app/widgets/colors.dart';

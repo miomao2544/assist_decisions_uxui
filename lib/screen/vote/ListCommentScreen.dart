@@ -1,5 +1,5 @@
 import 'package:assist_decisions_app/constant/constant_value.dart';
-import 'package:assist_decisions_app/controller/commentController.dart';
+import 'package:assist_decisions_app/classcontroller/commentController.dart';
 import 'package:assist_decisions_app/model/comment.dart';
 import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:flutter/material.dart';

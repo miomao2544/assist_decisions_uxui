@@ -1,5 +1,5 @@
-import 'package:assist_decisions_app/controller/choiceController.dart';
-import 'package:assist_decisions_app/controller/postController.dart';
+import 'package:assist_decisions_app/classcontroller/choiceController.dart';
+import 'package:assist_decisions_app/classcontroller/postController.dart';
 import 'package:assist_decisions_app/model/choice.dart';
 import 'package:assist_decisions_app/model/post.dart';
 import 'package:assist_decisions_app/screen/vote/ViewProfileScreen.dart';

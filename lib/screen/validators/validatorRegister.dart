@@ -1,4 +1,4 @@
-import 'package:assist_decisions_app/controller/memberController.dart';
+import 'package:assist_decisions_app/classcontroller/memberController.dart';
 
 bool isThaiOrEnglish(String input) {
   final thaiPattern = RegExp(r'^[ก-๏\s]+$');

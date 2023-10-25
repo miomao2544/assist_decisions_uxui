@@ -1,6 +1,6 @@
 import 'package:assist_decisions_app/constant/constant_value.dart';
-import 'package:assist_decisions_app/controller/memberController.dart';
-import 'package:assist_decisions_app/controller/reportController.dart';
+import 'package:assist_decisions_app/classcontroller/memberController.dart';
+import 'package:assist_decisions_app/classcontroller/reportController.dart';
 import 'package:assist_decisions_app/model/member.dart';
 import 'package:assist_decisions_app/model/report.dart';
 import 'package:assist_decisions_app/screen/admin/viewReportPostDetailScreen.dart';

@@ -1,7 +1,7 @@
 import 'package:assist_decisions_app/controller/NotifyPostController.dart';
-import 'package:assist_decisions_app/controller/postController.dart';
-import 'package:assist_decisions_app/controller/viewPostController.dart';
-import 'package:assist_decisions_app/controller/voteController.dart';
+import 'package:assist_decisions_app/classcontroller/postController.dart';
+import 'package:assist_decisions_app/classcontroller/viewPostController.dart';
+import 'package:assist_decisions_app/classcontroller/voteController.dart';
 import 'package:assist_decisions_app/model/post.dart';
 import 'package:assist_decisions_app/screen/vote/viewPostScreen.dart';
 import 'package:assist_decisions_app/widgets/colors.dart';
