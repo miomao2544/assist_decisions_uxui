@@ -1,6 +1,7 @@
 import 'package:assist_decisions_app/constant/constant_value.dart';
 import 'package:assist_decisions_app/classcontroller/memberController.dart';
 import 'package:assist_decisions_app/classcontroller/reportController.dart';
+import 'package:assist_decisions_app/controller/ListReportPostsController.dart';
 import 'package:assist_decisions_app/model/member.dart';
 import 'package:assist_decisions_app/model/report.dart';
 import 'package:assist_decisions_app/screen/admin/viewReportPostDetailScreen.dart';
@@ -21,8 +22,10 @@ class _ListReportScreenState extends State<ListReportScreen> {
   bool isDataLoaded = false;
   List<Report>? reports = [];
   Member? member;
+  ListReportPostsController listReportPostsController = ListReportPostsController();
   ReportController reportController = ReportController();
   TextEditingController postDateStopController = TextEditingController();
+
   MemberController memberController = MemberController();
   String? dateStops = "";
   Future<void> _selectDateStop(BuildContext context) async {
@@ -101,7 +104,7 @@ class _ListReportScreenState extends State<ListReportScreen> {
   List<String> counts = [];
   Future fetchReport() async {
     List<Report> report;
-    report = await reportController.getListReport();
+    report = await listReportPostsController.getListReport();
     Member? members;
     members = await memberController.getMemberById(widget.username.toString());
     print(

@@ -1,4 +1,4 @@
-import 'package:assist_decisions_app/classcontroller/memberController.dart';
+import 'package:assist_decisions_app/controller/LoginAdminController.dart';
 import 'package:assist_decisions_app/screen/admin/listReportScreen.dart';
 import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:flutter/material.dart';
@@ -17,10 +17,10 @@ class _LoginAdminScreenState extends State<LoginAdminScreen> {
   String password = "";
   String result = "";
   final GlobalKey<FormState> fromKey = GlobalKey<FormState>();
-  MemberController memberController = MemberController();
+  LoginAdminController loginAdminController = LoginAdminController();
 
   Future doLoginAdmin() async {
-    result = await memberController.doLoginAdmin(username, password);
+    result = await loginAdminController.doLoginAdmin(username, password);
     print("-----------$result------------");
   }
 
@@ -70,7 +70,7 @@ class _LoginAdminScreenState extends State<LoginAdminScreen> {
                           SizedBox(height: 16.0),
                           Container(
                             width: 300,
-                            color: Colors.blueGrey[50],
+                            
                             child: TextFormField(
                               style:
                                   TextStyle(color: MainColor, fontSize: 20.0),
@@ -82,6 +82,8 @@ class _LoginAdminScreenState extends State<LoginAdminScreen> {
                                 prefixIcon:
                                     Icon(Icons.person, color: MainColor),
                                 border: InputBorder.none,
+                                                      filled: true,
+                      fillColor: Colors.blueGrey[50],
                               ),
                               onChanged: (value) {
                                 setState(() {
@@ -96,7 +98,7 @@ class _LoginAdminScreenState extends State<LoginAdminScreen> {
                           SizedBox(height: 16.0),
                           Container(
                             width: 300,
-                            color: Colors.blueGrey[50],
+                        
                             child: TextFormField(
                               obscureText: true,
                               style:
@@ -108,6 +110,8 @@ class _LoginAdminScreenState extends State<LoginAdminScreen> {
                                 prefixIcon:
                                     Icon(Icons.person, color: MainColor),
                                 border: InputBorder.none,
+                                                      filled: true,
+                      fillColor: Colors.blueGrey[50],
                               ),
                               onChanged: (value) {
                                 setState(() {
@@ -148,18 +152,45 @@ class _LoginAdminScreenState extends State<LoginAdminScreen> {
                                           username: username,
                                         );
                                       }));
-                                    } else if (result == "true") {
-                                      showDialog(
+                                    }else if(result == "true"){
+                                         showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
                                           return AlertDialog(
                                             title: Text('ข้อจำกัด'),
-                                            content: Text('คุณไม่มีสิทธิเข้า'),
+                                            content: Text('สิทธิของคุณเข้าไม่ถึงระบบนี้'),
                                             actions: [
                                               ElevatedButton(
                                                 onPressed: () {
                                                   Navigator.of(context).pop();
                                                 },
+                                                                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all(MainColor), // สีพื้นหลังของปุ่ม
+                                      ),
+                                                child: Text('ปิด'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    }
+                                     else{
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: Text('ไม่มีข้อมูล'),
+                                            content: Text('ไม่พบข้อมูลของคุณ'),
+                                            actions: [
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all(MainColor), // สีพื้นหลังของปุ่ม
+                                      ),
                                                 child: Text('ปิด'),
                                               ),
                                             ],

@@ -72,14 +72,6 @@ class MemberController {
   }
 
 
-  Future doLoginAdmin(String username,String password) async {
-    var url = Uri.parse(baseURL + "/members/loginmember/${username}/${password}");
-     http.Response response = await http.post(url, headers: headers, body: null);
-    return response.body;
-  }
-
-
-
 
     Future doUpdatePoint(String username,String point) async {
     var url = Uri.parse(baseURL + '/members/updatepoint/${username}/${point}');

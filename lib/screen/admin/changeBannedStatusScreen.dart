@@ -1,7 +1,8 @@
 import 'package:assist_decisions_app/constant/constant_value.dart';
 import 'package:assist_decisions_app/classcontroller/banTypeController.dart';
-import 'package:assist_decisions_app/classcontroller/historyController.dart';
 import 'package:assist_decisions_app/classcontroller/reportController.dart';
+import 'package:assist_decisions_app/controller/ChangeBannedStatusController.dart';
+import 'package:assist_decisions_app/controller/ViewReportPostDetailController.dart';
 import 'package:assist_decisions_app/model/banType.dart';
 import 'package:assist_decisions_app/model/report.dart';
 import 'package:assist_decisions_app/screen/admin/listReportScreen.dart';
@@ -25,8 +26,9 @@ class _ChangeBannedStatusScreenState extends State<ChangeBannedStatusScreen> {
   Report? reports;
   String? banComment;
   ReportController reportController = ReportController();
+  ViewReportPostDetailController  viewReportPostDetailController =ViewReportPostDetailController(); 
   BanTypeController banTypeController = BanTypeController();
-  HistoryBanController historyBanController = HistoryBanController();
+  ChangeBannedStatusController changeBannedStatusController = ChangeBannedStatusController();
   String? banTypeId = "";
   String? banTypesId = "BT0000000001";
   List<String?> banTypes = [];
@@ -62,7 +64,7 @@ class _ChangeBannedStatusScreenState extends State<ChangeBannedStatusScreen> {
   Future fetchReport() async {
     Report? report;
     report =
-        await reportController.doViewReportDetail(widget.reportId.toString());
+        await viewReportPostDetailController.doViewReportDetail(widget.reportId.toString());
     List<BanType?> banType;
     banType = await banTypeController.listAllBanTypes();
     for (int i = 0; i < banType.length; i++) {
@@ -360,7 +362,7 @@ class _ChangeBannedStatusScreenState extends State<ChangeBannedStatusScreen> {
                                                       "----------${banTypesId}------------");
                                                   print(
                                                       "----------${reports!.member!.username}------------");
-                                                  await historyBanController
+                                                  await changeBannedStatusController
                                                       .doBanStatus(
                                                           banCommentController
                                                               .text,
@@ -368,6 +370,7 @@ class _ChangeBannedStatusScreenState extends State<ChangeBannedStatusScreen> {
                                                           reports!.member!
                                                                   .username ??
                                                               "");
+                                                             
                                                   Navigator.push(context,
                                                       MaterialPageRoute(
                                                           builder: (context) {

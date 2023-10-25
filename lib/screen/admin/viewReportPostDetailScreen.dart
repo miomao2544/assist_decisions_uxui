@@ -1,6 +1,7 @@
 import 'package:assist_decisions_app/constant/constant_value.dart';
 import 'package:assist_decisions_app/classcontroller/choiceController.dart';
 import 'package:assist_decisions_app/classcontroller/reportController.dart';
+import 'package:assist_decisions_app/controller/ViewReportPostDetailController.dart';
 import 'package:assist_decisions_app/model/choice.dart';
 import 'package:assist_decisions_app/model/report.dart';
 import 'package:assist_decisions_app/screen/admin/ChangeBannedStatusScreen.dart';
@@ -24,6 +25,7 @@ class _ViewReportPostDetailState extends State<ViewReportPostDetail> {
   Report? reports;
   ReportController reportController = ReportController();
   ChoiceController choiceController = ChoiceController();
+  ViewReportPostDetailController  viewReportPostDetailController =ViewReportPostDetailController(); 
 
   String formatDate(String? inputDate) {
     if (inputDate != null) {
@@ -48,7 +50,7 @@ class _ViewReportPostDetailState extends State<ViewReportPostDetail> {
   Future fetchReport() async {
     Report? report;
     List<Choice> choiceRequired;
-    report = await reportController.doViewReportDetail(widget.reportId.toString());
+    report = await viewReportPostDetailController.doViewReportDetail(widget.reportId.toString());
     choiceRequired = await choiceController.listAllChoicesById(report!.post!.postId.toString());
     setState(() {
       reports = report;
