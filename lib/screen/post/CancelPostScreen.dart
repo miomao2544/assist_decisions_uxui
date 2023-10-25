@@ -1,4 +1,5 @@
 import 'package:assist_decisions_app/classcontroller/postController.dart';
+import 'package:assist_decisions_app/controller/CancelPostController.dart';
 import 'package:assist_decisions_app/screen/vote/homeScreen.dart';
 import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,7 @@ class CancelPostScreen extends StatefulWidget {
 }
 
 class _ChackDeletePostScreenState extends State<CancelPostScreen> {
-  PostController postController = PostController();
+  CancelPostController cancelPostController = CancelPostController();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -53,7 +54,7 @@ class _ChackDeletePostScreenState extends State<CancelPostScreen> {
                             children: [
                               ElevatedButton(
                                 onPressed: () async {
-                                  await postController
+                                  await cancelPostController
                                       .doDeletePost(widget.postId.toString());
                                   Navigator.push(context,
                                       MaterialPageRoute(builder: (context) {

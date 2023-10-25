@@ -1,0 +1,19 @@
+import 'dart:convert';
+import 'package:assist_decisions_app/model/post.dart';
+import 'package:http/http.dart' as http;
+import '../constant/constant_value.dart';
+
+class ListPostController{
+  Future getListPostByMember(String username) async {
+    var url = Uri.parse(baseURL + '/posts/listme/${username}');
+
+    http.Response response = await http.post(url, headers: headers, body: null);
+    List<Post>? list;
+
+    final utf8body = utf8.decode(response.bodyBytes);
+    List<dynamic> jsonList = json.decode(utf8body);
+    list = jsonList.map((e) => Post.fromJsonToPost(e)).toList();
+    print("-------------------------------post-----------------");
+    return list;
+  }
+}

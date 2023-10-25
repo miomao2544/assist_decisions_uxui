@@ -1,4 +1,5 @@
 import 'package:assist_decisions_app/classcontroller/postController.dart';
+import 'package:assist_decisions_app/controller/ListPostController.dart';
 import 'package:assist_decisions_app/model/post.dart';
 import 'package:assist_decisions_app/screen/post/ViewPostDetailScreen.dart';
 import 'package:assist_decisions_app/widgets/colors.dart';
@@ -18,10 +19,10 @@ class _ListPostScreenState extends State<ListPostScreen> {
   List<Post>? posts;
   List<int>? counts;
   bool? isDataLoaded = false;
-  final PostController postController = PostController();
-
+  PostController postController = PostController();
+  ListPostController listPostController = ListPostController();
   Future fetchPost() async {
-    posts = await postController.listPostsForMe(widget.username.toString());
+    posts = await listPostController.getListPostByMember(widget.username.toString());
     counts = List<int>.filled(posts!.length, 0);
     for (int i = 0; i < posts!.length; i++) {
       int count =

@@ -7,40 +7,6 @@ import '../constant/constant_value.dart';
 class PostController {
   Post? posts;
 
-  Future doEditPost(String postId,
-      String title,
-      String image,
-      String description,
-      String postPoint,
-      String dateStart,
-      String dateStop,
-      String qtyMax,
-      String qtyMin,
-      String username,
-      String interestId) async {
-    Map data = {
-      "postId":postId,
-      "postImage": image,
-      "title": title,
-      "description": description,
-      "postPoint": postPoint,
-      "dateStart": dateStart,
-      "dateStop": dateStop,
-      "qtyMax": qtyMax,
-      "qtyMin": qtyMin,
-      "username": username,
-      "interestId": interestId,
-    };
-    var body = json.encode(data);
-    var url = Uri.parse(baseURL + '/posts/update');
-
-    http.Response response = await http.post(url, headers: headers, body: body);
-    // print(response.body);
-    var jsonResponse = jsonDecode(response.body);
-    print(jsonResponse);
-    return jsonResponse;
-  }
-
   Future listAllPosts() async {
     var url = Uri.parse(baseURL + '/posts/list');
 
@@ -97,13 +63,6 @@ class PostController {
 
 
 
-  Future doDeletePost(String postId) async {
-    var url = Uri.parse(baseURL + '/posts/delete/${postId}');
-
-    http.Response response = await http.post(url, headers: headers, body: null);
-    final utf8body = utf8.decode(response.bodyBytes);
-    print("-------------------------------${utf8body}-----------------");
-  }
 
   Future<Post?> getPostById(String postId) async {
     try {
@@ -139,18 +98,6 @@ class PostController {
   }
 
 
-  Future listPostsForMe(String username) async {
-    var url = Uri.parse(baseURL + '/posts/listme/${username}');
-
-    http.Response response = await http.post(url, headers: headers, body: null);
-    List<Post>? list;
-
-    final utf8body = utf8.decode(response.bodyBytes);
-    List<dynamic> jsonList = json.decode(utf8body);
-    list = jsonList.map((e) => Post.fromJsonToPost(e)).toList();
-    print("-------------------------------post-----------------");
-    return list;
-  }
 
     Future doUpdateResult(String result,String postId) async {
     var url = Uri.parse(baseURL + '/posts/updateresult/${result}/${postId}');

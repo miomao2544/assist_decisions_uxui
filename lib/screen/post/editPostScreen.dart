@@ -4,6 +4,7 @@ import 'package:assist_decisions_app/constant/constant_value.dart';
 import 'package:assist_decisions_app/classcontroller/choiceController.dart';
 import 'package:assist_decisions_app/classcontroller/memberController.dart';
 import 'package:assist_decisions_app/classcontroller/postController.dart';
+import 'package:assist_decisions_app/controller/EditPostController.dart';
 import 'package:assist_decisions_app/model/member.dart';
 import 'package:assist_decisions_app/model/post.dart';
 import 'package:assist_decisions_app/screen/vote/homeScreen.dart';
@@ -43,6 +44,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
   List<String>? images = [];
   ChoiceController choiceController = ChoiceController();
   PostController postController = PostController();
+  EditPostController editPostController = EditPostController();
   MemberController memberController = MemberController();
   String? fileName;
   PlatformFile? pickedFile;
@@ -207,7 +209,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
 
   Post? posts;
   Future<void> setInitialValues() async {
-    Post? post = await postController.getPostById(widget.postId);
+    Post? post = await editPostController.doPostDetail(widget.postId);
     List<Choice> choice =
         await choiceController.listAllChoicesById(widget.postId);
     for (int i = 0; i < choice.length; i++) {
@@ -806,7 +808,7 @@ labelStyle: TextStyle(
                                           "${dateStart ?? formatDateNew(posts!.dateStart.toString())}");
                                       print(
                                           "${dateStop ?? formatDateNew(posts!.dateStop.toString())}");
-                                      postController.doEditPost(
+                                      editPostController.doEditPost(
                                           posts!.postId.toString(),
                                           title ?? posts!.title.toString(),
                                           image ?? posts!.postImage.toString(),

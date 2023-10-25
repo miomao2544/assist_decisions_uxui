@@ -1,6 +1,7 @@
 import 'package:assist_decisions_app/classcontroller/memberController.dart';
 import 'package:assist_decisions_app/classcontroller/postController.dart';
 import 'package:assist_decisions_app/classcontroller/voteController.dart';
+import 'package:assist_decisions_app/controller/ViewPostDetailController.dart';
 import 'package:assist_decisions_app/screen/post/CancelPostScreen.dart';
 import 'package:assist_decisions_app/screen/post/EditPostScreen.dart';
 import 'package:assist_decisions_app/screen/vote/ListCommentScreen.dart';
@@ -36,6 +37,7 @@ class _PostDetailScreenState extends State<ViewPostDetailScreen> {
   bool? isDataLoaded = false;
   ChoiceController choiceController = ChoiceController();
   PostController postController = PostController();
+  ViewPostDetailController viewPostDetailController = ViewPostDetailController();
   MemberController memberController = MemberController();
   VoteController voteController = VoteController();
   String formatDate(String? inputDate) {
@@ -53,7 +55,7 @@ class _PostDetailScreenState extends State<ViewPostDetailScreen> {
     Member? memberRequired;
     int count;
     List<String> vote = [];
-    postRequired = await postController.getPostById(widget.postId);
+    postRequired = await viewPostDetailController.doViewPostDetail(widget.postId);
     choiceRequired = await choiceController.listAllChoicesById(widget.postId);
     memberRequired = await memberController.getMemberById(widget.username);
     count = await postController.getListCountMember(widget.postId);
