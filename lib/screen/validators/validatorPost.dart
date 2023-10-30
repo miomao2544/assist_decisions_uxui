@@ -45,14 +45,17 @@ String? validateMin(String? value) {
   return null;
 }
 
-String? validateMax(String? value) {
+String? validateMax(String? value,String min) {
   final RegExp validQty = RegExp(r'^[0-9]+$');
 
   if (value == null || value.isEmpty) {
     return 'กรุณากรอกจำนวนผู้ที่เข้ารวมสูงสุด';
   } else if (!validQty.hasMatch(value)) {
     return 'จำนวนผู้ที่เข้ารวมสูงสุดต้องเป็นตัวเลขเท่านั้น';
-  } else {
+  }else if (int.parse(value) < int.parse(min)) {
+    return 'จำนวนผู้ที่เข้ารวมสูงสุดต้องไม่น้อยกว่า $min';
+  }
+  else {
     if (value.length < 2 || value.length > 4) {
       return 'จำนวนผู้ที่เข้ารวมสูงสุดต้องเป็นจำนวนเต็ม 10 เท่านั้น';
     } else if (value.contains(' ')) {

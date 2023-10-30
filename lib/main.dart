@@ -1,4 +1,5 @@
 
+
 import 'package:assist_decisions_app/screen/admin/listReportScreen.dart';
 import 'package:assist_decisions_app/screen/admin/LoginAdminScreen.dart';
 import 'package:assist_decisions_app/screen/admin/viewReportPostDetailScreen.dart';
@@ -20,9 +21,7 @@ class MainApp extends StatelessWidget {
       // home: PreviewPostScreen(),
       home: LoginMemberScreen(),
       // home: LoginAdminScreen(),
-      // home: HomeScreen(username: 'miomao2544'),
-      // home: ListReportScreen(username: 'adminmember'),
-      // home: ViewReportPostDetail(username: 'adminmember',reportId: 'R00000000002',),
+    
       debugShowCheckedModeBanner: false,
     );
   }

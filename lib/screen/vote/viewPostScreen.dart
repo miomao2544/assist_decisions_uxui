@@ -39,7 +39,7 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
   ViewPostController viewPostController = ViewPostController();
   MemberController memberController = MemberController();
   VoteController voteController = VoteController();
-  VotePostController votePostController =VotePostController();
+  VotePostController votePostController = VotePostController();
   String formatDate(String? inputDate) {
     if (inputDate != null) {
       final DateTime date = DateTime.parse(inputDate);
@@ -49,7 +49,7 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
     return '';
   }
 
- String votePost = "";
+  String votePost = "";
   int counts = 0;
   String ifvote = "";
   List<String> usernames = [];
@@ -60,15 +60,14 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
     List<String> username = [];
     String voteChoice;
 
-    
-
     postRequired = await viewPostController.getPostById(widget.postId);
     choiceRequired = await choiceController.listAllChoicesById(widget.postId);
     memberRequired = await memberController.getMemberById(widget.username);
     counts = await postController.getListCountMember(widget.postId);
     ifvote =
         await voteController.getIFVoteChoice(widget.username, widget.postId);
-    voteChoice = await voteController.getVoteChoice(widget.postId, widget.username);
+    voteChoice =
+        await voteController.getVoteChoice(widget.postId, widget.username);
     int i;
     for (i = 0; i < choiceRequired.length; i++) {
       if (choiceRequired[i].choiceName == voteChoice) {
@@ -85,38 +84,41 @@ class _ViewPostScreenState extends State<ViewPostScreen> {
       choices = choiceRequired;
       member = memberRequired;
       votePost = voteChoice;
-          print(
-        "---------------${widget.postId.toString()}--------------${votePost.toString()}----------------");
+      print(
+          "---------------${widget.postId.toString()}--------------${votePost.toString()}----------------");
       usernames = List<String>.from(username);
       calculateScorepoint();
       ifreport();
       isDataLoaded = true;
     });
   }
-    bool isResult = true;
-ReportController reportController = ReportController();
+
+  bool isResult = true;
+  ReportController reportController = ReportController();
   Future ifreport() async {
-    List<Report> reports =await reportController.getListReport(widget.postId.toString());
+    List<Report> reports =
+        await reportController.getListReport(widget.postId.toString());
 
     print("-------------${isResult}-----------");
     setState(() {
-          for(int i = 0;i<reports.length;i++){
-      if(reports[i].member!.username.toString() == widget.username.toString()){
-        isResult = false;
-        break;
+      for (int i = 0; i < reports.length; i++) {
+        if (reports[i].member!.username.toString() ==
+            widget.username.toString()) {
+          isResult = false;
+          break;
+        }
       }
-    }
     });
   }
 
   Future calculateScorepoint() async {
-  if ((post!.qtyMax == counts) ||
-      (post!.qtyMin != null &&
-          post!.qtyMin! >= counts &&
-          post!.dateStop != null &&
-          DateTime.parse(post!.dateStop!).isBefore(DateTime.now()))) {
-    double score = double.parse(post!.postPoint.toString());
-    int qtyMax = counts;
+    if ((post!.qtyMax == counts) ||
+        (post!.qtyMin != null &&
+            post!.qtyMin! >= counts &&
+            post!.dateStop != null &&
+            DateTime.parse(post!.dateStop!).isBefore(DateTime.now()))) {
+      double score = double.parse(post!.postPoint.toString());
+      int qtyMax = counts;
       int scorepoint = (score / qtyMax).toInt();
       print("----------point--${scorepoint}-------");
       await postController.doUpdateResult("1", post!.postId.toString());
@@ -126,10 +128,8 @@ ReportController reportController = ReportController();
         await memberController.doUpdatePointVote(
             usernames[i].toString(), post!.avgPoint.toString());
       }
-      
-
+    }
   }
-}
 
   Future ShowVoteDrialog() => showDialog(
         context: context,
@@ -152,12 +152,13 @@ ReportController reportController = ReportController();
                     height: 10,
                   ),
                   Text(
-                    "คุณต้องการเลือกตัวเลือกที่",
+                    "คุณต้องการเลือก",
                     style: TextStyle(fontFamily: 'Light'),
                   ),
                   Text(
-                    "${selectedChoiceIndex! + 1}",
-                    style: TextStyle(fontSize: 35, fontFamily: 'Light'),
+                    "${choices![selectedChoiceIndex!].choiceName }",
+                     overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 20, fontFamily: 'Light'),
                   ),
                   Text(
                     "ใช่หรือไม่",
@@ -246,27 +247,28 @@ ReportController reportController = ReportController();
             color: Colors.white,
           ),
           actions: [
-            
-            isResult  == true? IconButton(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return ReportPostScreen(
-                      postId: post!.postId.toString(),
-                      username: widget.username.toString());
-                }));
-              },
-              icon: Icon(
-                Icons.report,
-                size: 35,
-              ),
-            ):IconButton(
-              onPressed: () {
-              },
-              icon: Icon(
-                Icons.report_off,
-                size: 35,
-              ),
-            ),
+            isResult == true
+                ? IconButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return ReportPostScreen(
+                            postId: post!.postId.toString(),
+                            username: widget.username.toString());
+                      }));
+                    },
+                    icon: Icon(
+                      Icons.report,
+                      size: 35,
+                    ),
+                  )
+                : IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.report_off,
+                      size: 35,
+                    ),
+                  ),
           ],
         ),
         body: isDataLoaded == true
@@ -341,8 +343,7 @@ ReportController reportController = ReportController();
                                 itemCount: choices?.length ?? 0,
                                 itemBuilder: (context, index) {
                                   return AbsorbPointer(
-                                    absorbing: votePost == ""
-                                  ? false:true,
+                                    absorbing: votePost == "" ? false : true,
                                     child: Card(
                                       elevation: 2,
                                       shape: Border.all(
@@ -373,6 +374,9 @@ ReportController reportController = ReportController();
                                                   )
                                                 : SizedBox(
                                                     width: 2, height: 50),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
                                             Text(
                                               choices![index].choiceName ?? "",
                                               style: TextStyle(

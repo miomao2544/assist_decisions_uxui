@@ -41,6 +41,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
   String? dateStart;
   String? dateStop;
 
+  String? errorMessage;
   List<String>? images = [];
   ChoiceController choiceController = ChoiceController();
   PostController postController = PostController();
@@ -437,6 +438,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                                       onChanged: (value) {
                                         setState(() {
                                           point = value;
+                                           errorMessage = validatePoint(value, pointmember!) ?? validateMin(value) ?? validateMax(value,min!);
                                         });
                                       },
                                       validator: (value) =>
@@ -475,6 +477,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                                       onChanged: (value) {
                                         setState(() {
                                           min = value;
+                                           errorMessage = validatePoint(value, pointmember!) ?? validateMin(value) ?? validateMax(value,min!);
                                         });
                                       },
                                       validator: validateMin,
@@ -511,22 +514,31 @@ class _EditPostScreenState extends State<EditPostScreen> {
                                       onChanged: (value) {
                                         setState(() {
                                           max = value;
+                                            errorMessage = validatePoint(value, pointmember!) ?? validateMin(value) ?? validateMax(value,min!);
                                         });
                                       },
-                                      validator: validateMax,
+                                    
                                     ),
                                   ),
                                 ],
                               ),
                             ],
                           ),
-                          Center(
-                              child: Text(
-                            "เมื่อทำการสร้างคะแนนของคุณจะลดลงตามคะแนนที่คุณสร้าง",
-                            style: TextStyle(fontFamily: 'Light'),
-                            textAlign: TextAlign.center,
-                          )),
-                          SizedBox(height: 16),
+                    Text(
+                      errorMessage ?? '',
+                      style: TextStyle(
+                        color: Colors
+                            .red, // สีข้อความ error สามารถปรับแต่งได้ตามต้องการ
+                        fontSize: 14, // ขนาดตัวอักษรข้อความ error
+                      ),
+                    ),
+                    Center(
+                        child: Text(
+                      "เมื่อทำการสร้างคะแนนของคุณจะลดลงตามคะแนนที่คุณสร้าง",
+                      style: TextStyle(fontFamily: 'Light'),
+                      textAlign: TextAlign.center,
+                    )),
+                    SizedBox(height: 16),
                           Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 10.0),

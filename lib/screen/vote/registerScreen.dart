@@ -68,6 +68,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
+  bool passwordClicked = false;
   bool isDataLoaded = false;
   Future loadInterests() async {
     List<Interest> interestList = await interestController.listAllInterests();
@@ -92,7 +93,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MainColor,
-        title: Text('สมัครสมาชิก',style: TextStyle(fontFamily: 'Light'),),
+        title: Text(
+          'สมัครสมาชิก',
+          style: TextStyle(fontFamily: 'Light'),
+        ),
       ),
       body: isDataLoaded
           ? Padding(
@@ -119,7 +123,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               style: TextStyle(
                                   fontSize: 22.0,
                                   fontWeight: FontWeight.bold,
-                                  color: MainColor,fontFamily: 'Light'),
+                                  color: MainColor,
+                                  fontFamily: 'Light'),
                             ),
                           ),
                           SizedBox(height: 12.0),
@@ -128,7 +133,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             child: Text(
                               'ส่วนของข้อมูลส่วนตัว',
                               style: TextStyle(
-                                  fontSize: 18.0, fontWeight: FontWeight.bold,fontFamily: 'Light'),
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Light'),
                             ),
                           ),
                           Text(
@@ -155,7 +162,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 14,fontFamily: 'Light'),
+                                      fontSize: 14,
+                                      fontFamily: 'Light'),
                                 ),
                               ),
                               SizedBox(width: 16.0),
@@ -173,7 +181,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 14,fontFamily: 'Light')),
+                                        fontSize: 14,
+                                        fontFamily: 'Light')),
                               ),
                             ],
                           ),
@@ -184,7 +193,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             decoration: InputDecoration(
                               labelText: 'ชื่อ',
                               prefixIcon: Icon(Icons.person, color: MainColor),
-                              labelStyle: TextStyle(color: MainColor,fontFamily: 'Light'),
+                              labelStyle: TextStyle(
+                                  color: MainColor, fontFamily: 'Light'),
                               border: InputBorder.none,
                               filled: true,
                               fillColor: Colors.blueGrey[50],
@@ -203,7 +213,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             decoration: InputDecoration(
                               labelText: 'นามสกุล',
                               prefixIcon: Icon(Icons.person, color: MainColor),
-                              labelStyle: TextStyle(color: MainColor,fontFamily: 'Light'),
+                              labelStyle: TextStyle(
+                                  color: MainColor, fontFamily: 'Light'),
                               border: InputBorder.none,
                               filled: true,
                               fillColor: Colors.blueGrey[50],
@@ -220,7 +231,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             decoration: InputDecoration(
                               labelText: 'อีเมล์',
                               prefixIcon: Icon(Icons.email, color: MainColor),
-                              labelStyle: TextStyle(color: MainColor,fontFamily: 'Light'),
+                              labelStyle: TextStyle(
+                                  color: MainColor, fontFamily: 'Light'),
                               border: InputBorder.none,
                               filled: true,
                               fillColor: Colors.blueGrey[50],
@@ -237,7 +249,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             decoration: InputDecoration(
                               labelText: 'หมายเลขโทรศัพท์',
                               prefixIcon: Icon(Icons.phone, color: MainColor),
-                              labelStyle: TextStyle(color: MainColor,fontFamily: 'Light'),
+                              labelStyle: TextStyle(
+                                  color: MainColor, fontFamily: 'Light'),
                               border: InputBorder.none,
                               filled: true,
                               fillColor: Colors.blueGrey[50],
@@ -255,60 +268,129 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             style: TextStyle(
                                 color: MainColor,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 16,fontFamily: 'Light'),
+                                fontSize: 16,
+                                fontFamily: 'Light'),
                           ),
                           SizedBox(height: 4.0),
-                          Container(
-                            height: 38.0,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: interests.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                final interest = interests[index];
-                                final isSelected = interestSelect
-                                    .contains(interest.interestId);
-                                return Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 8.0),
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        if (isSelected) {
-                                          interestSelect
-                                              .remove(interest.interestId);
-                                        } else {
-                                          interestSelect
-                                              .add(interest.interestId);
-                                        }
-                                        formattedInterestSelect = interestSelect
-                                            .where((item) => item != null)
-                                            .join(',');
-                                        print(
-                                            "interestSelect is ----------------- > = " +
-                                                formattedInterestSelect
-                                                    .toString());
-                                      });
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      primary:
-                                          isSelected ? SecondColor : MainColor,
-                                    ),
-                                    child: Text(
-                                      interest.interestName ?? "",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14,fontFamily: 'Light'),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
+                       Container(
+  child: Column(
+    children: <Widget>[
+      Text(
+        'ความสนใจที่คุณอาจสนใจ',
+        style: TextStyle(
+            fontSize: 14,
+          fontFamily: 'Light'),
+      ),
+      Container(
+        height: 30.0,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: interests.length,
+          itemBuilder: (BuildContext context, int index) {
+            final interest = interests[index];
+            final isSelected = interestSelect.contains(interest.interestId);
+
+            if (!isSelected) {
+              return Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      if (isSelected) {
+                        interestSelect.remove(interest.interestId);
+                      } else {
+                        interestSelect.add(interest.interestId);
+                      }
+                      formattedInterestSelect = interestSelect
+                          .where((item) => item != null)
+                          .join(',');
+                      print(
+                          "interestSelect is ----------------- > = " +
+                              formattedInterestSelect.toString());
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: isSelected ? SecondColor : MainColor,
+                  ),
+                  child: Text(
+                    interest.interestName ?? "",
+                    style: TextStyle(fontFamily: 'Light'),
+                  ),
+                ),
+              );
+            } else {
+              return SizedBox.shrink();
+            }
+          },
+        ),
+      ),
+      SizedBox(height: 10,),
+      Text(
+        'ความสนใจของคุณ',
+         style: TextStyle(
+            fontSize: 14,
+          fontFamily: 'Light'),
+      ),
+      Container(
+        height: 30.0,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: interests.length,
+          itemBuilder: (BuildContext context, int index) {
+            final interest = interests[index];
+            final isSelected = interestSelect.contains(interest.interestId);
+
+            if (isSelected) {
+              return Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      if (isSelected) {
+    interestSelect.remove(interest.interestId);
+    // Remove from formattedInterestSelect
+    formattedInterestSelect = interestSelect
+        .where((item) => item != null)
+        .join(',');
+                      } else {
+                        if (!interestSelect.contains(interest.interestId)) {
+                          interestSelect.add(interest.interestId);
+                                                formattedInterestSelect = interestSelect
+                          .where((item) => item != null)
+                          .join(',');
+                        }
+                      }
+
+                      print(
+                          "interestSelect is ----------------- > = " +
+                              formattedInterestSelect.toString());
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: isSelected ? SecondColor : MainColor,
+                  ),
+                  child: Text(
+                    interest.interestName ?? "",
+                    style: TextStyle(fontFamily: 'Light'),
+                  ),
+                ),
+              );
+            } else {
+              return SizedBox.shrink();
+            }
+          },
+        ),
+      ),
+    ],
+  ),
+),
                           SizedBox(height: 12.0),
                           Text(
                             'สามารถเลือกได้มากกว่า 1 ตัวเลือก',
-                            style: TextStyle(fontSize: 16.0, color: MainColor,fontFamily: 'Light'),
+                            style: TextStyle(
+                                fontSize: 16.0,
+                                color: MainColor,
+                                fontFamily: 'Light'),
                           ),
                           SizedBox(height: 20.0),
                           Align(
@@ -318,7 +400,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               style: TextStyle(
                                   fontSize: 22.0,
                                   color: MainColor,
-                                  fontWeight: FontWeight.bold,fontFamily: 'Light'),
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Light'),
                             ),
                           ),
                           SizedBox(height: 10.0),
@@ -344,7 +427,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 _pickFile();
                               },
                               icon: Icon(Icons.image),
-                              label: Text("เลือกรูปภาพ",style: TextStyle(fontFamily: 'Light'),),
+                              label: Text(
+                                "เลือกรูปภาพ",
+                                style: TextStyle(fontFamily: 'Light'),
+                              ),
                               style: ButtonStyle(
                                 backgroundColor:
                                     MaterialStateProperty.all<Color>(
@@ -359,10 +445,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               labelText: 'ชื่อบัญชี',
                               prefixIcon:
                                   Icon(Icons.account_circle, color: MainColor),
-                              labelStyle: TextStyle(color: MainColor,fontFamily: 'Light'),
-                                                         border: InputBorder.none,
-                          filled: true,
-                           fillColor: Colors.blueGrey[50],
+                              labelStyle: TextStyle(
+                                  color: MainColor, fontFamily: 'Light'),
+                              border: InputBorder.none,
+                              filled: true,
+                              fillColor: Colors.blueGrey[50],
                             ),
                             onChanged: (value) {
                               setState(() {
@@ -377,28 +464,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               labelText: 'ชื่อผู้ใช้งาน (ห้ามซ้ำ)',
                               prefixIcon:
                                   Icon(Icons.account_box, color: MainColor),
-                              labelStyle: TextStyle(color: MainColor,fontFamily: 'Light'),
-                                                         border: InputBorder.none,
-                          filled: true,
-                           fillColor: Colors.blueGrey[50],
+                              labelStyle: TextStyle(
+                                  color: MainColor, fontFamily: 'Light'),
+                              border: InputBorder.none,
+                              filled: true,
+                              fillColor: Colors.blueGrey[50],
                             ),
                             onChanged: (value) {
                               setState(() {
-                                checkUsernameExists(value);
                                 username = value;
                               });
                             },
-                            validator: validateUsername,
+                            validator: (value) {
+                              return validateUsername(value);
+                            },
                           ),
+                          passwordClicked == true ? Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Text("ชื่อผู้ใช้งานนี้มีอยู่แล้ว",style: TextStyle(color: Colors.red),),
+                          ) : SizedBox(),
                           SizedBox(height: 16.0),
                           TextFormField(
                             decoration: InputDecoration(
                               labelText: 'รหัสผ่าน',
                               prefixIcon: Icon(Icons.key, color: MainColor),
-                              labelStyle: TextStyle(color: MainColor,fontFamily: 'Light'),
-                                                         border: InputBorder.none,
-                          filled: true,
-                           fillColor: Colors.blueGrey[50],
+                              labelStyle: TextStyle(
+                                  color: MainColor, fontFamily: 'Light'),
+                              border: InputBorder.none,
+                              filled: true,
+                              fillColor: Colors.blueGrey[50],
                             ),
                             obscureText: true,
                             onChanged: (value) {
@@ -406,7 +500,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 password = value;
                               });
                             },
-                            validator: validatePassword,
+                            validator: (value) {
+                              return validatePassword(value);
+                            },
+                            onTap: () async {
+                              bool usernameExists =
+                                  await checkUsernameExists(username ?? "");
+                              setState(() {
+                                passwordClicked = usernameExists;
+                            
+                              });
+                            },
                           ),
                           SizedBox(height: 16.0),
                           TextFormField(
@@ -414,10 +518,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               labelText: 'ยืนยันรหัสผ่าน',
                               prefixIcon:
                                   Icon(Icons.key_outlined, color: MainColor),
-                              labelStyle: TextStyle(color: MainColor,fontFamily: 'Light'),
-                                                         border: InputBorder.none,
-                          filled: true,
-                           fillColor: Colors.blueGrey[50],
+                              labelStyle: TextStyle(
+                                  color: MainColor, fontFamily: 'Light'),
+                              border: InputBorder.none,
+                              filled: true,
+                              fillColor: Colors.blueGrey[50],
                             ),
                             obscureText: true,
                             onChanged: (value) {
@@ -437,7 +542,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               child: ElevatedButton.icon(
                                   icon: Icon(Icons.add),
                                   label: Text("สมัคร",
-                                      style: TextStyle(fontSize: 20,fontFamily: 'Light')),
+                                      style: TextStyle(
+                                          fontSize: 20, fontFamily: 'Light')),
                                   style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all<
                                             Color>(
@@ -480,8 +586,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                           }
                                         }
                                         if (isUsernameTaken == false) {
-                                          var result =
-                                              await registerController.doRegister(
+                                          var result = await registerController
+                                              .doRegister(
                                                   username ?? "",
                                                   password ?? "",
                                                   nickname ?? "",

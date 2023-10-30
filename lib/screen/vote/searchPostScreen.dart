@@ -197,6 +197,7 @@ print("---------------------------interests-----is ${interestListSelect}--------
                                 print(
                                     "interestSelect is ----------------- > = " +
                                         interestListSelect.toString());
+                                         fetchPost();
                               });
                             },
                             style: ElevatedButton.styleFrom(

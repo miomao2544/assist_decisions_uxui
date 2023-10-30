@@ -94,10 +94,18 @@ class _ViewPostHistoryState extends State<ViewPostHistoryScreen> {
                                         width: 2.0, // ความหนาของเส้นขอบ 2
                                       ),
                                     ),
-                                    child: ClipOval(
+                                    child:posts![index].postImage != "I00002.png"? ClipOval(
                                       child: Image.network(
                                         baseURL +
                                             '/posts/downloadimg/${posts![index].postImage}',
+                                        fit: BoxFit.cover,
+                                        width: 50,
+                                        height: 50,
+                                      ),
+                                    ):ClipOval(
+                                      child: Image.network(
+                                        baseURL +
+                                            '/members/downloadimg/${posts![index].member!.image}',
                                         fit: BoxFit.cover,
                                         width: 50,
                                         height: 50,

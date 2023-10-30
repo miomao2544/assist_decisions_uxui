@@ -20,9 +20,9 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-   LoginMemberController loginMemberController = LoginMemberController();
-   EditProfileController editProfileController = EditProfileController();
-      MemberController memberController = MemberController();
+  LoginMemberController loginMemberController = LoginMemberController();
+  EditProfileController editProfileController = EditProfileController();
+  MemberController memberController = MemberController();
   InterestController interestController = InterestController();
 
   List<Interest> interests = [];
@@ -112,7 +112,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Future<void> initializeData() async {
-    member = await editProfileController.doProfileDetail(widget.username.toString());
+    member =
+        await editProfileController.doProfileDetail(widget.username.toString());
     if (member != null) {
       firstname = member?.firstname.toString();
       username = member?.username.toString();
@@ -148,7 +149,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MainColor,
-        title: Text('แก้ไข',style: TextStyle(fontFamily: 'Light'),),
+        title: Text(
+          'แก้ไข',
+          style: TextStyle(fontFamily: 'Light'),
+        ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
@@ -181,7 +185,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               style: TextStyle(
                                   fontSize: 22.0,
                                   fontWeight: FontWeight.bold,
-                                  color: MainColor,fontFamily: 'Light'),
+                                  color: MainColor,
+                                  fontFamily: 'Light'),
                             ),
                           ),
                           SizedBox(height: 12.0),
@@ -190,15 +195,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             child: Text(
                               'ส่วนของข้อมูลส่วนตัว',
                               style: TextStyle(
-                                  fontSize: 20.0, fontWeight: FontWeight.bold,fontFamily: 'Light'),
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Light'),
                             ),
                           ),
                           Text(
                             'เพศ',
                             style: TextStyle(
                                 color: MainColor,
-    
-                                fontSize: 16,fontFamily: 'Light'),
+                                fontSize: 16,
+                                fontFamily: 'Light'),
                           ),
                           Row(
                             children: [
@@ -212,7 +219,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   primary:
                                       gender == 'M' ? SecondColor : MainColor,
                                 ),
-                                child: Text('ชาย',style: TextStyle(fontFamily: 'Light'),),
+                                child: Text(
+                                  'ชาย',
+                                  style: TextStyle(fontFamily: 'Light'),
+                                ),
                               ),
                               SizedBox(width: 16.0),
                               ElevatedButton(
@@ -225,21 +235,25 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   primary:
                                       gender == 'F' ? SecondColor : MainColor,
                                 ),
-                                child: Text('หญิง',style: TextStyle(fontFamily: 'Light'),),
+                                child: Text(
+                                  'หญิง',
+                                  style: TextStyle(fontFamily: 'Light'),
+                                ),
                               ),
                             ],
                           ),
                           Container(
-                           
                             child: TextFormField(
                               initialValue: firstname,
                               decoration: InputDecoration(
                                 labelText: 'ชื่อ',
-                                prefixIcon: Icon(Icons.person, color: MainColor),
-                                labelStyle: TextStyle(color: MainColor,fontFamily: 'Light'),
+                                prefixIcon:
+                                    Icon(Icons.person, color: MainColor),
+                                labelStyle: TextStyle(
+                                    color: MainColor, fontFamily: 'Light'),
                                 border: InputBorder.none,
-                                       filled: true,
-                      fillColor: Colors.blueGrey[50],
+                                filled: true,
+                                fillColor: Colors.blueGrey[50],
                               ),
                               onChanged: (value) {
                                 setState(() {
@@ -259,18 +273,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               },
                             ),
                           ),
-                              SizedBox(height: 16.0),
+                          SizedBox(height: 16.0),
                           Container(
-                      
                             child: TextFormField(
                               initialValue: lastname,
                               decoration: InputDecoration(
                                 labelText: 'นามสกุล',
-                                prefixIcon: Icon(Icons.person, color: MainColor),
-                                labelStyle: TextStyle(color: MainColor,fontFamily: 'Light'),
+                                prefixIcon:
+                                    Icon(Icons.person, color: MainColor),
+                                labelStyle: TextStyle(
+                                    color: MainColor, fontFamily: 'Light'),
                                 border: InputBorder.none,
-                                       filled: true,
-                      fillColor: Colors.blueGrey[50],
+                                filled: true,
+                                fillColor: Colors.blueGrey[50],
                               ),
                               onChanged: (value) {
                                 setState(() {
@@ -292,15 +307,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                           SizedBox(height: 16.0),
                           Container(
-                        
                             child: TextFormField(
                               initialValue: email,
                               decoration: InputDecoration(
                                 labelText: 'อีเมล์',
                                 prefixIcon: Icon(Icons.email, color: MainColor),
-                                labelStyle: TextStyle(color: MainColor,fontFamily: 'Light'),
-                                border:  InputBorder.none,       filled: true,
-                      fillColor: Colors.blueGrey[50],
+                                labelStyle: TextStyle(
+                                    color: MainColor, fontFamily: 'Light'),
+                                border: InputBorder.none,
+                                filled: true,
+                                fillColor: Colors.blueGrey[50],
                               ),
                               onChanged: (value) {
                                 setState(() {
@@ -324,15 +340,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                           SizedBox(height: 16.0),
                           Container(
-            
                             child: TextFormField(
                               initialValue: tel,
                               decoration: InputDecoration(
                                 labelText: 'หมายเลขโทรศัพท์',
                                 prefixIcon: Icon(Icons.phone, color: MainColor),
-                                labelStyle: TextStyle(color: MainColor,fontFamily: 'Light'),
-                                border: InputBorder.none,       filled: true,
-                      fillColor: Colors.blueGrey[50],
+                                labelStyle: TextStyle(
+                                    color: MainColor, fontFamily: 'Light'),
+                                border: InputBorder.none,
+                                filled: true,
+                                fillColor: Colors.blueGrey[50],
                               ),
                               onChanged: (value) {
                                 setState(() {
@@ -341,7 +358,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               },
                               validator: (value) {
                                 final validDigits = RegExp(r'^[0-9]{10}$');
-                          
+
                                 if (value == null || value.isEmpty) {
                                   return 'กรุณากรอกหมายเลขโทรศัพท์';
                                 } else if (!value.startsWith('06') &&
@@ -359,53 +376,154 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             ),
                           ),
                           SizedBox(height: 16.0),
-                          Text('ความสนใจ',style: TextStyle(fontFamily: 'Light'),),
+                          Text(
+                            'ความสนใจ',
+                            style: TextStyle(fontFamily: 'Light'),
+                          ),
                           Container(
-                            height: 30.0,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: interests.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                final interest = interests[index];
-                                final isSelected = interestSelect
-                                    .contains(interest.interestId);
+                            child: Column(
+                              children: <Widget>[
+                                Text(
+                                  'ความสนใจที่คุณอาจสนใจ',
+                                  style: TextStyle(
+                                      fontSize: 14, fontFamily: 'Light'),
+                                ),
+                                Container(
+                                  height: 30.0,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: interests.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      final interest = interests[index];
+                                      final isSelected = interestSelect
+                                          .contains(interest.interestId);
 
-                                return Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 8.0),
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        if (isSelected) {
-                                          interestSelect
-                                              .remove(interest.interestId);
-                                        } else {
-                                          interestSelect
-                                              .add(interest.interestId);
-                                        }
-                                        formattedInterestSelect = interestSelect
-                                            .where((item) => item != null)
-                                            .join(',');
-                                        print(
-                                            "interestSelect is ----------------- > = " +
-                                                formattedInterestSelect
-                                                    .toString());
-                                      });
+                                      if (!isSelected) {
+                                        return Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                if (isSelected) {
+                                                  interestSelect.remove(
+                                                      interest.interestId);
+                                                } else {
+                                                  interestSelect
+                                                      .add(interest.interestId);
+                                                }
+                                                formattedInterestSelect =
+                                                    interestSelect
+                                                        .where((item) =>
+                                                            item != null)
+                                                        .join(',');
+                                                print(
+                                                    "interestSelect is ----------------- > = " +
+                                                        formattedInterestSelect
+                                                            .toString());
+                                              });
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              primary: isSelected
+                                                  ? SecondColor
+                                                  : MainColor,
+                                            ),
+                                            child: Text(
+                                              interest.interestName ?? "",
+                                              style: TextStyle(
+                                                  fontFamily: 'Light'),
+                                            ),
+                                          ),
+                                        );
+                                      } else {
+                                        return SizedBox.shrink();
+                                      }
                                     },
-                                    style: ElevatedButton.styleFrom(
-                                      primary:
-                                          isSelected ? SecondColor : MainColor,
-                                    ),
-                                    child: Text(interest.interestName ?? "",style: TextStyle(fontFamily: 'Light'),),
                                   ),
-                                );
-                              },
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  'ความสนใจของคุณ',
+                                  style: TextStyle(
+                                      fontSize: 14, fontFamily: 'Light'),
+                                ),
+                                Container(
+                                  height: 30.0,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: interests.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      final interest = interests[index];
+                                      final isSelected = interestSelect
+                                          .contains(interest.interestId);
+
+                                      if (isSelected) {
+                                        return Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                if (isSelected) {
+                                                  interestSelect.remove(
+                                                      interest.interestId);
+                                                  // Remove from formattedInterestSelect
+                                                  formattedInterestSelect =
+                                                      interestSelect
+                                                          .where((item) =>
+                                                              item != null)
+                                                          .join(',');
+                                                } else {
+                                                  if (!interestSelect.contains(
+                                                      interest.interestId)) {
+                                                    interestSelect.add(
+                                                        interest.interestId);
+                                                    formattedInterestSelect =
+                                                        interestSelect
+                                                            .where((item) =>
+                                                                item != null)
+                                                            .join(',');
+                                                  }
+                                                }
+
+                                                print(
+                                                    "interestSelect is ----------------- > = " +
+                                                        formattedInterestSelect
+                                                            .toString());
+                                              });
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              primary: isSelected
+                                                  ? SecondColor
+                                                  : MainColor,
+                                            ),
+                                            child: Text(
+                                              interest.interestName ?? "",
+                                              style: TextStyle(
+                                                  fontFamily: 'Light'),
+                                            ),
+                                          ),
+                                        );
+                                      } else {
+                                        return SizedBox.shrink();
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                           SizedBox(height: 12.0),
                           Text(
                             'สามารถเลือกได้มากกว่า 1 ตัวเลือก',
-                            style: TextStyle(fontSize: 16.0, color: MainColor,fontFamily: 'Light'),
+                            style: TextStyle(
+                                fontSize: 16.0,
+                                color: MainColor,
+                                fontFamily: 'Light'),
                           ),
                           SizedBox(height: 20.0),
                           Align(
@@ -414,8 +532,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               'ส่วนของข้อมูลทั่วไป',
                               style: TextStyle(
                                   fontSize: 20.0,
-                    
-                                  fontWeight: FontWeight.bold,fontFamily: 'Light'),
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Light'),
                             ),
                           ),
                           SizedBox(height: 12.0),
@@ -442,7 +560,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 _pickFile();
                               },
                               icon: Icon(Icons.image),
-                              label: Text("เลือกรูปภาพ",style: TextStyle(fontFamily: 'Light'),),
+                              label: Text(
+                                "เลือกรูปภาพ",
+                                style: TextStyle(fontFamily: 'Light'),
+                              ),
                               style: ButtonStyle(
                                 backgroundColor:
                                     MaterialStateProperty.all<Color>(
@@ -453,17 +574,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                           SizedBox(height: 12.0),
                           Container(
-                       
                             child: TextFormField(
                               initialValue: nickname,
                               decoration: InputDecoration(
                                 labelText: 'ชื่อบัญชี',
-                                prefixIcon:
-                                    Icon(Icons.account_circle, color: MainColor),
-                                labelStyle: TextStyle(color: MainColor,fontFamily: 'Light'),
+                                prefixIcon: Icon(Icons.account_circle,
+                                    color: MainColor),
+                                labelStyle: TextStyle(
+                                    color: MainColor, fontFamily: 'Light'),
                                 border: InputBorder.none,
-                                       filled: true,
-                      fillColor: Colors.blueGrey[50],
+                                filled: true,
+                                fillColor: Colors.blueGrey[50],
                               ),
                               onChanged: (value) {
                                 setState(() {
@@ -485,32 +606,32 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                           SizedBox(height: 16.0),
                           Container(
-                      
                             child: TextFormField(
                               initialValue: username,
                               decoration: InputDecoration(
                                 labelText: 'ชื่อผู้ใช้งาน (ห้ามซ้ำ)',
                                 prefixIcon:
                                     Icon(Icons.account_box, color: MainColor),
-                                labelStyle: TextStyle(color: MainColor,fontFamily: 'Light'),
+                                labelStyle: TextStyle(
+                                    color: MainColor, fontFamily: 'Light'),
                                 border: InputBorder.none,
-                                       filled: true,
-                      fillColor: Colors.blueGrey[50],
+                                filled: true,
+                                fillColor: Colors.blueGrey[50],
                               ),
                               enabled: false,
                             ),
                           ),
                           SizedBox(height: 16.0),
                           Container(
-                        
                             child: TextFormField(
                               decoration: InputDecoration(
                                 labelText: 'รหัสผ่าน',
                                 prefixIcon: Icon(Icons.key, color: MainColor),
-                                labelStyle: TextStyle(color: MainColor,fontFamily: 'Light'),
+                                labelStyle: TextStyle(
+                                    color: MainColor, fontFamily: 'Light'),
                                 border: InputBorder.none,
-                                       filled: true,
-                      fillColor: Colors.blueGrey[50],
+                                filled: true,
+                                fillColor: Colors.blueGrey[50],
                               ),
                               obscureText: true,
                               onChanged: (value) {
@@ -519,8 +640,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 });
                               },
                               validator: (value) {
+                  
                                 if (value == null || value.isEmpty) {
-                                  return 'กรุณากรอกรหัสผ่าน';
+                                  return null;
                                 } else if (value.length < 8 ||
                                     value.length > 16) {
                                   return 'รหัสผ่านควรมีความยาวระหว่าง 8 และ 16 ตัวอักษร';
@@ -529,20 +651,28 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   return 'รหัสผ่านควรประกอบด้วยตัวอักษรภาษาอังกฤษ, ตัวเลข, @, _, -, หรือ . เท่านั้น';
                                 }
                                 return null;
+                       
                               },
                             ),
                           ),
+                                                                         Text(
+                            'กรอกเมื่อต้องการเปลี่ยนรหัสผ่าน',
+                            style: TextStyle(
+                                fontSize: 16.0,
+                                color: MainColor,
+                                fontFamily: 'Light'),
+                          ),
                           SizedBox(height: 16.0),
                           Container(
-                       
                             child: TextFormField(
                               decoration: InputDecoration(
                                 labelText: 'ยืนยันรหัสผ่าน',
                                 prefixIcon: Icon(Icons.key, color: MainColor),
-                                labelStyle: TextStyle(color: MainColor,fontFamily: 'Light'),
+                                labelStyle: TextStyle(
+                                    color: MainColor, fontFamily: 'Light'),
                                 border: InputBorder.none,
-                                       filled: true,
-                      fillColor: Colors.blueGrey[50],
+                                filled: true,
+                                fillColor: Colors.blueGrey[50],
                               ),
                               obscureText: true,
                               onChanged: (value) {
@@ -551,9 +681,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 });
                               },
                               validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'กรุณารหัสผ่านอีกครั้งเพื่อยืนยัน';
-                                } else if (value.toString() != password) {
+                                 if (value == null || value.isEmpty) {
+                                  return null;
+                                }
+                                if (value.toString() != password) {
                                   return 'รหัสผ่านของคุณไม่เหมือนเดิม กรุณากรอกใหม่อีกครั้ง';
                                 }
                                 return null;
@@ -569,7 +700,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               child: ElevatedButton.icon(
                                   icon: Icon(Icons.add),
                                   label: Text("บันทึกข้อมูล",
-                                      style: TextStyle(fontSize: 20,fontFamily: 'Light')),
+                                      style: TextStyle(
+                                          fontSize: 20, fontFamily: 'Light')),
                                   style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all<
                                             Color>(
@@ -595,10 +727,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                                   onPressed: () {
                                                     Navigator.of(context).pop();
                                                   },
-                                                                                    style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.all(MainColor), // สีพื้นหลังของปุ่ม
-                                      ),
+                                                  style: ButtonStyle(
+                                                    backgroundColor:
+                                                        MaterialStateProperty.all(
+                                                            MainColor), // สีพื้นหลังของปุ่ม
+                                                  ),
                                                   child: Text('ปิด'),
                                                 ),
                                               ],
@@ -624,7 +757,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
                                         print("---------- result------------");
                                         print(username);
-                                        print(password);
+                                        print(password!.isEmpty?"pass":password!);
                                         print(nickname);
                                         print(gender);
                                         print(firstname);
@@ -635,10 +768,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                         print(status);
                                         print(fileToSend);
                                         print(formattedInterestSelect);
-                                        var result =
-                                            await editProfileController.doEditProfile(
+                                        var result = await editProfileController
+                                            .doEditProfile(
                                                 username ?? "",
-                                                password ?? "",
+                                                password??"",
                                                 nickname ?? "",
                                                 gender ?? "",
                                                 firstname ?? "",

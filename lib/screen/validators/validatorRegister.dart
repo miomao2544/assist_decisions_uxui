@@ -80,12 +80,16 @@ String? validateNickname(String? value) {
 }
 
 bool isUsernameTaken = true;
+bool result =true;
 MemberController memberController = MemberController();
 Future checkUsernameExists(String username) async {
-  isUsernameTaken = await memberController.checkUsernameExists(username);
+   result = await memberController.checkUsernameExists(username);
+  return result;
 }
 
 String? validateUsername(String? value) {
+  checkUsernameExists(value??"");
+  isUsernameTaken  = result;
   if (value == null || value.isEmpty) {
     return 'กรุณากรอกชื่อผู้ใช้งาน';
   } else if (!RegExp(r'^[a-zA-Z0-9]+$').hasMatch(value)) {

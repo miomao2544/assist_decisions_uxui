@@ -36,7 +36,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
   String? dateStart;
   String? dateStop;
 
-
+  String? errorMessage;
   List<String>? images = [];
   ChoiceController choiceController = ChoiceController();
   AddPostController addPostController = AddPostController();
@@ -340,10 +340,10 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                 onChanged: (value) {
                                   setState(() {
                                     point = value;
+                                    errorMessage = validatePoint(value, pointmember!) ?? validateMin(value) ?? validateMax(max!,min!);
                                   });
                                 },
-                                validator: (value) =>
-                                    validatePoint(value, pointmember!),
+                           
                               ),
                             ),
                           ],
@@ -375,9 +375,10 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                 onChanged: (value) {
                                   setState(() {
                                     min = value;
+                                     errorMessage = validatePoint(value, pointmember!) ?? validateMin(value) ?? validateMax(max, value);
                                   });
                                 },
-                                validator: validateMin,
+                               
                               ),
                             ),
                           ],
@@ -409,14 +410,23 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                 onChanged: (value) {
                                   setState(() {
                                     max = value;
+                                    errorMessage = validatePoint(value, pointmember!) ?? validateMin(min) ?? validateMax(value, min!);
                                   });
                                 },
-                                validator: validateMax,
+                                
                               ),
                             ),
                           ],
                         ),
                       ],
+                    ),
+                    Text(
+                      errorMessage ?? '',
+                      style: TextStyle(
+                        color: Colors
+                            .red, // สีข้อความ error สามารถปรับแต่งได้ตามต้องการ
+                        fontSize: 14, // ขนาดตัวอักษรข้อความ error
+                      ),
                     ),
                     Center(
                         child: Text(
@@ -518,7 +528,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                     ),
                     Center(
                         child: Text(
-                      "วันที่สิ้นสุดควรหากจากวันที่เริ่มต้นอย่างน้อย 1 วัน",
+                      "วันที่สิ้นสุดต้องมากกว่าวันที่เริ่มต้น",
                       style: TextStyle(fontFamily: 'Light'),
                       textAlign: TextAlign.center,
                     )),
@@ -607,10 +617,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       width: 200,
                       height: 50,
                       child: ElevatedButton(
-                                      
                           child: Text(
                             "สร้าง",
-                            style: TextStyle(fontFamily: 'Light',fontSize: 20),
+                            style: TextStyle(fontFamily: 'Light', fontSize: 20),
                           ),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: MainColor,
@@ -631,7 +640,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                               if (fileImagesToDisplay?[i] != null) {
                                 var uploadedFile = await choiceController
                                     .upload(fileImagesToDisplay![i]);
-                    
+
                                 if (uploadedFile != null) {
                                   choices[i].choiceImage = uploadedFile;
                                 }
@@ -639,7 +648,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                     "----------${choices[i].choiceImage}-----------");
                               }
                             }
-                    
+
                             if (fromKey.currentState!.validate()) {
                               if (postDateStartController.text.isEmpty) {
                                 // แจ้งเตือนผู้ใช้ให้เลือกวันที่
@@ -704,17 +713,18 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                 await memberController.doUpdatePoint(
                                     widget.username,
                                     (pointmember! - pointresult).toString());
-                                var response = await addPostController.doAddPost(
-                                    title ?? "",
-                                    image ?? "I00002.png",
-                                    description ?? "",
-                                    point ?? "",
-                                    dateStart ?? "",
-                                    dateStop ?? "",
-                                    min ?? "",
-                                    max ?? "",
-                                    widget.username.toString(),
-                                    selectedInterest ?? '');
+                                var response =
+                                    await addPostController.doAddPost(
+                                        title ?? "",
+                                        image ?? "I00002.png",
+                                        description ?? "",
+                                        point ?? "",
+                                        dateStart ?? "",
+                                        dateStop ?? "",
+                                        min ?? "",
+                                        max ?? "",
+                                        widget.username.toString(),
+                                        selectedInterest ?? '');
                                 for (int i = 0; i < choices.length; i++) {
                                   Choice choice = choices[i];
                                   await choiceController.addChoice(
@@ -726,7 +736,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                   );
                                   Navigator.push(context,
                                       MaterialPageRoute(builder: (context) {
-                                    return HomeScreen(username: widget.username);
+                                    return HomeScreen(
+                                        username: widget.username);
                                   }));
                                 }
                               }
