@@ -1,6 +1,7 @@
 import 'package:assist_decisions_app/constant/constant_value.dart';
 import 'package:assist_decisions_app/classcontroller/banTypeController.dart';
 import 'package:assist_decisions_app/classcontroller/reportController.dart';
+import 'package:assist_decisions_app/controller/CancelPostController.dart';
 import 'package:assist_decisions_app/controller/ChangeBannedStatusController.dart';
 import 'package:assist_decisions_app/controller/ViewReportPostDetailController.dart';
 import 'package:assist_decisions_app/model/banType.dart';
@@ -26,6 +27,7 @@ class _ChangeBannedStatusScreenState extends State<ChangeBannedStatusScreen> {
   Report? reports;
   String? banComment;
   ReportController reportController = ReportController();
+  CancelPostController cancelPostController = CancelPostController();
   ViewReportPostDetailController  viewReportPostDetailController =ViewReportPostDetailController(); 
   BanTypeController banTypeController = BanTypeController();
   ChangeBannedStatusController changeBannedStatusController = ChangeBannedStatusController();
@@ -370,6 +372,8 @@ class _ChangeBannedStatusScreenState extends State<ChangeBannedStatusScreen> {
                                                           reports!.post!.member!
                                                                   .username ??
                                                               "");
+                                                              await cancelPostController
+                                      .doDeletePost(reports!.post!.postId.toString());
                                                              
                                                   Navigator.push(context,
                                                       MaterialPageRoute(

@@ -7,6 +7,7 @@ import 'package:assist_decisions_app/screen/vote/registerScreen.dart';
 import 'package:assist_decisions_app/widgets/colors.dart';
 import 'package:flutter/material.dart';
 import '../validators/validatorLogin.dart';
+import 'package:intl/intl.dart';
 
 class LoginMemberScreen extends StatefulWidget {
   const LoginMemberScreen({super.key});
@@ -28,6 +29,21 @@ class _LoginMemberScreenState extends State<LoginMemberScreen> {
     result = await loginMemberController.doLoginMember(username, password);
     print("-----------$result------------");
   }
+
+
+
+String formatDate(String? inputDate,String?  dateBan) {
+  if (inputDate != null) {
+    final DateTime date = DateTime.parse(inputDate);
+    final int? numberOfDay = int.tryParse(dateBan!);
+    final DateTime newDate = date.add(Duration(days: numberOfDay??0));
+    final DateFormat formatter = DateFormat('dd/MM/yyyy');
+    return formatter.format(newDate.toLocal());
+  }
+  return '';
+}
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -142,8 +158,17 @@ class _LoginMemberScreenState extends State<LoginMemberScreen> {
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertDialog(
-                                  title: Text('คุณโดนแบน ${historyBan.banType!.typeName.toString()}'),
-                                  content: Text('${historyBan.banComment} '),
+                                  title: Text('คุณโดนแบน ${historyBan.banType!.typeName.toString()} จำนวน ${historyBan.banType!.numberOfDay.toString()} วัน'),
+                                  content: Container(
+                                    height: 100,
+                                    child: Column(
+                                      children: [
+                                        Text('${historyBan.banComment} '),
+                                        Text('คุณถูกแบนถึงวันที่'),
+                                        Text('${formatDate(historyBan.banDate,historyBan.banType!.numberOfDay.toString())}',style: TextStyle(fontSize: 25),),
+                                      ],
+                                    ),
+                                  ),
                                   actions: [
                                     ElevatedButton(
                                       onPressed: () {
