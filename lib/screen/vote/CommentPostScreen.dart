@@ -68,6 +68,7 @@ class _CommentScreenState extends State<CommentPostScreen> {
                               ),
                               SizedBox(height: 8.0),
                               TextFormField(
+                                key: Key('comment'),
                                 decoration: InputDecoration(
                                     labelText: 'คอมเม้น',
                                     labelStyle: TextStyle(color: MainColor,fontFamily: 'Light'),

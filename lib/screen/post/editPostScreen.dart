@@ -334,6 +334,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                             style: TextStyle(fontSize: 20, fontFamily: 'Light'),
                           ),
                           TextFormField(
+                            key: Key('title'),
                             initialValue: posts!.title.toString(),
                             decoration: InputDecoration(
                               labelText: 'หัวข้อ',
@@ -388,6 +389,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                           ),
                           SizedBox(height: 16),
                           TextFormField(
+                            key: Key('description'),
                             initialValue: posts!.description,
                             decoration: InputDecoration(
                               labelText: 'รายละเอียด',
@@ -422,6 +424,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                                   Container(
                                     width: 120.0,
                                     child: TextFormField(
+                                      key: Key('point'),
                                       enabled: false,
                                       initialValue: (posts!.postPoint)
                                           ?.toInt()
@@ -462,6 +465,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                                   Container(
                                     width: 120.0,
                                     child: TextFormField(
+                                      key: Key('min'),
                                       enabled: false,
                                       initialValue:
                                           (posts!.qtyMin)?.toInt().toString(),
@@ -500,6 +504,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                                   Container(
                                     width: 120.0,
                                     child: TextFormField(
+                                      key: Key('max'),
                                       initialValue:
                                           (posts!.qtyMax)?.toInt().toString(),
                                       keyboardType: TextInputType.number,
@@ -581,6 +586,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                               SizedBox(
                                 width: 160,
                                 child: TextFormField(
+                                  key: Key('postDateStartController'),
                                   controller: postDateStartController,
                                   enabled: false,
                                   readOnly: true,
@@ -606,6 +612,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                               SizedBox(
                                 width: 160,
                                 child: TextFormField(
+                                  key: Key('postDateStopController'),
                                   controller: postDateStopController,
                                   readOnly: true,
                                   onTap: () => _selectDateStop(context),
@@ -701,6 +708,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                                       SizedBox(width: 10),
                                       Expanded(
                                         child: TextFormField(
+                                          key: Key('${choices[index].choiceName}'),
                                           initialValue:
                                               choices[index].choiceName,
                                           decoration: InputDecoration(

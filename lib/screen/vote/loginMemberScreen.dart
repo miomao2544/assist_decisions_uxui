@@ -94,6 +94,7 @@ String formatDate(String? inputDate,String?  dateBan) {
                 Container(
                   width: 350,
                   child: TextFormField(
+                    key: Key('username'),
                     style: TextStyle(color: MainColor, fontSize: 20.0),
                     decoration: InputDecoration(
                       labelText: 'ชื่อผู้ใช้งาน',
@@ -107,7 +108,7 @@ String formatDate(String? inputDate,String?  dateBan) {
                     onChanged: (value) {
                       setState(() {
                         username = value;
-                        doLoginMember();
+                      
                       });
                     },
                     validator: (value) => validateUsername(value, result),
@@ -117,6 +118,7 @@ String formatDate(String? inputDate,String?  dateBan) {
                 Container(
                   width: 350,
                   child: TextFormField(
+                    key: Key('password'),
                     obscureText: true,
                     style: TextStyle(color: MainColor, fontSize: 20.0),
                     decoration: InputDecoration(
@@ -131,7 +133,7 @@ String formatDate(String? inputDate,String?  dateBan) {
                     onChanged: (value) {
                       setState(() {
                         password = value;
-                        doLoginMember();
+                   
                       });
                     },
                     validator: (value) => validatePassword(value, result),
@@ -145,6 +147,7 @@ String formatDate(String? inputDate,String?  dateBan) {
                     height: 60,
                     child: ElevatedButton(
                       onPressed: () async {
+                        doLoginMember();
                         if (fromKey.currentState!.validate()) {
                           doLoginMember();
                           if (result == "true") {

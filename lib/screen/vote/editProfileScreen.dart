@@ -244,6 +244,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                           Container(
                             child: TextFormField(
+                              key: Key('firstname'),
                               initialValue: firstname,
                               decoration: InputDecoration(
                                 labelText: 'ชื่อ',
@@ -276,6 +277,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           SizedBox(height: 16.0),
                           Container(
                             child: TextFormField(
+                              key: Key('lastname'),
                               initialValue: lastname,
                               decoration: InputDecoration(
                                 labelText: 'นามสกุล',
@@ -308,6 +310,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           SizedBox(height: 16.0),
                           Container(
                             child: TextFormField(
+                              key: Key('email'),
                               initialValue: email,
                               decoration: InputDecoration(
                                 labelText: 'อีเมล์',
@@ -341,6 +344,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           SizedBox(height: 16.0),
                           Container(
                             child: TextFormField(
+                              key: Key('tel'),
                               initialValue: tel,
                               decoration: InputDecoration(
                                 labelText: 'หมายเลขโทรศัพท์',
@@ -575,6 +579,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           SizedBox(height: 12.0),
                           Container(
                             child: TextFormField(
+                              key: Key('nickname'),
                               initialValue: nickname,
                               decoration: InputDecoration(
                                 labelText: 'ชื่อบัญชี',
@@ -607,6 +612,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           SizedBox(height: 16.0),
                           Container(
                             child: TextFormField(
+                              key: Key('username'),
                               initialValue: username,
                               decoration: InputDecoration(
                                 labelText: 'ชื่อผู้ใช้งาน (ห้ามซ้ำ)',
@@ -624,6 +630,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           SizedBox(height: 16.0),
                           Container(
                             child: TextFormField(
+                              key: Key('password'),
                               decoration: InputDecoration(
                                 labelText: 'รหัสผ่าน',
                                 prefixIcon: Icon(Icons.key, color: MainColor),
@@ -665,6 +672,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           SizedBox(height: 16.0),
                           Container(
                             child: TextFormField(
+                              key: Key('confirmPassword'),
                               decoration: InputDecoration(
                                 labelText: 'ยืนยันรหัสผ่าน',
                                 prefixIcon: Icon(Icons.key, color: MainColor),

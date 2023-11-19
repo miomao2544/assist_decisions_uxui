@@ -72,6 +72,7 @@ class _LoginAdminScreenState extends State<LoginAdminScreen> {
                             width: 300,
                             
                             child: TextFormField(
+                              key: Key("username"),
                               style:
                                   TextStyle(color: MainColor, fontSize: 20.0),
                               decoration: InputDecoration(
@@ -88,7 +89,7 @@ class _LoginAdminScreenState extends State<LoginAdminScreen> {
                               onChanged: (value) {
                                 setState(() {
                                   username = value;
-                                  doLoginAdmin();
+                         
                                 });
                               },
                               validator: (value) =>
@@ -100,6 +101,7 @@ class _LoginAdminScreenState extends State<LoginAdminScreen> {
                             width: 300,
                         
                             child: TextFormField(
+                              key: Key('password'),
                               obscureText: true,
                               style:
                                   TextStyle(color: MainColor, fontSize: 20.0),
@@ -116,7 +118,7 @@ class _LoginAdminScreenState extends State<LoginAdminScreen> {
                               onChanged: (value) {
                                 setState(() {
                                   password = value;
-                                  doLoginAdmin();
+                  
                                 });
                               },
                               validator: (value) =>
@@ -143,6 +145,7 @@ class _LoginAdminScreenState extends State<LoginAdminScreen> {
                                   ),
                                 ),
                                 onPressed: () {
+                                  doLoginAdmin();
                                   if (fromKey.currentState!.validate()) {
                                     doLoginAdmin();
                                     if (result == "admin") {

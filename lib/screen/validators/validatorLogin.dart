@@ -1,6 +1,6 @@
 String? validateUsername(String? value, String? result) {
   if (value!.isEmpty) {
-    return 'กรุณากรอกชื่อผู้ใช้งาน';
+    return 'กรุณากรอกชื่อผู้ใช้งานให้ถูกต้อง';
   } else if (!RegExp(r'^[a-zA-Z0-9]{6,12}$').hasMatch(value)) {
     return 'ชื่อผู้ใช้งานต้องเป็นตัวอักษรภาษาอังกฤษและตัวเลขเท่านั้น และความยาวต้องอยู่ระหว่าง 6-12 ตัวอักษร';
   } else if (result == "nodata") {
@@ -11,7 +11,7 @@ String? validateUsername(String? value, String? result) {
 
 String? validatePassword(String? value, String? result) {
   if (value!.isEmpty) {
-    return 'กรุณากรอกรหัสผ่าน';
+    return 'กรุณากรอกรหัสผ่านให้ถูกต้อง';
   } else if (value.length < 8 || value.length > 16) {
     return 'รหัสผ่านต้องมีความยาวระหว่าง 8-16 ตัวอักษร';
   } else if (!RegExp(r'^[a-zA-Z0-9@_-]+$').hasMatch(value)) {

@@ -295,6 +295,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                     ),
                     SizedBox(height: 16),
                     TextFormField(
+                      key: Key('description'),
                       decoration: InputDecoration(
                         labelText: 'รายละเอียด',
                         border: InputBorder.none,
@@ -328,6 +329,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                             Container(
                               width: 120.0,
                               child: TextFormField(
+                                key: Key('point'),
                                 keyboardType: TextInputType.number,
                                 inputFormatters: <TextInputFormatter>[
                                   FilteringTextInputFormatter.digitsOnly
@@ -363,6 +365,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                             Container(
                               width: 120.0,
                               child: TextFormField(
+                                key: Key('min'),
                                 keyboardType: TextInputType.number,
                                 inputFormatters: <TextInputFormatter>[
                                   FilteringTextInputFormatter.digitsOnly
@@ -398,6 +401,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                             Container(
                               width: 120.0,
                               child: TextFormField(
+                                key: Key('max'),
                                 keyboardType: TextInputType.number,
                                 inputFormatters: <TextInputFormatter>[
                                   FilteringTextInputFormatter.digitsOnly
@@ -480,6 +484,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                         SizedBox(
                           width: 160,
                           child: TextFormField(
+                            key: Key('postDateStartController'),
                             controller: postDateStartController,
                             readOnly: true,
                             onTap: () => _selectDateStart(context),
@@ -504,6 +509,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                         SizedBox(
                           width: 160,
                           child: TextFormField(
+                            key: Key('postDateStopController'),
                             controller: postDateStopController,
                             readOnly: true,
                             onTap: () => _selectDateStop(context),
@@ -570,6 +576,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                             ),
                             Expanded(
                               child: TextFormField(
+                                key: Key('${choices[i].choiceName}'),
                                 initialValue: choices[i].choiceName,
                                 decoration: InputDecoration(
                                     labelText: 'ตัวเลือกที่ ${i + 1}',

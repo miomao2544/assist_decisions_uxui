@@ -190,6 +190,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             height: 4,
                           ),
                           TextFormField(
+                            key: Key('firstname'),
                             decoration: InputDecoration(
                               labelText: 'ชื่อ',
                               prefixIcon: Icon(Icons.person, color: MainColor),
@@ -210,7 +211,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             height: 16,
                           ),
                           TextFormField(
+                            key: Key('lastname'),
                             decoration: InputDecoration(
+                         
                               labelText: 'นามสกุล',
                               prefixIcon: Icon(Icons.person, color: MainColor),
                               labelStyle: TextStyle(
@@ -228,6 +231,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                           SizedBox(height: 16.0),
                           TextFormField(
+                            key: Key('email'),
                             decoration: InputDecoration(
                               labelText: 'อีเมล์',
                               prefixIcon: Icon(Icons.email, color: MainColor),
@@ -246,6 +250,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                           SizedBox(height: 16.0),
                           TextFormField(
+                            key: Key('tel'),
                             decoration: InputDecoration(
                               labelText: 'หมายเลขโทรศัพท์',
                               prefixIcon: Icon(Icons.phone, color: MainColor),
@@ -272,118 +277,143 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 fontFamily: 'Light'),
                           ),
                           SizedBox(height: 4.0),
-                       Container(
-  child: Column(
-    children: <Widget>[
-      Text(
-        'ความสนใจที่คุณอาจสนใจ',
-        style: TextStyle(
-            fontSize: 14,
-          fontFamily: 'Light'),
-      ),
-      Container(
-        height: 30.0,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: interests.length,
-          itemBuilder: (BuildContext context, int index) {
-            final interest = interests[index];
-            final isSelected = interestSelect.contains(interest.interestId);
+                          Container(
+                            child: Column(
+                              children: <Widget>[
+                                Text(
+                                  'ความสนใจที่คุณอาจสนใจ',
+                                  style: TextStyle(
+                                      fontSize: 14, fontFamily: 'Light'),
+                                ),
+                                Container(
+                                  height: 30.0,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: interests.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      final interest = interests[index];
+                                      final isSelected = interestSelect
+                                          .contains(interest.interestId);
 
-            if (!isSelected) {
-              return Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      if (isSelected) {
-                        interestSelect.remove(interest.interestId);
-                      } else {
-                        interestSelect.add(interest.interestId);
-                      }
-                      formattedInterestSelect = interestSelect
-                          .where((item) => item != null)
-                          .join(',');
-                      print(
-                          "interestSelect is ----------------- > = " +
-                              formattedInterestSelect.toString());
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: isSelected ? SecondColor : MainColor,
-                  ),
-                  child: Text(
-                    interest.interestName ?? "",
-                    style: TextStyle(fontFamily: 'Light'),
-                  ),
-                ),
-              );
-            } else {
-              return SizedBox.shrink();
-            }
-          },
-        ),
-      ),
-      SizedBox(height: 10,),
-      Text(
-        'ความสนใจของคุณ',
-         style: TextStyle(
-            fontSize: 14,
-          fontFamily: 'Light'),
-      ),
-      Container(
-        height: 30.0,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: interests.length,
-          itemBuilder: (BuildContext context, int index) {
-            final interest = interests[index];
-            final isSelected = interestSelect.contains(interest.interestId);
+                                      if (!isSelected) {
+                                        return Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                if (isSelected) {
+                                                  interestSelect.remove(
+                                                      interest.interestId);
+                                                } else {
+                                                  interestSelect
+                                                      .add(interest.interestId);
+                                                }
+                                                formattedInterestSelect =
+                                                    interestSelect
+                                                        .where((item) =>
+                                                            item != null)
+                                                        .join(',');
+                                                print(
+                                                    "interestSelect is ----------------- > = " +
+                                                        formattedInterestSelect
+                                                            .toString());
+                                              });
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              primary: isSelected
+                                                  ? SecondColor
+                                                  : MainColor,
+                                            ),
+                                            child: Text(
+                                              interest.interestName ?? "",
+                                              style: TextStyle(
+                                                  fontFamily: 'Light'),
+                                            ),
+                                          ),
+                                        );
+                                      } else {
+                                        return SizedBox.shrink();
+                                      }
+                                    },
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  'ความสนใจของคุณ',
+                                  style: TextStyle(
+                                      fontSize: 14, fontFamily: 'Light'),
+                                ),
+                                Container(
+                                  height: 30.0,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: interests.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      final interest = interests[index];
+                                      final isSelected = interestSelect
+                                          .contains(interest.interestId);
 
-            if (isSelected) {
-              return Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      if (isSelected) {
-    interestSelect.remove(interest.interestId);
-    // Remove from formattedInterestSelect
-    formattedInterestSelect = interestSelect
-        .where((item) => item != null)
-        .join(',');
-                      } else {
-                        if (!interestSelect.contains(interest.interestId)) {
-                          interestSelect.add(interest.interestId);
-                                                formattedInterestSelect = interestSelect
-                          .where((item) => item != null)
-                          .join(',');
-                        }
-                      }
+                                      if (isSelected) {
+                                        return Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                if (isSelected) {
+                                                  interestSelect.remove(
+                                                      interest.interestId);
+                                                  // Remove from formattedInterestSelect
+                                                  formattedInterestSelect =
+                                                      interestSelect
+                                                          .where((item) =>
+                                                              item != null)
+                                                          .join(',');
+                                                } else {
+                                                  if (!interestSelect.contains(
+                                                      interest.interestId)) {
+                                                    interestSelect.add(
+                                                        interest.interestId);
+                                                    formattedInterestSelect =
+                                                        interestSelect
+                                                            .where((item) =>
+                                                                item != null)
+                                                            .join(',');
+                                                  }
+                                                }
 
-                      print(
-                          "interestSelect is ----------------- > = " +
-                              formattedInterestSelect.toString());
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: isSelected ? SecondColor : MainColor,
-                  ),
-                  child: Text(
-                    interest.interestName ?? "",
-                    style: TextStyle(fontFamily: 'Light'),
-                  ),
-                ),
-              );
-            } else {
-              return SizedBox.shrink();
-            }
-          },
-        ),
-      ),
-    ],
-  ),
-),
+                                                print(
+                                                    "interestSelect is ----------------- > = " +
+                                                        formattedInterestSelect
+                                                            .toString());
+                                              });
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              primary: isSelected
+                                                  ? SecondColor
+                                                  : MainColor,
+                                            ),
+                                            child: Text(
+                                              interest.interestName ?? "",
+                                              style: TextStyle(
+                                                  fontFamily: 'Light'),
+                                            ),
+                                          ),
+                                        );
+                                      } else {
+                                        return SizedBox.shrink();
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                           SizedBox(height: 12.0),
                           Text(
                             'สามารถเลือกได้มากกว่า 1 ตัวเลือก',
@@ -441,6 +471,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                           SizedBox(height: 12.0),
                           TextFormField(
+                            key: Key('nickname'),
                             decoration: InputDecoration(
                               labelText: 'ชื่อบัญชี',
                               prefixIcon:
@@ -460,6 +491,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                           SizedBox(height: 16.0),
                           TextFormField(
+                            key: Key('username'),
                             decoration: InputDecoration(
                               labelText: 'ชื่อผู้ใช้งาน (ห้ามซ้ำ)',
                               prefixIcon:
@@ -479,12 +511,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               return validateUsername(value);
                             },
                           ),
-                          passwordClicked == true ? Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Text("ชื่อผู้ใช้งานนี้มีอยู่แล้ว",style: TextStyle(color: Colors.red),),
-                          ) : SizedBox(),
+                          passwordClicked == true
+                              ? Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: Text(
+                                    "ชื่อผู้ใช้งานนี้มีอยู่แล้ว",
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                )
+                              : SizedBox(),
                           SizedBox(height: 16.0),
                           TextFormField(
+                            key: Key('password'),
                             decoration: InputDecoration(
                               labelText: 'รหัสผ่าน',
                               prefixIcon: Icon(Icons.key, color: MainColor),
@@ -508,12 +546,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   await checkUsernameExists(username ?? "");
                               setState(() {
                                 passwordClicked = usernameExists;
-                            
                               });
                             },
                           ),
                           SizedBox(height: 16.0),
                           TextFormField(
+                            key: Key('confirmPassword'),
                             decoration: InputDecoration(
                               labelText: 'ยืนยันรหัสผ่าน',
                               prefixIcon:

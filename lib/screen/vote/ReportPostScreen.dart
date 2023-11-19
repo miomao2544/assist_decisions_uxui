@@ -226,6 +226,7 @@ class _ReportPostScreenState extends State<ReportPostScreen> {
                                                   child: Padding(
                                                     padding: const EdgeInsets.all(8.0),
                                                     child: TextFormField(
+                                                      key: Key('reportComment'),
                                                       decoration: InputDecoration(
                                                         labelText: 'รายงาน',
                                                         labelStyle: TextStyle(

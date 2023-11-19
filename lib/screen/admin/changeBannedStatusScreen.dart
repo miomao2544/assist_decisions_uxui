@@ -28,9 +28,11 @@ class _ChangeBannedStatusScreenState extends State<ChangeBannedStatusScreen> {
   String? banComment;
   ReportController reportController = ReportController();
   CancelPostController cancelPostController = CancelPostController();
-  ViewReportPostDetailController  viewReportPostDetailController =ViewReportPostDetailController(); 
+  ViewReportPostDetailController viewReportPostDetailController =
+      ViewReportPostDetailController();
   BanTypeController banTypeController = BanTypeController();
-  ChangeBannedStatusController changeBannedStatusController = ChangeBannedStatusController();
+  ChangeBannedStatusController changeBannedStatusController =
+      ChangeBannedStatusController();
   String? banTypeId = "";
   String? banTypesId = "BT0000000001";
   List<String?> banTypes = [];
@@ -65,8 +67,8 @@ class _ChangeBannedStatusScreenState extends State<ChangeBannedStatusScreen> {
 
   Future fetchReport() async {
     Report? report;
-    report =
-        await viewReportPostDetailController.doViewReportDetail(widget.reportId.toString());
+    report = await viewReportPostDetailController
+        .doViewReportDetail(widget.reportId.toString());
     List<BanType?> banType;
     banType = await banTypeController.listAllBanTypes();
     for (int i = 0; i < banType.length; i++) {
@@ -77,7 +79,8 @@ class _ChangeBannedStatusScreenState extends State<ChangeBannedStatusScreen> {
         "object-----------------${report!.reportDate.toString()}---------------------");
     setState(() {
       reports = report;
-      banCommentController.text = "คุณถูกรายงานเนื่องจากโพสต์ ${report!.post!.title} ของคุณไม่เหมาะสม";
+      banCommentController.text =
+          "คุณถูกรายงานเนื่องจากโพสต์ ${report!.post!.title} ของคุณไม่เหมาะสม";
       isDataLoaded = true;
     });
   }
@@ -93,10 +96,10 @@ class _ChangeBannedStatusScreenState extends State<ChangeBannedStatusScreen> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: MainColor,
-          title:     Image.asset(
-                    "assets/images/logo.png",
-                    width: 60,
-                  ),
+          title: Image.asset(
+            "assets/images/logo.png",
+            width: 60,
+          ),
         ),
         body: isDataLoaded == true
             ? SingleChildScrollView(
@@ -150,8 +153,8 @@ class _ChangeBannedStatusScreenState extends State<ChangeBannedStatusScreen> {
                                                     reports!.post!.title
                                                         .toString(),
                                                     style: TextStyle(
-                                                      overflow: TextOverflow
-                                                                .ellipsis,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
                                                         color: MainColor,
                                                         fontSize: 24,
                                                         fontWeight:
@@ -173,9 +176,13 @@ class _ChangeBannedStatusScreenState extends State<ChangeBannedStatusScreen> {
                                             width: 250,
                                             child: Column(
                                               children: [
-                                                Text(reports!.post!.description
-                                                    .toString(),style: TextStyle(overflow: TextOverflow
-                                                              .ellipsis),),
+                                                Text(
+                                                  reports!.post!.description
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                      overflow: TextOverflow
+                                                          .ellipsis),
+                                                ),
                                                 Row(
                                                   children: [
                                                     Column(
@@ -209,7 +216,8 @@ class _ChangeBannedStatusScreenState extends State<ChangeBannedStatusScreen> {
                                                                     FontWeight
                                                                         .bold)),
                                                         Text(
-                                                            reports!.post!.qtyMin
+                                                            reports!
+                                                                .post!.qtyMin
                                                                 .toString(),
                                                             style: TextStyle(
                                                                 fontSize: 20,
@@ -230,7 +238,8 @@ class _ChangeBannedStatusScreenState extends State<ChangeBannedStatusScreen> {
                                                                     FontWeight
                                                                         .bold)),
                                                         Text(
-                                                            reports!.post!.qtyMax
+                                                            reports!
+                                                                .post!.qtyMax
                                                                 .toString(),
                                                             style: TextStyle(
                                                                 fontSize: 20,
@@ -270,8 +279,7 @@ class _ChangeBannedStatusScreenState extends State<ChangeBannedStatusScreen> {
                                             width: 15,
                                           ),
                                           Text(
-                                              "รายงานคุณ ${reports!.post!.member!.nickname
-                                                  .toString()}",
+                                              "รายงานคุณ ${reports!.post!.member!.nickname.toString()}",
                                               style: TextStyle(
                                                   color: MainColor,
                                                   fontSize: 20,
@@ -357,31 +365,64 @@ class _ChangeBannedStatusScreenState extends State<ChangeBannedStatusScreen> {
                                                   ),
                                                 ),
                                                 onPressed: () async {
-                                                  updateBanTypeId();
-                                                  print(
-                                                      "----------${banCommentController.text}------------");
-                                                  print(
-                                                      "----------${banTypesId}------------");
-                                                  print(
-                                                      "----------${reports!.post!.member!.username}------------");
-                                                  await changeBannedStatusController
-                                                      .doBanStatus(
-                                                          banCommentController
-                                                              .text,
-                                                          banTypesId ?? "",
-                                                          reports!.post!.member!
-                                                                  .username ??
-                                                              "");
-                                                              await cancelPostController
-                                      .doDeletePost(reports!.post!.postId.toString());
-                                                             
-                                                  Navigator.push(context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) {
-                                                    return ListReportScreen(
-                                                      username: widget.username,
-                                                    );
-                                                  }));
+                                                  bool confirmAction =
+                                                      await showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return AlertDialog(
+                                                        title: Text(
+                                                            'ยืนยันการดำเนินการ?'),
+                                                        content: Text(
+                                                            'คุณต้องการทำรายการนี้ใช่หรือไม่?'),
+                                                        actions: <Widget>[
+                                                          TextButton(
+                                                            onPressed: () {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop(false);
+                                                            },
+                                                            child: Text('ไม่'),
+                                                          ),
+                                                          TextButton(
+                                                            onPressed: () {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop(true);
+                                                            },
+                                                            child: Text('ใช่'),
+                                                          ),
+                                                        ],
+                                                      );
+                                                    },
+                                                  );
+
+                                                  if (confirmAction == true) {
+                                                    updateBanTypeId();
+                                                    await changeBannedStatusController
+                                                        .doBanStatus(
+                                                            banCommentController
+                                                                .text,
+                                                            banTypesId ?? "",
+                                                            reports!
+                                                                    .post!
+                                                                    .member!
+                                                                    .username ??
+                                                                "");
+                                                    await cancelPostController
+                                                        .doDeletePost(reports!
+                                                            .post!.postId
+                                                            .toString());
+
+                                                    Navigator.push(context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) {
+                                                      return ListReportScreen(
+                                                        username:
+                                                            widget.username,
+                                                      );
+                                                    }));
+                                                  }
                                                 },
                                               ),
                                             ),
@@ -424,15 +465,13 @@ class _ChangeBannedStatusScreenState extends State<ChangeBannedStatusScreen> {
                             ),
                           ),
                         ),
-                         SizedBox(
+                        SizedBox(
                           height: 20,
                         ),
                       ],
                     ),
                   ),
-                  
                 ),
-                
               )
             : Center(child: CircularProgressIndicator()));
   }
